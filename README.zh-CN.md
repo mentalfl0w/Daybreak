@@ -1,7 +1,7 @@
 # Daybreak
 
 <p align="center">
-  <img src="branding/Daybreak-Logo-Transparent.png" alt="Daybreak" width="180">
+  <img src="Assets/iOS/Assets.xcassets/AppIcon.appiconset/AppIcon.png" alt="Daybreak 应用图标" width="180">
 </p>
 
 <p align="center">现代化 Bing 每日壁纸客户端，支持 Mac、iPhone 和 iPad。</p>

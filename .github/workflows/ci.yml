@@ -25,8 +25,10 @@ permissions:
 jobs:
   build:
     name: Build unsigned macOS and iOS packages
-    runs-on: macos-latest
+    runs-on: xcode-27
     timeout-minutes: 45
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_27.2.app/Contents/Developer
     outputs:
       version: ${{ steps.metadata.outputs.version }}
       tag_name: ${{ steps.metadata.outputs.tag_name }}
