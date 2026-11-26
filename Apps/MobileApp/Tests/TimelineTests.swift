@@ -168,6 +168,59 @@ struct TimelineBuilderTests {
         #expect(year[11].observedDays == 0)
     }
 
+    @Test("Market choices require a locally available picture")
+    func marketChoicesUseCachedImages() {
+        let zhImage = WallpaperID(source: .bing, sourceImageID: "cached-thumbnail")
+        let enImage = WallpaperID(source: .bing, sourceImageID: "cached-original")
+        let jaImage = WallpaperID(source: .bing, sourceImageID: "missing-file")
+        let unsupportedImage = WallpaperID(source: .bing, sourceImageID: "unsupported")
+        let date = timelineDate(2026, 11, 25)
+
+        let missingThumbnail = CachedImageAsset(
+            wallpaperID: jaImage,
+            kind: .thumbnail,
+            relativePath: "missing-thumbnail.jpg",
+            byteCount: 100,
+            lastAccessedAt: Date(timeIntervalSince1970: 1)
+        )
+        let snapshot = RepositorySnapshot(
+            occurrences: [
+                WallpaperOccurrence(source: .bing, market: .zhCN, localDate: date, wallpaperID: zhImage),
+                WallpaperOccurrence(source: .bing, market: .zhCN, localDate: date, wallpaperID: zhImage, revision: 1),
+                WallpaperOccurrence(source: .bing, market: .enUS, localDate: date, wallpaperID: enImage),
+                WallpaperOccurrence(source: .bing, market: .jaJP, localDate: date, wallpaperID: jaImage),
+                WallpaperOccurrence(source: .bing, market: Market("xx-XX"), localDate: date, wallpaperID: unsupportedImage)
+            ],
+            assets: [
+                CachedImageAsset(
+                    wallpaperID: zhImage,
+                    kind: .thumbnail,
+                    relativePath: "cached-thumbnail.jpg",
+                    byteCount: 100,
+                    lastAccessedAt: Date(timeIntervalSince1970: 1)
+                ),
+                CachedImageAsset(
+                    wallpaperID: enImage,
+                    kind: .original,
+                    relativePath: "cached-original.jpg",
+                    byteCount: 100,
+                    lastAccessedAt: Date(timeIntervalSince1970: 1)
+                ),
+                missingThumbnail,
+                CachedImageAsset(
+                    wallpaperID: unsupportedImage,
+                    kind: .thumbnail,
+                    relativePath: "unsupported.jpg",
+                    byteCount: 100,
+                    lastAccessedAt: Date(timeIntervalSince1970: 1)
+                )
+            ],
+            missingAssets: [missingThumbnail]
+        )
+
+        #expect(TimelineMarketBuilder.availableMarkets(snapshot: snapshot) == [.zhCN, .enUS])
+    }
+
     @Test("Favorites are image-level and keep the newest cross-market occurrence")
     func favoriteGalleryDeduplicatesImages() throws {
         let imageA = WallpaperID(source: .bing, sourceImageID: "A")

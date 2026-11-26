@@ -143,6 +143,53 @@ struct LibraryTests {
         #expect(LibraryCalendarMath.weekdayIndex(for: date("2026-11-29")) == 6)
     }
 
+    @Test("market choices require a locally available picture")
+    func marketChoicesUseCachedImages() {
+        let missingThumbnail = CachedImageAsset(
+            wallpaperID: image("missing-thumbnail"),
+            kind: .thumbnail,
+            relativePath: "missing-thumbnail.jpg",
+            byteCount: 100,
+            lastAccessedAt: Self.fixedNow
+        )
+        let snapshot = RepositorySnapshot(
+            occurrences: [
+                occurrence("2026-11-25", market: .zhCN, imageID: "cached-thumbnail"),
+                occurrence("2026-11-24", market: .zhCN, imageID: "cached-thumbnail"),
+                occurrence("2026-11-25", market: .enUS, imageID: "cached-original"),
+                occurrence("2026-11-25", market: .jaJP, imageID: "missing-thumbnail"),
+                occurrence("2026-11-25", market: Market("xx-XX"), imageID: "unsupported")
+            ],
+            assets: [
+                CachedImageAsset(
+                    wallpaperID: image("cached-thumbnail"),
+                    kind: .thumbnail,
+                    relativePath: "cached-thumbnail.jpg",
+                    byteCount: 100,
+                    lastAccessedAt: Self.fixedNow
+                ),
+                CachedImageAsset(
+                    wallpaperID: image("cached-original"),
+                    kind: .original,
+                    relativePath: "cached-original.jpg",
+                    byteCount: 100,
+                    lastAccessedAt: Self.fixedNow
+                ),
+                missingThumbnail,
+                CachedImageAsset(
+                    wallpaperID: image("unsupported"),
+                    kind: .thumbnail,
+                    relativePath: "unsupported.jpg",
+                    byteCount: 100,
+                    lastAccessedAt: Self.fixedNow
+                )
+            ],
+            missingAssets: [missingThumbnail]
+        )
+
+        #expect(LibraryMarketBuilder.availableMarkets(snapshot: snapshot) == [.zhCN, .enUS])
+    }
+
     // MARK: Gallery joins
 
     @Test("gallery filters market, sorts by source date and joins strict stories")
@@ -360,6 +407,32 @@ struct LibraryTests {
         #expect(model.favoriteImageCount == 0)
         #expect(model.galleryItems.allSatisfy { !$0.isFavorite })
     }
+
+    @Test("market switches preserve the calendar month and selected date")
+    @MainActor
+    func marketSwitchPreservesCalendarNavigation() async throws {
+        let directory = FileManager.default.temporaryDirectory
+            .appendingPathComponent(
+                "DaybreakLibraryMarketNavigation-\(UUID().uuidString)",
+                isDirectory: true
+            )
+        defer { try? FileManager.default.removeItem(at: directory) }
+
+        let now: @Sendable () -> Date = { Self.fixedNow }
+        let service = try TodayService(directory: directory, now: now)
+        let model = LibraryModel(service: service, market: .zhCN, now: now)
+        await model.load()
+
+        let selectedDate = date("2026-12-17")
+        await model.selectDate(selectedDate)
+        let selectedMonth = model.monthKey
+        model.updateMarket(.enUS)
+        await model.load()
+
+        #expect(model.monthKey == selectedMonth)
+        #expect(model.selectedDate == selectedDate)
+    }
+
 
     @Test("favorite changes hand exactly one coalesced signal to sync")
     @MainActor

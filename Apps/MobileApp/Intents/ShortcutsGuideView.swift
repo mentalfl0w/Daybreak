@@ -1,5 +1,6 @@
 import SwiftUI
 import UIKit
+import UserNotifications
 
 /// Setup and daily-automation guide for the supported Shortcuts wallpaper flow.
 ///
@@ -9,10 +10,10 @@ import UIKit
 /// confirms each step. The view never claims that Daybreak installed a
 /// shortcut or changed the system wallpaper.
 struct ShortcutsGuideView: View {
-    /// Canonical `source:sourceImageID` text, or nil when the host screen has
-    /// no selected image. Without it the one-click run link is disabled.
-    let selectedWallpaperID: String?
-
+    /// Occurrence-aware text from the host screen, or nil when there is no
+    /// selected image. Without it the one-click run link is disabled.
+    let selectedWallpaperReference: DaybreakWallpaperReference?
+    @Environment(\.scenePhase) private var scenePhase
     @Environment(\.openURL) private var openURL
     @AppStorage(DaybreakShortcutGuideStorage.applyConfigured) private var applyConfigured = false
     @AppStorage(DaybreakShortcutGuideStorage.dailyConfigured) private var dailyConfigured = false
@@ -22,20 +23,28 @@ struct ShortcutsGuideView: View {
 
     @State private var didCopyID = false
     @State private var urlError: String?
-    @State private var fetchedWallpaperID: String?
+    @State private var fetchedWallpaperReference: DaybreakWallpaperReference?
     @State private var isLoadingSelection = false
+    @State private var notificationAuthorizationStatus: UNAuthorizationStatus = .notDetermined
+    @State private var isRequestingNotificationAuthorization = false
+    @State private var notificationPermissionMessage: String?
 
-    private var effectiveWallpaperID: String? {
-        selectedWallpaperID ?? fetchedWallpaperID
+    private var effectiveWallpaperReference: DaybreakWallpaperReference? {
+        selectedWallpaperReference ?? fetchedWallpaperReference
     }
 
-    init(selectedWallpaperID: String? = nil) {
-        self.selectedWallpaperID = selectedWallpaperID
+    private var effectiveWallpaperID: String? {
+        effectiveWallpaperReference?.wallpaperID.description
+    }
+
+    init(selectedWallpaperReference: DaybreakWallpaperReference? = nil) {
+        self.selectedWallpaperReference = selectedWallpaperReference
     }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             header
+            notificationCard
             if let urlError {
                 Text(urlError)
                     .font(.footnote)
@@ -47,14 +56,119 @@ struct ShortcutsGuideView: View {
         }
         .frame(maxWidth: 640, alignment: .leading)
         .accessibilityElement(children: .contain)
-        .task(id: selectedWallpaperID) {
-            guard selectedWallpaperID == nil else { return }
+        .task(id: selectedWallpaperReference) {
+            guard selectedWallpaperReference == nil else { return }
             isLoadingSelection = true
             defer { isLoadingSelection = false }
-            guard let wallpaperID = await MobileIntentService.shared.currentSelectionWallpaperID() else {
+            guard let selection = await MobileIntentService.shared.currentSelectionIdentity() else {
                 return
             }
-            fetchedWallpaperID = wallpaperID.description
+            fetchedWallpaperReference = DaybreakWallpaperReference(
+                wallpaperID: selection.wallpaperID,
+                occurrenceKey: selection.occurrenceKey
+            )
+        }
+        .task {
+            await refreshNotificationAuthorization()
+        }
+        .onChange(of: scenePhase) { _, phase in
+            guard phase == .active else { return }
+            Task { await refreshNotificationAuthorization() }
+        }
+    }
+
+    // MARK: Notification permission
+
+    private var notificationCard: some View {
+        card(title: "壁纸通知", systemImage: "bell.badge") {
+            VStack(alignment: .leading, spacing: 10) {
+                Text("允许通知后，快捷指令可在“设置墙纸照片”之后显示同一张图片的缩略图、来源标题、地区与版权说明，以及可用的知识点。通知只表示已提交，不会证明系统壁纸动作成功。")
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                switch notificationAuthorizationStatus {
+                case .authorized, .provisional, .ephemeral:
+                    Label("通知已允许。快捷指令可发送壁纸通知。", systemImage: "checkmark.circle.fill")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                case .denied:
+                    Text("通知权限已关闭。请在系统设置中允许 Daybreak 通知。")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                    Button("打开系统通知设置", systemImage: "gear") {
+                        openNotificationSettings()
+                    }
+                    .buttonStyle(.bordered)
+                case .notDetermined:
+                    Button {
+                        requestNotificationAuthorization()
+                    } label: {
+                        if isRequestingNotificationAuthorization {
+                            ProgressView("正在请求通知权限…")
+                        } else {
+                            Label("允许通知", systemImage: "bell.badge")
+                        }
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .disabled(isRequestingNotificationAuthorization)
+                @unknown default:
+                    Text("无法读取通知权限状态。")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }
+
+                if let notificationPermissionMessage {
+                    Text(notificationPermissionMessage)
+                        .font(.footnote)
+                        .foregroundStyle(.red)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+        }
+    }
+
+    private var notificationActionStep: LocalizedStringKey {
+        "在系统“设置墙纸照片”之后添加“发送 Daybreak 壁纸通知”动作，并将“壁纸图片”设为同一个 Daybreak 获取壁纸动作返回的图片（不要连接系统墙纸动作的结果）。通知使用这张图片的缩略图、来源标题、地区、版权和可用知识点；快捷指令无法确认系统墙纸是否更改。"
+    }
+
+    private func refreshNotificationAuthorization() async {
+        let settings = await UNUserNotificationCenter.current().notificationSettings()
+        notificationAuthorizationStatus = settings.authorizationStatus
+    }
+
+    private func requestNotificationAuthorization() {
+        isRequestingNotificationAuthorization = true
+        notificationPermissionMessage = nil
+        Task {
+            defer { isRequestingNotificationAuthorization = false }
+            do {
+                _ = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert])
+                await refreshNotificationAuthorization()
+            } catch {
+                notificationPermissionMessage = MobileLocalizedString.resolve(
+                    "通知权限请求失败。请稍后重试。",
+                    locale: DaybreakShortcutLocale.current
+                )
+            }
+        }
+    }
+
+    private func openNotificationSettings() {
+        guard let url = URL(string: UIApplication.openSettingsURLString) else {
+            notificationPermissionMessage = MobileLocalizedString.resolve(
+                "无法打开系统设置。请手动在“设置”中查找 Daybreak 的通知选项。",
+                locale: DaybreakShortcutLocale.current
+            )
+            return
+        }
+        openURL(url) { accepted in
+            if !accepted {
+                notificationPermissionMessage = MobileLocalizedString.resolve(
+                    "无法打开系统设置。请手动在“设置”中查找 Daybreak 的通知选项。",
+                    locale: DaybreakShortcutLocale.current
+                )
+            }
         }
     }
 
@@ -95,16 +209,15 @@ struct ShortcutsGuideView: View {
                 Button {
                     runShortcut(
                         name: DaybreakShortcutName.apply,
-                        input: effectiveWallpaperID
+                        input: effectiveWallpaperReference?.text
                     )
                 } label: {
                     Label("运行 Daybreak Apply", systemImage: "photo.badge.arrow.down")
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .buttonStyle(.borderedProminent)
-                .disabled(!applyConfigured || effectiveWallpaperID == nil)
-                .accessibilityHint("打开系统的 Daybreak Apply 快捷指令，并把当前壁纸 ID 作为文本输入传入。系统会显示实际结果。")
-
+                .disabled(!applyConfigured || effectiveWallpaperReference == nil)
+                .accessibilityHint("打开系统的 Daybreak Apply 快捷指令，并传入所选图片及其地区和日期。系统会显示实际结果。")
                 if !applyConfigured {
                     Text("先添加并确认 Daybreak Apply，运行按钮才会启用。")
                         .font(.footnote)
@@ -113,7 +226,7 @@ struct ShortcutsGuideView: View {
 
                 lastHandoffStatus
 
-                Text("这个按钮只把图片 ID 交给快捷指令。是否成功、是否需要确认，都由系统快捷指令显示；Daybreak 不会读取系统壁纸，也不会把“已打开”当成“已设置”。")
+                Text("这个按钮只把所选图片及其具体出现位置交给快捷指令。是否成功、是否需要确认，都由系统快捷指令显示；Daybreak 不会读取系统壁纸，也不会把“已打开”当成“已设置”。")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -126,9 +239,10 @@ struct ShortcutsGuideView: View {
             VStack(alignment: .leading, spacing: 12) {
                 step(1, "打开“快捷指令”App，新建一个快捷指令，名称必须是 Daybreak Apply。名称不一致时，Daybreak 无法通过系统 URL 运行它。")
                 step(2, "在快捷指令的详细信息中开启接收文本输入（快捷操作或分享表单），否则“快捷指令输入”可能为空。")
-                step(3, "添加“按 ID 获取 Daybreak 壁纸”动作，把“壁纸 ID”设为“快捷指令输入”，并在“输出”中选择原图或目标屏幕比例。")
-                step(4, "添加系统“设置墙纸照片”动作（不同系统版本的名称可能略有不同），把上一步返回的图片交给它，并在系统预览中确认。")
-                step(5, "回到这里打开“我已添加 Daybreak Apply”。这只是解锁运行按钮，不代表 Daybreak 检测到了快捷指令。")
+                step(3, "添加“按图片引用获取 Daybreak 壁纸”动作，把“壁纸引用”设为“快捷指令输入”，并在“输出”中选择原图或目标屏幕比例。")
+                step(4, "添加系统“设置墙纸照片”动作，把上一步返回的图片交给它，并在系统预览中确认。")
+                step(5, notificationActionStep)
+                step(6, "回到这里打开“我已添加 Daybreak Apply”。这只是解锁运行按钮，不代表 Daybreak 检测到了快捷指令。")
 
                 ViewThatFits(in: .horizontal) {
                     HStack(spacing: 12) {
@@ -155,6 +269,10 @@ struct ShortcutsGuideView: View {
                 .font(.footnote.monospaced())
                 .textSelection(.enabled)
                 .foregroundStyle(.secondary)
+            Text("从“今日”或“时光”页运行时，Daybreak 会传入图片 ID、地区和来源日期，并按这条具体出现记录解析元数据。")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
         } else if isLoadingSelection {
             ProgressView("正在读取当前选择…")
                 .font(.footnote)
@@ -177,19 +295,19 @@ struct ShortcutsGuideView: View {
 
     @ViewBuilder
     private var copyIDButton: some View {
-        if let effectiveWallpaperID {
+        if let reference = effectiveWallpaperReference {
             Button {
-                UIPasteboard.general.string = effectiveWallpaperID
+                UIPasteboard.general.string = reference.text
                 didCopyID = true
             } label: {
                 Label(
-                    didCopyID ? LocalizedStringKey("已复制壁纸 ID") : LocalizedStringKey("复制壁纸 ID"),
+                    didCopyID ? LocalizedStringKey("已复制快捷指令输入") : LocalizedStringKey("复制快捷指令输入"),
                     systemImage: didCopyID ? "checkmark" : "doc.on.doc"
                 )
             }
             .buttonStyle(.bordered)
             .tint(.daybreakActionTint)
-            .accessibilityHint("复制 \(effectiveWallpaperID)，用于“按 ID 获取 Daybreak 壁纸”动作或测试。")
+            .accessibilityHint("复制 \(reference.text)，用于“按图片引用获取 Daybreak 壁纸”动作或测试。")
         }
     }
 
@@ -239,10 +357,11 @@ struct ShortcutsGuideView: View {
         DisclosureGroup("或手动创建") {
             VStack(alignment: .leading, spacing: 12) {
                 step(1, "新建名为 Daybreak Daily 的快捷指令，添加“获取今日 Daybreak 壁纸”动作，并在“输出”中按目标设备选择：普通 iPhone 竖屏选锁屏或主屏幕（9:19.5），iPad 横屏选 iPad 横屏（近似 4:3），Duo 按目标屏幕选对应预设；不确定时选原图。")
-                step(2, "添加系统“设置墙纸照片”动作（名称可能因系统版本略有不同），并在预览中确认。")
-                step(3, "打开“快捷指令”的“自动化”，新建“时间”自动化，每天选择时间，运行 Daybreak Daily。")
-                step(4, "如果系统提供“运行前询问”，可尝试关闭；部分 iOS 版本仍会要求确认，自动化不保证准点执行。")
-                step(5, "Bing 可能尚未发布当天图片。建议把时间设在早晨，失败时快捷指令会显示“今天尚未缓存”，不会用旧图冒充。")
+                step(2, "添加系统“设置墙纸照片”动作，把获取壁纸动作返回的图片交给它，并在系统预览中确认。")
+                step(3, notificationActionStep)
+                step(4, "打开“快捷指令”的“自动化”，新建“时间”自动化，每天选择时间，运行 Daybreak Daily。")
+                step(5, "如果系统提供“运行前询问”，可尝试关闭；部分 iOS 版本仍会要求确认，自动化不保证准点执行。")
+                step(6, "Bing 可能尚未发布当天图片。建议把时间设在早晨，失败时快捷指令会显示“今天尚未缓存”，不会用旧图冒充。")
             }
             .padding(.top, 8)
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -262,7 +381,7 @@ struct ShortcutsGuideView: View {
                     Text("快捷指令：\(lastHandoffShortcut)")
                 }
                 if !lastHandoffWallpaperID.isEmpty {
-                    Text("壁纸 ID：\(lastHandoffWallpaperID)")
+                    Text("快捷指令输入：\(lastHandoffWallpaperID)")
                         .font(.footnote.monospaced())
                         .textSelection(.enabled)
                 }
@@ -329,10 +448,16 @@ struct ShortcutsGuideView: View {
     }
 
     private var installNote: some View {
-        Text("按钮只打开 iCloud 上的快捷指令页面。请在页面点“获取快捷指令”，再在系统确认框中添加；Daybreak 无法检测你是否已添加。")
-            .font(.footnote)
-            .foregroundStyle(.secondary)
-            .fixedSize(horizontal: false, vertical: true)
+        VStack(alignment: .leading, spacing: 4) {
+            Text("按钮只打开 iCloud 上的快捷指令页面。请在页面点“获取快捷指令”，再在系统确认框中添加；Daybreak 无法检测你是否已添加。")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+            Text("iCloud 分享内容由外部托管，Daybreak 无法随应用更新修改它们。链接失效或缺少通知动作时，请按下方的手动步骤创建或编辑快捷指令。")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
     }
 
     private func card<Content: View>(

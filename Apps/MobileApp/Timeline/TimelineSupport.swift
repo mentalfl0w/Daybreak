@@ -45,6 +45,26 @@ protocol TimelineDataStore: AnyObject {
     func recordCurrentSelection(_ key: OccurrenceKey?) async
 }
 
+// MARK: - Markets
+
+enum TimelineMarketBuilder {
+    /// Supported markets with at least one occurrence backed by a locally
+    /// available thumbnail or original image.
+    static func availableMarkets(snapshot: RepositorySnapshot) -> [Market] {
+        let availableImages = snapshot.availableThumbnailIDs
+            .union(snapshot.availableOriginalIDs)
+        let marketsWithImages = Set(
+            snapshot.occurrences
+                .filter { availableImages.contains($0.wallpaperID) }
+                .map(\.market)
+        )
+        return BingMarketProfile.catalog.compactMap { profile in
+            marketsWithImages.contains(profile.market) ? profile.market : nil
+        }
+    }
+}
+
+
 // MARK: - Navigation values
 
 enum TimelineSection: String, CaseIterable, Identifiable, Sendable {

@@ -23,17 +23,13 @@ struct LiveDaybreakShortcutDataSource: DaybreakShortcutDataSource {
             selection = .randomFavorite
         case .currentSelection:
             selection = .currentSelection
-        case .wallpaperID(let rawValue):
-            guard DaybreakWallpaperReference(text: rawValue) != nil else {
+        case .wallpaperReference(let rawValue):
+            guard let reference = DaybreakWallpaperReference(text: rawValue) else {
                 throw DaybreakShortcutError.malformedWallpaperID
             }
-            guard let wallpaperID = await MobileIntentService.shared
-                .lookupWallpaperID(rawValue) else {
-                throw DaybreakShortcutError.unknownWallpaper(rawValue)
-            }
-            selection = .wallpaper(wallpaperID)
-        }
+            selection = .occurrence(reference.occurrenceKey, reference.wallpaperID)
 
+        }
         do {
             let image = try await MobileIntentService.shared.prepareIntentImage(
                 selection,
@@ -111,7 +107,7 @@ struct LiveDaybreakShortcutDataSource: DaybreakShortcutDataSource {
                 return .noFavorites
             case .currentSelection:
                 return .noCurrentSelection
-            case .wallpaperID(let rawValue):
+            case .wallpaperReference(let rawValue):
                 return .unknownWallpaper(rawValue)
             }
         case .noFavorites:

@@ -360,6 +360,8 @@ struct TimelineCalendarView: View {
             .accessibilityLabel(model.display == .month ? Text("下个月") : Text("下一年"))
 
             Spacer(minLength: 8)
+            marketMenu
+
 
             Button {
                 model.setDisplay(model.display == .month ? .year : .month)
@@ -372,6 +374,41 @@ struct TimelineCalendarView: View {
             .accessibilityLabel(model.display == .month ? Text("切换到年视图") : Text("切换到月视图"))
         }
     }
+
+    private var marketMenu: some View {
+        Menu {
+            if model.availableMarkets.isEmpty {
+                Text("没有已缓存图片的地区")
+                    .disabled(true)
+            } else {
+                ForEach(model.availableMarkets, id: \.self) { market in
+                    Button {
+                        Task { await model.setMarket(market) }
+                    } label: {
+                        if market == model.market {
+                            Label(
+                                TimelinePresentation.marketName(for: market, in: locale),
+                                systemImage: "checkmark"
+                            )
+                        } else {
+                            Text(verbatim: TimelinePresentation.marketName(for: market, in: locale))
+                        }
+                    }
+                }
+            }
+        } label: {
+            Image(systemName: "globe")
+                .font(.body.weight(.semibold))
+                .frame(width: 34, height: 34)
+        }
+        .buttonStyle(.bordered)
+        .buttonBorderShape(.circle)
+        .accessibilityLabel(Text("地区"))
+        .accessibilityValue(
+            Text(verbatim: TimelinePresentation.marketName(for: model.market, in: locale))
+        )
+    }
+
 
     @ViewBuilder
     private var monthContent: some View {

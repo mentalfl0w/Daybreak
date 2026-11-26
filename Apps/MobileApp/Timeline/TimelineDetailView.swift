@@ -225,7 +225,10 @@ struct TimelineDetailView: View {
             favoriteButton(detail)
             previewButton(detail)
             if let wallpaperID = detail.wallpaperID {
-                DaybreakSetWallpaperButton(wallpaperID: wallpaperID.description)
+                DaybreakSetWallpaperButton(
+                    wallpaperID: wallpaperID,
+                    occurrenceKey: detail.key
+                )
             }
             if !detail.hasOriginal {
                 downloadButton(detail)

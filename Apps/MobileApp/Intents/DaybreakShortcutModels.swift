@@ -56,7 +56,7 @@ enum DaybreakShortcutTarget: Sendable, Hashable {
     case randomCached
     case favorite
     case currentSelection
-    case wallpaperID(String)
+    case wallpaperReference(String)
 }
 
 // MARK: - Errors
@@ -78,13 +78,14 @@ enum DaybreakShortcutError: Error, Equatable, Sendable, LocalizedError {
     case cropUnavailable(String)
     case storeUnavailable(String)
     case timedOut
+    case notificationReferenceUnavailable
 
     var errorDescription: String? {
         let locale = DaybreakShortcutLocale.current
         switch self {
         case .malformedWallpaperID:
             return MobileLocalizedString.resolve(
-                "壁纸 ID 无效。请使用“来源:图片 ID”的格式，例如 bing:OHR.Example。",
+                "壁纸引用无效。请从 Daybreak 今日或时光页运行快捷指令，让应用传入图片 ID、地区和日期。",
                 locale: locale
             )
         case .unsupportedMarket(let market):
@@ -152,6 +153,11 @@ enum DaybreakShortcutError: Error, Equatable, Sendable, LocalizedError {
             return String(
                 format: MobileLocalizedString.resolve("无法打开 Daybreak 本地资料库：%@", locale: locale),
                 detail
+            )
+        case .notificationReferenceUnavailable:
+            return MobileLocalizedString.resolve(
+                "无法创建壁纸通知引用。请重新获取图片后重试。",
+                locale: locale
             )
         case .timedOut:
             return MobileLocalizedString.resolve(
@@ -254,38 +260,167 @@ enum DaybreakCalendarDate {
     }
 }
 
-// MARK: - Wallpaper ID text
+// MARK: - Occurrence-aware wallpaper reference text
 
-/// Canonical text form of a wallpaper identity for Shortcuts text input.
-///
-/// A run-shortcut URL can only carry text, not a sandbox file URL. The text is
-/// therefore the canonical `source:sourceImageID` identity; the intent resolves
-/// it through the shared store and returns a real file. Parsing is strict so a
-/// missing ID cannot silently become a different wallpaper.
+/// The text form passed through the public Shortcuts URL. It always identifies
+/// one image occurrence: its wallpaper ID, market, and source date.
 struct DaybreakWallpaperReference: Hashable, Sendable {
-    let wallpaperID: WallpaperID
+    private static let occurrencePrefix = "daybreak-occurrence-v1"
 
-    init(wallpaperID: WallpaperID) {
+    let wallpaperID: WallpaperID
+    let occurrenceKey: OccurrenceKey
+
+    init(wallpaperID: WallpaperID, occurrenceKey: OccurrenceKey) {
         self.wallpaperID = wallpaperID
+        self.occurrenceKey = occurrenceKey
     }
 
     init?(text: String) {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmed.isEmpty, trimmed.utf8.count <= 512 else { return nil }
-        guard !trimmed.unicodeScalars.contains(where: { CharacterSet.controlCharacters.contains($0) }) else {
+        guard !trimmed.isEmpty,
+              trimmed.utf8.count <= 768,
+              !trimmed.unicodeScalars.contains(where: {
+                  CharacterSet.controlCharacters.contains($0)
+              })
+        else {
             return nil
         }
-        let parts = trimmed.split(separator: ":", maxSplits: 1, omittingEmptySubsequences: false)
+
+        let components = trimmed.split(
+            separator: "|",
+            maxSplits: 3,
+            omittingEmptySubsequences: false
+        )
+        guard components.count == 4,
+              components[0] == Self.occurrencePrefix,
+              let wallpaperID = Self.parseWallpaperID(String(components[3]))
+        else {
+            return nil
+        }
+
+        let market = Market(String(components[1]))
+        guard let sourceDate = LocalDate(iso8601: String(components[2])) else {
+            return nil
+        }
+        let key = OccurrenceKey(
+            source: wallpaperID.source,
+            market: market,
+            localDate: sourceDate
+        )
+        guard key.isValid,
+              BingMarketProfile.profile(for: market) != nil
+        else {
+            return nil
+        }
+
+        self.wallpaperID = wallpaperID
+        self.occurrenceKey = key
+    }
+
+    var text: String {
+        [
+            Self.occurrencePrefix,
+            occurrenceKey.market.rawValue,
+            occurrenceKey.localDate.iso8601,
+            wallpaperID.description
+        ].joined(separator: "|")
+    }
+
+    private static func parseWallpaperID(_ text: String) -> WallpaperID? {
+        let parts = text.split(separator: ":", maxSplits: 1, omittingEmptySubsequences: false)
         guard parts.count == 2 else { return nil }
         let source = SourceID(String(parts[0]))
         let imageID = String(parts[1]).trimmingCharacters(in: .whitespacesAndNewlines)
         guard source.isValid, !imageID.isEmpty else { return nil }
         let identifier = WallpaperID(source: source, sourceImageID: imageID)
-        guard identifier.isValid else { return nil }
-        self.wallpaperID = identifier
+        return identifier.isValid ? identifier : nil
+    }
+}
+
+// MARK: - Notification handoff reference
+
+/// Occurrence identity encoded in the exported file name so a later Shortcuts
+/// action can recover metadata for the exact Daybreak image it receives.
+struct DaybreakShortcutNotificationReference: Codable, Hashable, Sendable {
+    private static let filePrefix = "Daybreak-Notice-"
+
+    let wallpaperID: WallpaperID
+    let sourceDate: LocalDate
+    let market: Market
+
+    init(wallpaperID: WallpaperID, sourceDate: LocalDate, market: Market) {
+        self.wallpaperID = wallpaperID
+        self.sourceDate = sourceDate
+        self.market = market
     }
 
-    var text: String { wallpaperID.description }
+    var occurrenceKey: OccurrenceKey {
+        OccurrenceKey(
+            source: wallpaperID.source,
+            market: market,
+            localDate: sourceDate
+        )
+    }
+
+    func fileName(withExtension fileExtension: String) throws -> String {
+        let normalizedExtension = fileExtension.lowercased()
+        guard !normalizedExtension.isEmpty,
+              normalizedExtension.unicodeScalars.allSatisfy({
+                  CharacterSet.alphanumerics.contains($0)
+              }),
+              wallpaperID.isValid,
+              occurrenceKey.isValid,
+              BingMarketProfile.profile(for: market) != nil
+        else {
+            throw DaybreakShortcutError.notificationReferenceUnavailable
+        }
+
+        let payload: Data
+        do {
+            payload = try JSONEncoder().encode(self)
+        } catch {
+            throw DaybreakShortcutError.notificationReferenceUnavailable
+        }
+        let token = payload.base64EncodedString()
+            .replacingOccurrences(of: "+", with: "-")
+            .replacingOccurrences(of: "/", with: "_")
+            .replacingOccurrences(of: "=", with: "")
+        let fileName = "\(Self.filePrefix)\(token).\(normalizedExtension)"
+        guard fileName.utf8.count <= 240 else {
+            throw DaybreakShortcutError.notificationReferenceUnavailable
+        }
+        return fileName
+    }
+
+    init?(fileName: String) {
+        guard fileName.utf8.count <= 240 else { return nil }
+
+        let name = URL(fileURLWithPath: fileName)
+            .deletingPathExtension()
+            .lastPathComponent
+        guard name.hasPrefix(Self.filePrefix) else { return nil }
+
+        var token = String(name.dropFirst(Self.filePrefix.count))
+            .replacingOccurrences(of: "-", with: "+")
+            .replacingOccurrences(of: "_", with: "/")
+        let remainder = token.utf8.count % 4
+        if remainder != 0 {
+            token += String(repeating: "=", count: 4 - remainder)
+        }
+
+        guard let payload = Data(base64Encoded: token),
+              let reference = try? JSONDecoder().decode(
+                  Self.self,
+                  from: payload
+              ),
+              reference.wallpaperID.isValid,
+              reference.occurrenceKey.isValid,
+              BingMarketProfile.profile(for: reference.market) != nil
+        else {
+            return nil
+        }
+        self = reference
+    }
 }
 
 // MARK: - App entity and enum parameters
