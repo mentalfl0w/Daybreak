@@ -1,7 +1,7 @@
 # Daybreak
 
 <p align="center">
-  <img src="branding/Daybreak-Logo-Transparent.png" alt="Daybreak" width="180">
+  <img src="Assets/iOS/Assets.xcassets/AppIcon.appiconset/AppIcon.png" alt="Daybreak app icon" width="180">
 </p>
 
 <p align="center">A modern Bing daily wallpaper client for Mac, iPhone and iPad.</p>
