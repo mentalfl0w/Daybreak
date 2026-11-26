@@ -59,8 +59,8 @@ targets:
         INFOPLIST_KEY_NSHighResolutionCapable: YES
         INFOPLIST_KEY_NSPrincipalClass: NSApplication
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
-        MARKETING_VERSION: "1.0"
-        CURRENT_PROJECT_VERSION: "1"
+        MARKETING_VERSION: "1.1.0"
+        CURRENT_PROJECT_VERSION: "2"
         COMBINE_HIDPI_IMAGES: YES
     scheme:
       testTargets:
@@ -132,8 +132,8 @@ targets:
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         TARGETED_DEVICE_FAMILY: "1,2"
-        MARKETING_VERSION: "1.0"
-        CURRENT_PROJECT_VERSION: "8"
+        MARKETING_VERSION: "1.1.0"
+        CURRENT_PROJECT_VERSION: "9"
         # Automatic signing with whichever team the user selects locally.
         # Never commit DEVELOPMENT_TEAM, certificates, profiles or
         # entitlements; the default sideload configuration needs none.
