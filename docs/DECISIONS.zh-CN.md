@@ -1,113 +1,141 @@
-# Architecture decision log
+# 架构决策记录
 
-## Accepted (2026-11-23)
+## 已接受的决策
 
-- ADR-001: Swift 6 + SwiftUI; shared `DaybreakCore` Swift Package; Mac + Mobile targets. Rationale: native rendering and lightweight maintenance.
-- ADR-002: Calendar + cached editorial story are P0, not widgets-only. Rationale: historical and offline value.
-- ADR-003: Local-only recap from observed records, with explicit coverage. Rationale: offline/privacy and truthful history.
-- ADR-004: GitHub open source, not App Store; iOS/iPadOS sideloaded with per-user signing. Rationale: release preference.
-- ADR-005: No private APIs for Space/wallpaper. Event-driven convergence rather than atomic all-Space guarantee.
-- ADR-006: Bing metadata + editorial story are distinct providers with provenance; no fabricated fallback.
-- ADR-007: MIT is proposed for newly authored source code only; Bing content rights remain separate.
-- ADR-008: Phase A conditionally accepted; remaining device and system integration checks were originally treated as mandatory in their respective later phases. ADR-012 now defers them; they stay Not tested and do not block Phase D. Multi-display and multi-Space are separate P0 features. Space convergence uses public events and accessible Spaces only; inactive Spaces are not guaranteed to update immediately.
-- ADR-009: Do not download or install iOS simulator runtimes. Use installed SDKs for compile checks and authorized physical devices for behavioral acceptance.
+### ADR-001：Swift 6 与 SwiftUI
 
-## Pending / deferred verification
+- 使用 Swift 6、SwiftUI 和共享的 `DaybreakCore` Swift Package，分别构建 macOS 与移动端目标。
+- 理由：使用原生渲染能力，减少维护面。
 
-- ADR-PENDING-001: Reliability and schema of `/hp/api/model` across zh-CN, en-US, ja-JP; correct join key with `HPImageArchive`. Early probes took samples; long-term stability remains open.
-- ADR-PENDING-002: Full end-to-end App Intent → Shortcut → set wallpaper on target iOS versions and Duo crop behavior. Deferred and remains untested.
-- ADR-PENDING-003: Space switch event and desired wallpaper persistence under multi-display/mission-control. Partially observed; complete multi-display and multi-Space acceptance deferred.
-- ADR-PENDING-004: Sideload-compatible signing entitlements and optional widget capabilities. Deferred.
-- ADR-PENDING-005: Persistence implementation (SwiftData vs SQLite/file repository), including migration semantics. ADR-010 accepts the single-process actor repository; multi-process coordination remains open.
+### ADR-002：日历与缓存介绍属于核心体验
 
-For a new ADR: add Date, Status, Decision, Alternatives, Evidence, Risks, Consequences, Tests.
+- 日历和缓存的每日介绍属于 P0 功能，不只作为小组件能力提供。
+- 理由：它们支撑历史浏览和离线使用。
 
-## ADR-010 — Single-process file repository
+### ADR-003：回顾只统计本机观察记录
 
-- Date: 2026-11-23. Status: accepted for the current app, not a multi-process storage decision.
-- Decision: versioned local index and separately stored image assets, serialized by a Swift actor; preserve and migrate the existing file-cache format.
-- Alternatives: SwiftData or SQLite with files. They were not benchmarked or migration-tested; neither is rejected for future multi-process use.
-- Evidence: repository migration, recovery, retention and offline tests.
-- Risks: actor isolation does not coordinate separate processes; crash recovery and future schema migrations need further validation.
-- Consequences: extensions or other processes must not concurrently write this repository without a new coordination/storage decision.
-- Tests: `swift test --package-path Packages/DaybreakCore`.
+- 回顾只使用本机实际归档的记录，并明确展示观察范围。
+- 理由：保持离线可用和统计诚实。
 
-## ADR-011 — No product wallpaper backup/restore; bounded applied-image protection
+### ADR-004：GitHub 开源与用户自行签名
 
-- Date: 2026-11-25; revised 2026-11-26 at the user's direction. Status: accepted.
-- Decision: Daybreak does not provide product-level backup/restore or rollback of system wallpapers. Protect currently accessible desktop images and in-flight writes; historical images are not permanently protected solely because an inactive Space may reference them. Retain favorites and pinned images, and evict eligible originals according to the cache limit.
-- Evidence: a single-display observation showed an image remained visible after moving its source and switching Spaces away and back. `MacPreflightDisplayObservation` is transient preflight state, not a user-visible backup.
-- Risks: Apple does not publicly guarantee durable wallpaper cache retention after source deletion. Sleep, system restart, multiple displays, and other OS versions have not been validated; inactive Spaces may lose their displayed wallpaper.
-- Consequences: no backup/restore UI; tests may write only after explicit authorization and must not claim recovery of every Space.
-- Tests: protect current and in-flight images and favorites/pins while allowing historic originals to be evicted; test migration and concurrent cleanup.
+- 项目在 GitHub 开源，不上架 App Store；iOS 和 iPadOS 由用户自行签名后侧载。
+- 理由：符合当前发布方式和分发边界。
 
-## ADR-012 — Deferred real-device/system acceptance; no dedicated test facility
+### ADR-005：壁纸与 Space 只使用公开 API
 
-- Date: 2026-11-25. Status: accepted.
-- Decision: Real-device and real-system checks (multi-display, multi-Space, notifications, login item, Shortcuts/Duo, signing) are deferred and remain untested. Do not require a dedicated test machine or permanent test facility. Use existing product flows and automated test targets.
-- Alternatives: block implementation on full system acceptance. Rejected because these checks require authorized devices and system conditions.
-- Evidence: prior platform probes and automated tests, with device gaps recorded in the changelog.
-- Risks: deferred defects may surface later; status must stay explicit in release notes.
-- Consequences: implementation can ship as unsigned artifacts while device evidence remains pending.
-- Tests: none executed for deferred items.
+- 不使用私有 API 修改 Space 或壁纸。通过公开事件驱动状态收敛，不承诺所有 Space 原子同步。
 
-## ADR-013 — Unreadable wallpaper is unknown, not a manual-set blocker
+### ADR-006：图片元数据和每日介绍分离
 
-- Date: 2026-11-25. Status: accepted.
-- Decision: An unreadable or dynamic original wallpaper does not block a user's explicit manual wallpaper set. Automatic overwrite of unknown wallpaper requires separate authorization and stays off by default. Two nil reads with identical options and no Space/display event do not prove the original wallpaper is unchanged.
-- Alternatives: block manual setting whenever the original cannot be read, or treat repeated nil reads as proof of no change. Both overstate what public APIs can observe.
-- Evidence: platform findings show that public APIs expose no atomic read/compare/write transaction.
-- Risks: the app may not detect a user change between reads; unknown-wallpaper overwrite must remain explicitly authorized.
-- Consequences: manual confirmation remains available; automatic mode stays conservative and observable.
-- Tests: not executed for deferred system behavior.
+- Bing 图片元数据和来源介绍由独立 Provider 获取，并分别保存来源信息。
+- 缺失内容保持缺失，不使用虚构文本兜底。
 
-## ADR-014 — Single adaptive iOS target with user-selected signing
+### ADR-007：代码许可证与 Bing 内容权利分离
 
-- Date: 2026-11-25. Status: accepted.
-- Decision: iPhone, iPhone Duo and iPad share one iOS App target `DaybreakMobile` (deployment target iOS 26.0, `TARGETED_DEVICE_FAMILY = 1,2`). The product name is `Daybreak` and the Swift module name is `DaybreakMobile`. The app icon lives in `Assets/iOS/Assets.xcassets`; `AppIntents.framework` is linked so Xcode runs its App Intents metadata build step. The project commits no `DEVELOPMENT_TEAM`, certificates, provisioning profiles or entitlements; each user selects a team locally.
-- Alternatives: separate iPhone/iPad targets, or Mac Catalyst / Designed for iPad. Rejected: the UI is already adaptive, distribution is user-signed sideloading rather than the App Store, and extra platform targets would add signing and layout surfaces without a product requirement.
-- Evidence: `Apps/MacApp/project.yml`, `Assets/iOS/Assets.xcassets`, and Apple's account/distribution documentation.
-- Risks: free Personal Team profiles expire after 7 days; App Intents/Shortcuts behavior under different signing modes is unverified.
-- Consequences: `Daybreak.xcodeproj` is regenerated from the XcodeGen spec and is not hand-edited. Real-device signing, Duo and iPad checks remain untested until executed.
-- Tests: none executed for signing or device behavior; compile commands are documented for users to run.
+- MIT 许可证只适用于项目新编写的源代码，Bing 图片和文字的权利仍归各自权利人所有。
 
-## ADR-015 — Duo outer crop preset follows published display geometry
+### ADR-008：阶段 A 有条件接受
 
-- Date: 2026-11-25. Status: accepted.
-- Decision: The user-selected Duo outer composition preset uses Apple's published iPhone Duo outer-display resolution, 1398×2034 pixels (5.4-inch, 460 ppi), reduced to 233:339. The ratio is static preset metadata; it is not device, fold-state or orientation detection. The Duo inner portrait/wide presets remain their existing 3:4 and 4:3 composition approximations until a separate change is requested and verified. Preview provenance shows the market's region/language name in the app's interface language instead of printing the raw Bing tag (`zh-CN`).
-- Alternatives: a generic foldable-cover ratio such as 9:21, or selecting a preset from runtime display state. Rejected: 9:21 does not match Apple's published outer display, and public APIs do not reliably expose fold state, especially to background intents; the user must choose the target.
-- Evidence: <https://www.apple.com/iphone-duo/specs/> (outer display: 5.4-inch, 1398-by-2034-pixel resolution at 460 ppi); <https://developer.apple.com/design/human-interface-guidelines/designing-for-iphone-duo> (the outer display is wider and shorter than other iPhone displays; avoid fixed display assumptions).
-- Risks: the exported composition remains a reference; iOS may crop again when the user sets wallpaper. Duo system behavior and the preview at its actual size remain unverified on a real device.
-- Consequences: `WallpaperCropPreset.duoOuter.aspectRatio` is 233:339 and its label reads `233:339`; Shortcuts dialog text uses the same label. Preview subtitles no longer show `zh-CN`; Bing story and title text are never translated.
-- Tests: `WallpaperCropGeometryTests.duoOuterPublishedRatio` and `WallpaperPreviewMetadataTests.subtitleLocalizesMarket`; not executed in this change.
+- 阶段 A 有条件接受。设备和系统集成检查延后到相应阶段，仍标记为 `Not tested`，不阻塞阶段 D。
+- 多显示器和多 Space 是两个独立的 P0 能力。Space 协调使用公开事件和当前可访问的 Space，不能保证未激活的 Space 立即更新。
 
-## ADR-016 — Cross-device sync uses a user-authorized folder, not CloudKit
+### ADR-009：不安装额外模拟器运行时
 
-- Date: 2026-11-26. Status: accepted.
-- Decision: Optional sync exchanges immutable, versioned operation files plus content-addressed image blobs inside a folder the user selects (for example an iCloud Drive folder). Each device keeps its own local `WallpaperRepository`; the shared folder never hosts the live index. One security-scoped bookmark per device lives only under local Application Support and is never synced. No CloudKit, CloudKit container, iCloud Key-Value Store, App Group, push or paid entitlement is used, so the default free-sideload build keeps working without capability changes.
-- Alternatives: CloudKit private database, a dedicated iCloud container, or sharing the repository index directly. Rejected: container/entitlement requirements conflict with free Personal Team signing, and sharing a mutable index makes concurrent writes and iCloud conflict copies unsafe.
-- Convergence: causal version vectors per device sequence, register union with anti-chain pruning, remove-wins on concurrent favorite/pin conflicts, tombstones retained until dominated. A local favorite or pin is only removed when the archive actually holds a record for that key that is tombstoned; mere absence (empty folder, not-yet-downloaded file, unreadable directory) never deletes local data. A pin names a date and is rebound to the date's current local image rather than rejected. Bootstrap of pre-journal local state carries only the local device's sequence context, so an old local favorite cannot resurrect a peer's removal; only later user actions with the observed frontier can.
-- Scope: favorites, pinned dates, occurrences, metadata, stories and thumbnails sync by default; originals and market preferences are opt-in; interface language, cache limits, wallpaper targets, permissions and bookmarks stay local. Turning sync off or replacing the folder deletes no local data and no previously shared files.
-- Evidence: `Packages/DaybreakCore/Sources/DaybreakSyncController.swift` and related sync tests. Limits: `.completed` means this device finished a local pass, never that peers have received it.
-- Risks: a writable shared folder lets another process inject well-formed operations; the engine validates structure, size, digest and decodability but cannot authenticate an author. Real iCloud propagation and bookmark persistence after free-team re-signing remain unverified.
-- Consequences: device sync behavior remains untested until executed on authorized devices.
+- 不下载或安装 iOS 模拟器运行时。编译检查使用已安装 SDK，行为验收使用已授权的真机。
 
-## ADR-017 — Explicit interface language requires `LocalizedStringResource`
+## 延后验证
 
-- Date: 2026-11-26. Status: accepted.
-- Decision: Every macOS string-catalog lookup that must follow the in-app interface language goes through `MacLocalizedString.resolve`, which builds a `LocalizedStringResource` carrying the locale and only falls back to the bundle language for `.current`/`.autoupdatingCurrent`. The mobile app already resolves through `MobileLocalizedString` the same way.
-- Context: `String(localized:locale:)` formats interpolated values with the locale but does not change the lookup language. On the installed macOS 27 SDK a probe inside the built app bundle returned the source-language text for `en`, `ja` and `zh-Hans`, so model copy ignored the interface-language setting even though SwiftUI text followed `.environment(\.locale)`.
-- Alternatives: keep `String(localized:locale:)` and relax the guard test. Rejected: it hides a user-visible defect; the guard exists precisely to catch a silent fallback.
-- Evidence: `Apps/MacApp/Core/MacLocalizedString.swift`; `DaybreakTests/CoreInterfaceLocaleRegressionTests` failed before the change and passes after it (`/tmp/test-locale.log`).
-- Risks: a new call site that uses `String(localized:locale:)` directly reintroduces the fallback; code review should reject it.
-- Consequences: string keys remain compile-time literals for catalog extraction; only the lookup locale is decided at runtime.
+- ADR-PENDING-001：`/hp/api/model` 在 `zh-CN`、`en-US` 和 `ja-JP` 下的长期稳定性、字段约束，以及与 `HPImageArchive` 的准确关联键。
+- ADR-PENDING-002：App Intent → 快捷指令 → 设置壁纸的完整链路，以及 Duo 的最终裁切效果。
+- ADR-PENDING-003：Space 切换事件、目标壁纸持久性，以及多显示器与 Mission Control 下的完整协调。
+- ADR-PENDING-004：适合侧载的签名权限和可选小组件能力。
+- ADR-PENDING-005：持久化实现及迁移语义，包括 SwiftData、SQLite 或文件仓库的后续取舍。
 
-## ADR-018 — 组合式应用编排与基础设施边界
+新增决策记录时，应包含日期、状态、决策、替代方案、证据、风险、后果和测试。
+
+## ADR-010：单进程文件仓库
+
+- 日期：2026-11-23。状态：当前应用已接受，不代表多进程存储方案已确定。
+- 决策：使用版本化本地索引和独立图片资源，由 Swift actor 串行化访问，并保留和迁移现有文件缓存格式。
+- 替代方案：SwiftData 或 SQLite 加文件。两者尚未完成基准测试和迁移测试，因此不排除未来用于多进程场景。
+- 证据：仓库迁移、恢复、保留策略和离线测试。
+- 风险：actor 隔离不能协调独立进程；崩溃恢复和未来 schema 迁移仍需验证。
+- 后果：扩展或其他进程不能在没有新协调方案的情况下并发写入仓库。
+- 测试：`swift test --package-path Packages/DaybreakCore`。
+
+## ADR-011：不提供系统壁纸备份与恢复
+
+- 日期：2026-11-25，2026-11-26 根据用户意见修订。状态：已接受。
+- 决策：Daybreak 不提供系统壁纸的产品级备份、恢复或回滚。只保护当前可访问桌面正在使用的图片、写入中的图片、收藏和固定图片；历史图片按缓存上限正常淘汰。
+- 证据：单显示器观察表明，移走源文件并切换 Space 后，原壁纸仍可能显示，但这只是临时平台观察，不是用户可见的备份。
+- 风险：Apple 没有公开保证删除源文件后系统壁纸缓存仍会长期保留。睡眠、重启、多显示器和其他系统版本尚未验证。
+- 后果：不增加备份或恢复界面；测试只能在明确授权后写入，不能宣称能恢复每个 Space。
+- 测试：已覆盖当前图片、写入中的图片、收藏和固定图片的保护，以及迁移和并发清理；系统行为仍有未验证项。
+
+## ADR-012：延后真机和真实系统验收
+
+- 日期：2026-11-25。状态：已接受。
+- 决策：真机和真实系统检查，包括多显示器、多 Space、通知、登录项、快捷指令、Duo 和签名，暂时延后并保持 `Not tested`。不要求专用测试机器或永久测试设施，使用现有产品流程和自动化测试目标。
+- 替代方案：等待所有系统验收完成后再实现功能。该方案会被授权设备和系统条件阻塞，因此不采用。
+- 证据：已有平台探测和自动化测试，设备缺口在更新记录中明确标出。
+- 风险：延后的缺陷可能在后续验收中出现，发布说明必须保持状态透明。
+- 后果：可以发布未签名构建，但不能把设备证据缺口写成已验证。
+- 测试：延后项目没有执行测试。
+
+## ADR-013：无法读取的原壁纸不阻止手动设置
+
+- 日期：2026-11-25。状态：已接受。
+- 决策：原壁纸无法读取或属于动态壁纸时，不阻止用户明确发起的手动设置。自动覆盖未知壁纸需要单独授权，并默认关闭。没有 Space 或显示器事件时，两次相同选项的空读取不能证明原壁纸没有变化。
+- 替代方案：原壁纸不可读时阻止手动设置，或把重复空读取当作没有变化的证据。这两种做法都超出了公开 API 能确认的范围。
+- 证据：公开 API 没有提供原子读取、比较和写入事务。
+- 风险：两次读取之间发生的用户修改可能无法被发现，因此自动模式必须保守并提供可观察状态。
+- 后果：手动确认仍可用，自动模式默认不覆盖未知壁纸。
+- 测试：延后的系统行为尚未执行测试。
+
+## ADR-014：单一自适应 iOS 目标与用户自行签名
+
+- 日期：2026-11-25。状态：已接受。
+- 决策：iPhone、iPhone Duo 和 iPad 共用 `DaybreakMobile` iOS App target，部署目标为 iOS 26.0，`TARGETED_DEVICE_FAMILY = 1,2`。产品名为 Daybreak，Swift module 名为 `DaybreakMobile`。工程链接 `AppIntents.framework`，不提交团队标识、证书、描述文件或 entitlements，由用户在本机选择签名团队。
+- 替代方案：拆分 iPhone/iPad target，或使用 Mac Catalyst。当前自适应界面和用户侧载方式不需要额外目标。
+- 证据：`Apps/MacApp/project.yml`、`Assets/iOS/Assets.xcassets` 和 Apple 账户与分发文档。
+- 风险：免费 Personal Team 的 profile 有效期通常为 7 天；不同签名方式下的 App Intents 和快捷指令行为尚未完整验证。
+- 后果：工程由 XcodeGen 规范生成，不手动编辑 `Daybreak.xcodeproj`。真机签名、Duo 和 iPad 行为仍待验证。
+- 测试：尚未执行签名或真机行为测试。
+
+## ADR-015：Duo 外屏预览比例
+
+- 日期：2026-11-25。状态：已接受。
+- 决策：用户选择的 Duo 外屏构图预设采用 Apple 公布的 1398×2034 像素比例，简化为 `233:339`。这是静态预设元数据，不用于检测设备、折叠状态或方向。内屏竖屏和宽屏预设继续使用 3:4 与 4:3，直到另行验证。
+- 替代方案：使用通用折叠屏比例，或依据运行时折叠状态选择。公开 API 无法可靠提供后台折叠状态，因此由用户选择目标预设。
+- 证据：Apple 的 iPhone Duo 规格和人机界面指南。
+- 风险：导出的构图只是参考，用户设置壁纸时 iOS 可能再次裁切；真实设备上的系统行为和实际尺寸预览仍未验证。
+- 后果：`WallpaperCropPreset.duoOuter.aspectRatio` 使用 233:339，界面不直接显示原始 `zh-CN` 标签，也不翻译 Bing 的故事和标题。
+- 测试：已有 Duo 比例和市场本地化测试，真实设备行为尚未执行。
+
+## ADR-016：文件夹同步不使用 CloudKit
 
 - 日期：2026-11-26。状态：已接受。
-- 决策：使用值类型表达领域身份和快照，使用协议表达平台与外部服务边界，使用 actor 保护共享可变状态，使用组合拆分应用编排和基础设施职责。保留 `AppModel`、`WallpaperRepository` 和 `BingProvider` 作为稳定入口，但将显示器保护、仓库文件存储与校验、Bing 请求执行和图像验证移入聚焦的协作者。
-- 替代方案：增加继承层级或把每个小操作都抽成协议。拒绝，因为 SwiftUI 和 Swift 并发代码更适合组合、值语义和显式 actor 边界；过度抽象会扩大调用面。
-- 证据：`WallpaperDisplayCoordinator.swift`、`WallpaperRepositoryStorage.swift`、`WallpaperRepositoryValidation.swift`、`WallpaperRepositoryProtection.swift`、`BingRequestExecutor.swift`、`BingHTTPTransport.swift` 和 `BingImageValidator.swift`。边界检查脚本为 `scripts/check-import-boundaries.sh`。
-- 后果：应用入口保持稳定，内部职责更容易单独测试和演进。新增功能应优先加入现有协作者或新的聚焦协作者，不应继续扩大入口对象。
-- 测试：`swift test --package-path Packages/DaybreakCore`、`swift test --package-path Platform/MacIntegration`、macOS 与 iOS 未签名 Release 构建，以及模块边界检查均已执行。
+- 决策：可选同步在用户选择的文件夹中交换不可变的版本化操作文件和内容寻址图片资源，例如 iCloud Drive 文件夹。每台设备保留独立的 `WallpaperRepository`，共享文件夹不保存实时索引。每台设备的安全范围书签只保存在本机 Application Support，不参与同步。不使用 CloudKit、专用 iCloud 容器、iCloud Key-Value Store、App Group、推送或付费权限。
+- 收敛规则：使用每台设备的因果版本向量、寄存器合并、并发收藏和固定的删除优先规则，以及在被支配前保留的墓碑。文件夹为空、文件尚未下载或目录不可读时，不删除本地数据。
+- 同步范围：默认同步收藏、固定日期、发生记录、元数据、介绍和缩略图；原图和市场偏好可选。界面语言、缓存上限、壁纸目标、权限和书签保持本地。
+- 证据：`Packages/DaybreakCore/Sources/DaybreakSyncController.swift` 及相关同步测试。`.completed` 只表示本机完成一轮处理，不代表其他设备已经接收或应用变更。
+- 风险：可写共享文件夹中的其他进程可能注入结构合法但未认证的操作；真实 iCloud 传播和免费团队重签后的书签持久性仍未验证。
+- 后果：设备级同步行为在授权设备验收前保持未验证。
 
+## ADR-017：界面语言使用 `LocalizedStringResource`
+
+- 日期：2026-11-26。状态：已接受。
+- 决策：macOS 中需要跟随应用界面语言的字符串都通过 `MacLocalizedString.resolve` 查找，由它构造携带 locale 的 `LocalizedStringResource`。移动端使用相同原则的 `MobileLocalizedString`。
+- 背景：`String(localized:locale:)` 会使用 locale 格式化插值，但不一定改变资源查找语言，可能使模型文案忽略用户选择的界面语言。
+- 后果：字符串 key 保持可提取的字面量，运行时只决定查找语言。新增调用点不得绕过统一查找入口。
+- 测试：`DaybreakTests/CoreInterfaceLocaleRegressionTests` 已覆盖 macOS 查找回退问题。
+
+## ADR-018：组合式应用编排与基础设施边界
+
+- 日期：2026-11-26。状态：已接受。
+- 决策：使用值类型表达领域身份和快照，使用协议表达平台与外部服务边界，使用 actor 保护共享可变状态，并通过组合拆分应用编排和基础设施职责。保留 `AppModel`、`WallpaperRepository` 和 `BingProvider` 作为稳定入口，把显示器保护、仓库存储与校验、Bing 请求执行和图片校验交给聚焦的协作者。
+- 替代方案：增加继承层级，或为每个小操作都增加协议。过度抽象会扩大调用面，降低 SwiftUI 和 Swift 并发代码的可读性，因此不采用。
+- 证据：`WallpaperDisplayCoordinator.swift`、`WallpaperRepositoryStorage.swift`、`WallpaperRepositoryValidation.swift`、`WallpaperRepositoryProtection.swift`、`BingRequestExecutor.swift`、`BingHTTPTransport.swift`、`BingImageValidator.swift` 和 `scripts/check-import-boundaries.sh`。
+- 后果：应用入口保持稳定，内部职责可以独立测试和演进。新增功能应优先加入已有协作者或新的聚焦协作者，不应继续扩大入口对象。
+- 测试：DaybreakCore、MacIntegration、无签名 macOS 与 iOS Release 构建，以及模块边界检查均已执行。

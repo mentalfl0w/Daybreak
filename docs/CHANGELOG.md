@@ -13,9 +13,10 @@ This changelog consolidates development records. Test and build entries reflect 
 
 ## 2026-11-26
 
+- Added bounded automatic download requests for iCloud-backed sync files that are present but not yet materialized. The sync pass reports pending work and retries after the file provider has had time to finish downloading.
 - Added synchronization diagnostics that users can export on request. Reports use a field allowlist and do not automatically upload or include folder paths, bookmarks, device names, or user content.
-- File coordination and path-validation changes received synthetic regression coverage. The documented device-side synchronization failure was not reproduced, so the work is not described as a confirmed device fix.
-- The most recent recorded Core test run passed 252 tests. The iOS Release app compiled without signing; the generated unsigned IPA passed ZIP integrity checking but still requires user signing.
+- File coordination and path-validation changes received synthetic regression coverage. A device report showed repeated `pendingDownloads` before a later pass completed, so the UI and engine treat this as asynchronous file-provider materialization rather than a terminal read error.
+- The latest DaybreakCore run passed 254 tests. The iOS Release app compiled without signing against the installed iPhoneOS 27.2 SDK.
 
 ## 2026-11-25
 
