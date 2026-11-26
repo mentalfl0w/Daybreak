@@ -284,6 +284,7 @@ private struct MainWindowRegistration: View {
                 MainWindowAccess.shared.register {
                     openWindow(id: "main")
                 }
+                MainWindowAccess.shared.raiseRegisteredWindow()
             }
     }
 }
@@ -337,6 +338,15 @@ final class MainWindowAccess {
 
     func register(openWindow: @escaping () -> Void) {
         openWindowAction = openWindow
+    }
+
+    /// Raises the registered main window after SwiftUI has attached the scene.
+    /// Launch callbacks can arrive before the Window scene creates its NSWindow.
+    func raiseRegisteredWindow() {
+        let application = NSApplication.shared
+        let windows = Self.mainWindows(in: application)
+        guard !windows.isEmpty else { return }
+        _ = Self.present(windows, in: application)
     }
 
     /// Main-scene windows only: `NSPanel` excludes the menu bar extra and its

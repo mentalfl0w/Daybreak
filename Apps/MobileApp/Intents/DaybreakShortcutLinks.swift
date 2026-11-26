@@ -64,12 +64,26 @@ enum DaybreakShortcutShareLink {
 }
 
 
+/// Local, user-confirmed setup markers and last-handoff record.
 ///
-/// The links open Apple's iCloud Shortcuts page in the browser. That page's
-/// “Get Shortcut” button hands the shortcut to the system Shortcuts app, where
-/// the user must confirm adding it. Opening the page is not evidence that a
-/// shortcut was installed, and Daybreak cannot verify the shortcut's actions.
-enum DaybreakShortcutShareLink {
-    static let apply = URL(string: "https://www.icloud.com/shortcuts/9e944b28935f4b7da8ce9542ca059ef1")!
-    static let daily = URL(string: "https://www.icloud.com/shortcuts/61f30d50e6bb42108c2e6b5c0a23b1e2")!
+/// These are not evidence that the system wallpaper changed. They only let the
+/// UI unlock documented `shortcuts://` links and show when Daybreak last handed
+/// an image to Shortcuts.
+enum DaybreakShortcutGuideStorage {
+    static let applyConfigured = "daybreak.shortcuts.applyConfigured"
+    static let dailyConfigured = "daybreak.shortcuts.dailyConfigured"
+    static let lastHandoffDate = "daybreak.shortcuts.lastHandoffDate"
+    static let lastHandoffShortcut = "daybreak.shortcuts.lastHandoffShortcut"
+    static let lastHandoffWallpaperID = "daybreak.shortcuts.lastHandoffWallpaperID"
+
+    static func recordHandoff(
+        name: String,
+        wallpaperID: String?,
+        at date: Date = Date(),
+        defaults: UserDefaults = .standard
+    ) {
+        defaults.set(date.timeIntervalSince1970, forKey: lastHandoffDate)
+        defaults.set(name, forKey: lastHandoffShortcut)
+        defaults.set(wallpaperID ?? "", forKey: lastHandoffWallpaperID)
+    }
 }

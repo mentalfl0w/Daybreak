@@ -1,0 +1,162 @@
+# Generate from the repository root:
+#   xcodegen generate -s Apps/MacApp/project.yml -r . -p .
+name: Daybreak
+
+options:
+  minimumXcodeGenVersion: 2.40.0
+  deploymentTarget:
+    macOS: "14.0"
+    iOS: "26.0"
+  developmentLanguage: zh-Hans
+  knownRegions:
+    - zh-Hans
+    - en
+    - ja
+  createIntermediateGroups: true
+  groupSortPosition: top
+
+configs:
+  Debug: debug
+  Release: release
+
+packages:
+  DaybreakCore:
+    path: Packages/DaybreakCore
+  MacIntegration:
+    path: Platform/MacIntegration
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    SWIFT_STRICT_CONCURRENCY: complete
+    MACOSX_DEPLOYMENT_TARGET: "14.0"
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    SWIFT_TREAT_WARNINGS_AS_ERRORS: NO
+
+targets:
+  Daybreak:
+    type: application
+    platform: macOS
+    sources:
+      - path: Apps/MacApp/DaybreakMacApp.swift
+      - path: Apps/MacApp/Core
+      - path: Apps/MacApp/UI
+      - path: Apps/MacApp/Localization
+      - path: Apps/MacApp/Assets.xcassets
+    dependencies:
+      - package: DaybreakCore
+        product: DaybreakCore
+      - package: MacIntegration
+        product: MacIntegration
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.daybreak.mac
+        PRODUCT_NAME: Daybreak
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Daybreak
+        INFOPLIST_KEY_CFBundleName: Daybreak
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.photography
+        INFOPLIST_KEY_NSHumanReadableCopyright: "Source code MIT licensed. Bing content remains with its owners."
+        INFOPLIST_KEY_NSHighResolutionCapable: YES
+        INFOPLIST_KEY_NSPrincipalClass: NSApplication
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        COMBINE_HIDPI_IMAGES: YES
+    scheme:
+      testTargets:
+        - DaybreakTests
+      gatherCoverageData: false
+
+  DaybreakTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: Apps/MacApp/Tests
+    dependencies:
+      - target: Daybreak
+      - package: DaybreakCore
+        product: DaybreakCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.daybreak.mac.tests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/Daybreak.app/Contents/MacOS/Daybreak"
+        BUNDLE_LOADER: "$(TEST_HOST)"
+
+  # iPhone, iPhone Duo and iPad share one adaptive target. The product is named
+  # Daybreak, while the Swift module stays DaybreakMobile so tests and file
+  # organisation never depend on the marketing name.
+  DaybreakMobile:
+    type: application
+    platform: iOS
+    deploymentTarget: "26.0"
+    sources:
+      # Recursive: includes App/Today/Timeline/Settings/Preview/Intents/Model and
+      # Localization/*.xcstrings (InfoPlist.xcstrings, Localizable.xcstrings).
+      - path: Apps/MobileApp
+        excludes:
+          - Tests
+          - Tests/**
+      - path: Assets/iOS/Assets.xcassets
+    dependencies:
+      - package: DaybreakCore
+        product: DaybreakCore
+      # Linked explicitly so Xcode's build system runs Extract App Intents
+      # Metadata and publishes the intents to the Shortcuts app. The metadata
+      # step itself is Xcode-owned and must not be reimplemented as a script.
+      - sdk: AppIntents.framework
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.daybreak.mobile
+        # Background-launched App Intents and the actor-based repository must not
+        # inherit MainActor isolation; UI types opt in with @MainActor.
+        SWIFT_DEFAULT_ACTOR_ISOLATION: nonisolated
+        PRODUCT_NAME: Daybreak
+        PRODUCT_MODULE_NAME: DaybreakMobile
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Daybreak
+        INFOPLIST_KEY_CFBundleName: Daybreak
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.photography
+        INFOPLIST_KEY_NSHumanReadableCopyright: "Source code MIT licensed. Bing content remains with its owners."
+        INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription: "保存壁纸预览到“照片”时需要你的授权；Daybreak 仅在你主动保存时写入图片。"
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        # Xcode's Info.plist processor turns the setting above into
+        # UIApplicationSceneManifest { UIApplicationSupportsMultipleScenes = YES;
+        # UISceneConfigurations = {} }, which is what iPad multi-window needs.
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: YES
+        # The folder picker must hand back the real directory URL rather than a
+        # private copy, which is what makes the returned URL security-scoped.
+        INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        TARGETED_DEVICE_FAMILY: "1,2"
+        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: "8"
+        # Automatic signing with whichever team the user selects locally.
+        # Never commit DEVELOPMENT_TEAM, certificates, profiles or
+        # entitlements; the default sideload configuration needs none.
+        CODE_SIGN_STYLE: Automatic
+    scheme:
+      testTargets:
+        - DaybreakMobileTests
+      gatherCoverageData: false
+
+  DaybreakMobileTests:
+    type: bundle.unit-test
+    platform: iOS
+    deploymentTarget: "26.0"
+    sources:
+      - path: Apps/MobileApp/Tests
+    dependencies:
+      - target: DaybreakMobile
+      - package: DaybreakCore
+        product: DaybreakCore
+    settings:
+      base:
+        SWIFT_DEFAULT_ACTOR_ISOLATION: nonisolated
+        PRODUCT_BUNDLE_IDENTIFIER: dev.daybreak.mobile.tests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/Daybreak.app/Daybreak"
+        BUNDLE_LOADER: "$(TEST_HOST)"

@@ -1,0 +1,1270 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0C458791AD5E1EF97E4CC3BF /* WallpaperIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558A84553B867D42E8CC7967 /* WallpaperIntegration.swift */; };
+		0DC9AB80C9BB6E5E678ABBBB /* MarketSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A8861519F1818C259D7A478 /* MarketSettingsView.swift */; };
+		138B99C2A1246AED80F9C8CD /* WallpaperPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E3A25B4DAF168CBE15DA37 /* WallpaperPreviewView.swift */; };
+		144355C1003A60F0386363D2 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01C7C7F10C740F57E90C5BA5 /* TodayView.swift */; };
+		15F86A0FD967AA06DDCE7E1B /* TimelineComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 262400793E384EEC299E90CA /* TimelineComponents.swift */; };
+		1C5B268CB277E2549FA042E7 /* MobileRepositoryLease.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C08D3D9CE26804AF6ADFFB /* MobileRepositoryLease.swift */; };
+		1CE550A1BF5711666D521A4A /* FolderPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033502116C89DC3058450208 /* FolderPickerView.swift */; };
+		20487D1C207FB7B1A45C9107 /* MobileRepositoryLeaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4480936CC76F87DB4941F41 /* MobileRepositoryLeaseTests.swift */; };
+		21CA2D3A8A20D4DE31F23561 /* TimelineDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE96317A8E9ADC6AB5DF98B3 /* TimelineDetailView.swift */; };
+		22AEC3BE2C6FE9E2D03E1B13 /* WallpaperPreviewImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FA42D8BD3E291212FBBD265 /* WallpaperPreviewImageLoader.swift */; };
+		24F9260FB3E860326F93F157 /* LoginItemControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424619123724C98E13A027D4 /* LoginItemControllerTests.swift */; };
+		2AB58D50386A67BEA2B9ECB3 /* RecapScreenModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE01DE83E1F3F1FCADBB9717 /* RecapScreenModel.swift */; };
+		2C08777F775EBA34960AB801 /* TodayPresentationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE385BDB5774A842092A98B5 /* TodayPresentationTests.swift */; };
+		2DCF66A05404D585C6B15AE3 /* DaybreakShortcutModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F558D52D097F2C81A7225B /* DaybreakShortcutModels.swift */; };
+		2E043A0F665DD77A4D1D9C21 /* AppShortcuts.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = E5821FEEB565A83BA8C0FC36 /* AppShortcuts.xcstrings */; };
+		2E4A646027A0BE907D2A07E4 /* TimelineModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE97D63EDAFBC0ED35E3043 /* TimelineModel.swift */; };
+		30DC38AAC4F29D7F7018E7F1 /* ShortcutsGuideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E614933F562059CC2BAFBBB0 /* ShortcutsGuideView.swift */; };
+		3B9CEF065F51507089D1783B /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55440B6AFDBD5A858AB69FA7 /* LibraryView.swift */; };
+		3C70A28531CE5A6C867ED0FD /* MobileModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A610E682A9AD8F67A41377 /* MobileModels.swift */; };
+		3DBAF0873EEC87841827B700 /* TimelineScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8E4C183D6257D08622471B1 /* TimelineScreen.swift */; };
+		3E05881B1FA63D83AB20C662 /* TodayHeroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE63A8E10BAB4E90AA111C77 /* TodayHeroView.swift */; };
+		3E2AF020851D00F743AA8694 /* DaybreakShortcutService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98F952358D64EA643FFA909 /* DaybreakShortcutService.swift */; };
+		4098D814E9712F303590FEEC /* ImageQualityOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 547DB154BB1821DD0BA67EF4 /* ImageQualityOption.swift */; };
+		416A9B26DD1E68AA8F3F372A /* WindowBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E9358E427870648634A7CF /* WindowBackground.swift */; };
+		42C370D11C55AD2634BE5355 /* MobileIntentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA72F59DD7968FC5AB5ADDB5 /* MobileIntentService.swift */; };
+		44718AC6FE698C79F26794E2 /* TodayStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C68339C29004CBFBF7A8F0F9 /* TodayStatusView.swift */; };
+		4A245FB111A10FCDDED5C635 /* SyncSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D63E096B80C06381DA7990F /* SyncSettingsView.swift */; };
+		4AB631A46A6BB3D0464F374E /* MobileStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 759C6899C157A168AB371EA8 /* MobileStore.swift */; };
+		4B6C3F9C8A2150340FF63666 /* WallpaperConfirmationDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF3283ECAF1FCAF4F1F3BECB /* WallpaperConfirmationDialog.swift */; };
+		4B9B1F51ECD2DCFEA2DDAF77 /* MobileNavigationState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4D2E811573BA66059E40F13 /* MobileNavigationState.swift */; };
+		4D927808D4018DFC5CD2DB4B /* LibraryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B917316A94506522332B2C44 /* LibraryModel.swift */; };
+		4F3ED1BC84BCE1E91F4F19EC /* LoginItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E6AEE2379FEB69C7D79803F /* LoginItemController.swift */; };
+		52DDED283A9BD8D744EBEEBB /* LanguageSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C340F3EAF014395EABD5FE /* LanguageSettingsView.swift */; };
+		53C32B43E4B861FA7A9A9044 /* AboutSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA33C2E11717C9DF48A73CFC /* AboutSettingsView.swift */; };
+		53F12D502F0EEA1601F39132 /* TodayStoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFF98BBA309A93A16A04A04 /* TodayStoryView.swift */; };
+		54A519E0EBAD98469DB64327 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A16962AD2B98ACF87D927E86 /* Localizable.xcstrings */; };
+		59CDB4F5E943E1B7E339F24C /* MacLocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6611D6ECB0BA2B71618D50 /* MacLocalizedString.swift */; };
+		5A55CA0EDD681BBCE76159C0 /* DaybreakMacApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13A5EC1F9D2157CD161E839A /* DaybreakMacApp.swift */; };
+		5C826EE8F1EA28EDF84FDC40 /* MobileDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA98E55123A12BA92F65610D /* MobileDataStore.swift */; };
+		66002138D0E97A5DFB1809DC /* AppliedWallpaperProtectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC9432A67015B84926502541 /* AppliedWallpaperProtectionTests.swift */; };
+		693D37A9A9E6EF72052A3508 /* DaybreakMobileApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3164D82F76AA75FA4B0B36BC /* DaybreakMobileApp.swift */; };
+		6C71F30C9A98CED9C78A3E00 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DF614CDE50AD8BAC36319AD6 /* Assets.xcassets */; };
+		6DADEE3EA7A93AC225CF2070 /* MobileDataStore+Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7897F58624C3724DC517339D /* MobileDataStore+Cache.swift */; };
+		703728915ED084CFC43AD6ED /* WallpaperPreviewModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14ED42F060DFDDFA42C03FE2 /* WallpaperPreviewModels.swift */; };
+		71067EBA5E8673CE2AAD13EC /* WallpaperCropExporterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC4D10DA01354FAE55E83916 /* WallpaperCropExporterTests.swift */; };
+		729EF75928177689036AC663 /* TimelineMobileStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06BFA96B3E30FAA0E38063BC /* TimelineMobileStore.swift */; };
+		731DF79E58C9CC6705626235 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 8DE9CD6FE799705F63C357FD /* InfoPlist.xcstrings */; };
+		7536C654C05AB99A23807EAF /* TodayPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F704C5484CAFA670CB095B96 /* TodayPresentation.swift */; };
+		7691266EEBDF3D705CD226E5 /* TodayActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97976B136F787B45B2581C0F /* TodayActionsView.swift */; };
+		79FCC38A80477419CFCE4BD3 /* StoragePaginationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECF165DC1B407EF56A6D7E28 /* StoragePaginationTests.swift */; };
+		7F98BB54008BAACED6C2FF4F /* TimelineRecapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376F02982A5B82A811C99707 /* TimelineRecapView.swift */; };
+		809CCFCE45A1AE033720821F /* MobileCachePolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1FA30C092068E97A2B2CBC7 /* MobileCachePolicyTests.swift */; };
+		81CC15FB3F0AF7B208C69ACD /* WallpaperPhotoSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F072CFF95ADA07FF08358442 /* WallpaperPhotoSaver.swift */; };
+		8CBCA29D19AE59ED3C8BD391 /* WallpaperCropGeometryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1515ACFDFB02C6BBD2AAF62A /* WallpaperCropGeometryTests.swift */; };
+		8E521E8ECC05118B0B62285E /* AppShell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 298287FCC3BFE4C827ACCC0E /* AppShell.swift */; };
+		8F73B81F7807561A6EC09B4B /* TimelineGalleryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D856BE33D8DB30E402F5F1 /* TimelineGalleryView.swift */; };
+		8F9A2B8D38EEB959E3A27FC4 /* WallpaperCropExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE7C7ECE4C8400C109F5C212 /* WallpaperCropExporter.swift */; };
+		913572E58885AC80F2E68246 /* TimelineCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D100A1F898412A70EBB2037 /* TimelineCalendarView.swift */; };
+		934E624B6B316465BBB9E39F /* StorageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2A62E25CC5F5E64B662601 /* StorageView.swift */; };
+		93B1078AB3587CA2B0A1A3D6 /* AppIntents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C6A6645ABFACAAB9B4CA2819 /* AppIntents.framework */; };
+		9420BE0FF7B42B549E7DA3B7 /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = D369AFDC74D3C33E0E728030 /* SettingsScreen.swift */; };
+		947F640574AEA781D593005C /* AppLanguagePreference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D024F04764AB5AD063004D1 /* AppLanguagePreference.swift */; };
+		94A2DD33668267EB4EE1415D /* MobileIntentShortcutBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52B762926853BB512B5C61AA /* MobileIntentShortcutBridge.swift */; };
+		95EE94590C2DD2E26F0FC995 /* TodayStoreIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = F092C42E08B247AE934E3D3D /* TodayStoreIntegration.swift */; };
+		96D012C530FC619AF3715459 /* CacheSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A039D1530AC7008D5270E7F /* CacheSettingsView.swift */; };
+		99C89962952AEB947FEA32E7 /* MobileDataStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3514FBD8B781911E4B639D6E /* MobileDataStoreTests.swift */; };
+		9A9A5F825D25B6C270527233 /* MobileRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB601C1CDAEB495F446F283B /* MobileRootView.swift */; };
+		9C4E538A9CFDD4A9359DF008 /* MobileIntentDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB98FCACF7FBD8EACE65BBDC /* MobileIntentDataTests.swift */; };
+		9C7539616F73DB2A09C77467 /* DaybreakCore in Frameworks */ = {isa = PBXBuildFile; productRef = D21C0D0D0FE20F0A5329048F /* DaybreakCore */; };
+		9FC2CA02EDBEEE5F3F497A64 /* SyncDiagnosticExportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 737FC5CD9D052BE069CDFCCF /* SyncDiagnosticExportTests.swift */; };
+		A017A2F3361529DDC5E6812C /* DaybreakAppShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20B300A597F2782EB1A8A2F /* DaybreakAppShortcuts.swift */; };
+		A257FA7502C0C7666CE18C08 /* TimelineImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 311E524DEA25B53AA5ED49A3 /* TimelineImageLoader.swift */; };
+		A4427C742802933B9BAF9749 /* WallpaperCropGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792EF70305852E34E21279B6 /* WallpaperCropGeometry.swift */; };
+		A4E76059A6C405C6C1CD1F19 /* SettingsLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4A5FC68B031C2AF9C159AF /* SettingsLanguage.swift */; };
+		A57753786AFBEB39A01D401D /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = ABA73AA7A47C5C311FA80662 /* Localizable.xcstrings */; };
+		A812C178FC40DADAE000CB8A /* TodayService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD11E5CD55C11463FF1A798 /* TodayService.swift */; };
+		AB3A91F99BA146AB3802077E /* DaybreakWallpaperIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DD9775F009F414C672FBE4E /* DaybreakWallpaperIntents.swift */; };
+		AB72A33207E8A688F4DA8BC4 /* TodayScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BED58E414FCA3416492A4D1 /* TodayScreen.swift */; };
+		ADA341E3EE2D369A6D6F8BAB /* TimelineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F85F9AD809548C272FA42F33 /* TimelineTests.swift */; };
+		AF56F146EE0F7F484C483BC2 /* RecapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3994C9EDF54237B589ABDC3 /* RecapView.swift */; };
+		AF82CD1904C76F6319C54027 /* ShortcutIntentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66E7E437C3B5F80CD565D991 /* ShortcutIntentTests.swift */; };
+		B599A1DE416A8D6F5C71BC5C /* CacheCapacity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D4A26218AAE33254A661AA /* CacheCapacity.swift */; };
+		B5B9A6E6F9C689A195F22679 /* MobileSettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BF85F4F2154028A9BF22BBB /* MobileSettingsStore.swift */; };
+		BD008981F37746AF0C369591 /* ImageAssetLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4F2A93F86AD55BF6B80A0E /* ImageAssetLoader.swift */; };
+		BD0D08FCB39ED64B7FDB38D0 /* TimelineSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = F83B5D7E8EE085DB294F6ADA /* TimelineSupport.swift */; };
+		BDDED1C0834294B1E35CC6A5 /* WallpaperDisplayCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BE5AC06E8908C4F56219ADD /* WallpaperDisplayCoordinator.swift */; };
+		C02F8FC45D997AF1495D1451 /* DaybreakCore in Frameworks */ = {isa = PBXBuildFile; productRef = 1C312CF753D8F0C5E9DB7B79 /* DaybreakCore */; };
+		C132B5F0EC29F36D1A6407E4 /* MenuBarStoryTextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26431D874F832872E1EF6AE4 /* MenuBarStoryTextTests.swift */; };
+		C166EFC69FAA0168A96C7B0A /* MenuBarPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F64290694CEAAE4CE30C39 /* MenuBarPanel.swift */; };
+		C1F45D2953ED32C5EC689926 /* SyncDiagnosticExport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3430A64AE516855F7402258B /* SyncDiagnosticExport.swift */; };
+		C5BD534FCA5AAE5DAF072011 /* DaybreakCore in Frameworks */ = {isa = PBXBuildFile; productRef = 8C06A2582CE69A65758CF229 /* DaybreakCore */; };
+		C8E30B946A6A845443127387 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FDF57DF21EC809A84FD770F /* AppModel.swift */; };
+		C9F4EA713B7A6FEB63D6302A /* MobileTestSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB96E134533288896EDE99A7 /* MobileTestSupport.swift */; };
+		CE1F12E34ED5CFDDCB3BEBEE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DBF0936704A6E2417D2F7005 /* Assets.xcassets */; };
+		CE97F5D9BBFE1F90793D6F09 /* DailyNotificationControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDB63B01882E31362305887E /* DailyNotificationControllerTests.swift */; };
+		CF8C11BEA5BA08F8C6040716 /* ImageQualitySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73C8AB9CB0B2E434490BE72D /* ImageQualitySettingsView.swift */; };
+		D3DC051F7F8D2F62E4AD7011 /* MobileStoreCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 736DB740F7DC5A92B8B55D83 /* MobileStoreCacheTests.swift */; };
+		D689D4CE92F405AAF2117333 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6D8B87D7DB2D3F60B62C2CB /* SettingsView.swift */; };
+		D9152C778675F9A05FA0320F /* DaybreakSetWallpaperButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6C5E5393934A5C2B183C537 /* DaybreakSetWallpaperButton.swift */; };
+		DCB42A6859794F0263F9BF3E /* TodayDisplayContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943C742D9951CA9EC2535708 /* TodayDisplayContent.swift */; };
+		DEE77B7C950D77114DC31D34 /* LibraryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C87798C38AF9FB8848DFBE7 /* LibraryTests.swift */; };
+		E32ED2DC6CFC7A6818CDB09C /* RecapScreenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7D73B6C648B7598733ECA62 /* RecapScreenTests.swift */; };
+		E866B99CBA671B76330AB1AD /* ShortcutsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BD6E5F84C7CEFA35E88861E /* ShortcutsSettingsView.swift */; };
+		E8FE214BB13DED6B8601A22B /* DailyNotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C72C4D53C8BAFC61BB3BDC7C /* DailyNotificationController.swift */; };
+		E90B1589699D9E5556E6FFAE /* DaybreakCore in Frameworks */ = {isa = PBXBuildFile; productRef = C8BE563B99BD2978BEF52F36 /* DaybreakCore */; };
+		EB3CD7ED18072D29633EB73E /* WallpaperShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FEFD881B0E16A38847E66CE /* WallpaperShareSheet.swift */; };
+		EB65ECDAD8C393267B31F575 /* DaybreakShortcutLinks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AC350709F7F934580EEF64A /* DaybreakShortcutLinks.swift */; };
+		F06B07DC52E34F663759D5C9 /* TodayImageDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1928D22DEAEB50DCCC538B71 /* TodayImageDecoder.swift */; };
+		F7BEBD52A2B4C27396B4A880 /* MobileDataStore+Refresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CD2B3B81427D90CB7128043 /* MobileDataStore+Refresh.swift */; };
+		FAD9F011A95AA8A5D92AEA14 /* MacIntegration in Frameworks */ = {isa = PBXBuildFile; productRef = E101FE92265989C29F602CFF /* MacIntegration */; };
+		FF4BF00534AA31B0494CBF6A /* MobileSettingsContractTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C1BEF6E9A7A0682759C61B /* MobileSettingsContractTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		229BBA4A0D725965BA632296 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 11E6449B4CE4665FF45A0413 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C261E455EA7AFEDC88D157A0;
+			remoteInfo = Daybreak;
+		};
+		F6F041CB3A05B01D6EBFC229 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 11E6449B4CE4665FF45A0413 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 17F9569753E62FDEA54BB206;
+			remoteInfo = DaybreakMobile;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		01C7C7F10C740F57E90C5BA5 /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
+		033502116C89DC3058450208 /* FolderPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderPickerView.swift; sourceTree = "<group>"; };
+		06BFA96B3E30FAA0E38063BC /* TimelineMobileStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineMobileStore.swift; sourceTree = "<group>"; };
+		0D024F04764AB5AD063004D1 /* AppLanguagePreference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLanguagePreference.swift; sourceTree = "<group>"; };
+		0E6AEE2379FEB69C7D79803F /* LoginItemController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginItemController.swift; sourceTree = "<group>"; };
+		0FDF57DF21EC809A84FD770F /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
+		0FEFD881B0E16A38847E66CE /* WallpaperShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperShareSheet.swift; sourceTree = "<group>"; };
+		13A5EC1F9D2157CD161E839A /* DaybreakMacApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaybreakMacApp.swift; sourceTree = "<group>"; };
+		14ED42F060DFDDFA42C03FE2 /* WallpaperPreviewModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperPreviewModels.swift; sourceTree = "<group>"; };
+		1515ACFDFB02C6BBD2AAF62A /* WallpaperCropGeometryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperCropGeometryTests.swift; sourceTree = "<group>"; };
+		1928D22DEAEB50DCCC538B71 /* TodayImageDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayImageDecoder.swift; sourceTree = "<group>"; };
+		1AC350709F7F934580EEF64A /* DaybreakShortcutLinks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaybreakShortcutLinks.swift; sourceTree = "<group>"; };
+		1BFF98BBA309A93A16A04A04 /* TodayStoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayStoryView.swift; sourceTree = "<group>"; };
+		1CD2B3B81427D90CB7128043 /* MobileDataStore+Refresh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MobileDataStore+Refresh.swift"; sourceTree = "<group>"; };
+		21D4A26218AAE33254A661AA /* CacheCapacity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheCapacity.swift; sourceTree = "<group>"; };
+		262400793E384EEC299E90CA /* TimelineComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineComponents.swift; sourceTree = "<group>"; };
+		26431D874F832872E1EF6AE4 /* MenuBarStoryTextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarStoryTextTests.swift; sourceTree = "<group>"; };
+		298287FCC3BFE4C827ACCC0E /* AppShell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppShell.swift; sourceTree = "<group>"; };
+		2B4A5FC68B031C2AF9C159AF /* SettingsLanguage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsLanguage.swift; sourceTree = "<group>"; };
+		2D100A1F898412A70EBB2037 /* TimelineCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineCalendarView.swift; sourceTree = "<group>"; };
+		311E524DEA25B53AA5ED49A3 /* TimelineImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineImageLoader.swift; sourceTree = "<group>"; };
+		3164D82F76AA75FA4B0B36BC /* DaybreakMobileApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaybreakMobileApp.swift; sourceTree = "<group>"; };
+		3430A64AE516855F7402258B /* SyncDiagnosticExport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncDiagnosticExport.swift; sourceTree = "<group>"; };
+		3514FBD8B781911E4B639D6E /* MobileDataStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileDataStoreTests.swift; sourceTree = "<group>"; };
+		376F02982A5B82A811C99707 /* TimelineRecapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineRecapView.swift; sourceTree = "<group>"; };
+		3BD6E5F84C7CEFA35E88861E /* ShortcutsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsSettingsView.swift; sourceTree = "<group>"; };
+		3DD9775F009F414C672FBE4E /* DaybreakWallpaperIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaybreakWallpaperIntents.swift; sourceTree = "<group>"; };
+		3ED830B7BE21919E4447B385 /* DaybreakCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = DaybreakCore; path = Packages/DaybreakCore; sourceTree = SOURCE_ROOT; };
+		424619123724C98E13A027D4 /* LoginItemControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginItemControllerTests.swift; sourceTree = "<group>"; };
+		44E9358E427870648634A7CF /* WindowBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowBackground.swift; sourceTree = "<group>"; };
+		4BF85F4F2154028A9BF22BBB /* MobileSettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileSettingsStore.swift; sourceTree = "<group>"; };
+		4E33A0C269BA5C546DEB30A4 /* DaybreakMobileTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = DaybreakMobileTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4FA42D8BD3E291212FBBD265 /* WallpaperPreviewImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperPreviewImageLoader.swift; sourceTree = "<group>"; };
+		52B762926853BB512B5C61AA /* MobileIntentShortcutBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileIntentShortcutBridge.swift; sourceTree = "<group>"; };
+		547DB154BB1821DD0BA67EF4 /* ImageQualityOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageQualityOption.swift; sourceTree = "<group>"; };
+		55440B6AFDBD5A858AB69FA7 /* LibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryView.swift; sourceTree = "<group>"; };
+		558A84553B867D42E8CC7967 /* WallpaperIntegration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperIntegration.swift; sourceTree = "<group>"; };
+		5BE5AC06E8908C4F56219ADD /* WallpaperDisplayCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperDisplayCoordinator.swift; sourceTree = "<group>"; };
+		5DE97D63EDAFBC0ED35E3043 /* TimelineModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineModel.swift; sourceTree = "<group>"; };
+		66E7E437C3B5F80CD565D991 /* ShortcutIntentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutIntentTests.swift; sourceTree = "<group>"; };
+		736DB740F7DC5A92B8B55D83 /* MobileStoreCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileStoreCacheTests.swift; sourceTree = "<group>"; };
+		737FC5CD9D052BE069CDFCCF /* SyncDiagnosticExportTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncDiagnosticExportTests.swift; sourceTree = "<group>"; };
+		73C8AB9CB0B2E434490BE72D /* ImageQualitySettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageQualitySettingsView.swift; sourceTree = "<group>"; };
+		74C340F3EAF014395EABD5FE /* LanguageSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageSettingsView.swift; sourceTree = "<group>"; };
+		759C6899C157A168AB371EA8 /* MobileStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileStore.swift; sourceTree = "<group>"; };
+		7897F58624C3724DC517339D /* MobileDataStore+Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MobileDataStore+Cache.swift"; sourceTree = "<group>"; };
+		792EF70305852E34E21279B6 /* WallpaperCropGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperCropGeometry.swift; sourceTree = "<group>"; };
+		7A039D1530AC7008D5270E7F /* CacheSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheSettingsView.swift; sourceTree = "<group>"; };
+		82DCAF56AA3C7650864EA0D3 /* DaybreakMobile.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = DaybreakMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8B2A62E25CC5F5E64B662601 /* StorageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageView.swift; sourceTree = "<group>"; };
+		8DE9CD6FE799705F63C357FD /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
+		943C742D9951CA9EC2535708 /* TodayDisplayContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayDisplayContent.swift; sourceTree = "<group>"; };
+		94D856BE33D8DB30E402F5F1 /* TimelineGalleryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineGalleryView.swift; sourceTree = "<group>"; };
+		97976B136F787B45B2581C0F /* TodayActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayActionsView.swift; sourceTree = "<group>"; };
+		9A8861519F1818C259D7A478 /* MarketSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketSettingsView.swift; sourceTree = "<group>"; };
+		9BED58E414FCA3416492A4D1 /* TodayScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayScreen.swift; sourceTree = "<group>"; };
+		9C87798C38AF9FB8848DFBE7 /* LibraryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryTests.swift; sourceTree = "<group>"; };
+		9D63E096B80C06381DA7990F /* SyncSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncSettingsView.swift; sourceTree = "<group>"; };
+		A16962AD2B98ACF87D927E86 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		A2C1BEF6E9A7A0682759C61B /* MobileSettingsContractTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileSettingsContractTests.swift; sourceTree = "<group>"; };
+		A3994C9EDF54237B589ABDC3 /* RecapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecapView.swift; sourceTree = "<group>"; };
+		ABA73AA7A47C5C311FA80662 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		AE01DE83E1F3F1FCADBB9717 /* RecapScreenModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecapScreenModel.swift; sourceTree = "<group>"; };
+		B2F64290694CEAAE4CE30C39 /* MenuBarPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarPanel.swift; sourceTree = "<group>"; };
+		B4D2E811573BA66059E40F13 /* MobileNavigationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileNavigationState.swift; sourceTree = "<group>"; };
+		B6D8B87D7DB2D3F60B62C2CB /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		B8E4C183D6257D08622471B1 /* TimelineScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineScreen.swift; sourceTree = "<group>"; };
+		B917316A94506522332B2C44 /* LibraryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryModel.swift; sourceTree = "<group>"; };
+		B98F952358D64EA643FFA909 /* DaybreakShortcutService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaybreakShortcutService.swift; sourceTree = "<group>"; };
+		B9A610E682A9AD8F67A41377 /* MobileModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileModels.swift; sourceTree = "<group>"; };
+		BB601C1CDAEB495F446F283B /* MobileRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileRootView.swift; sourceTree = "<group>"; };
+		BB96E134533288896EDE99A7 /* MobileTestSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileTestSupport.swift; sourceTree = "<group>"; };
+		BDB63B01882E31362305887E /* DailyNotificationControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyNotificationControllerTests.swift; sourceTree = "<group>"; };
+		BF3283ECAF1FCAF4F1F3BECB /* WallpaperConfirmationDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperConfirmationDialog.swift; sourceTree = "<group>"; };
+		C14E88A016A8E80548E9F161 /* DaybreakTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DaybreakTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C20B300A597F2782EB1A8A2F /* DaybreakAppShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaybreakAppShortcuts.swift; sourceTree = "<group>"; };
+		C4480936CC76F87DB4941F41 /* MobileRepositoryLeaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileRepositoryLeaseTests.swift; sourceTree = "<group>"; };
+		C68339C29004CBFBF7A8F0F9 /* TodayStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayStatusView.swift; sourceTree = "<group>"; };
+		C6A6645ABFACAAB9B4CA2819 /* AppIntents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppIntents.framework; path = System/Library/Frameworks/AppIntents.framework; sourceTree = SDKROOT; };
+		C72C4D53C8BAFC61BB3BDC7C /* DailyNotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyNotificationController.swift; sourceTree = "<group>"; };
+		CE385BDB5774A842092A98B5 /* TodayPresentationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayPresentationTests.swift; sourceTree = "<group>"; };
+		D0C08D3D9CE26804AF6ADFFB /* MobileRepositoryLease.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileRepositoryLease.swift; sourceTree = "<group>"; };
+		D369AFDC74D3C33E0E728030 /* SettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreen.swift; sourceTree = "<group>"; };
+		DBF0936704A6E2417D2F7005 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		DC4D10DA01354FAE55E83916 /* WallpaperCropExporterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperCropExporterTests.swift; sourceTree = "<group>"; };
+		DC9432A67015B84926502541 /* AppliedWallpaperProtectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppliedWallpaperProtectionTests.swift; sourceTree = "<group>"; };
+		DE63A8E10BAB4E90AA111C77 /* TodayHeroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayHeroView.swift; sourceTree = "<group>"; };
+		DE7C7ECE4C8400C109F5C212 /* WallpaperCropExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperCropExporter.swift; sourceTree = "<group>"; };
+		DF614CDE50AD8BAC36319AD6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E5821FEEB565A83BA8C0FC36 /* AppShortcuts.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = AppShortcuts.xcstrings; sourceTree = "<group>"; };
+		E614933F562059CC2BAFBBB0 /* ShortcutsGuideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsGuideView.swift; sourceTree = "<group>"; };
+		E6C5E5393934A5C2B183C537 /* DaybreakSetWallpaperButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaybreakSetWallpaperButton.swift; sourceTree = "<group>"; };
+		E6F558D52D097F2C81A7225B /* DaybreakShortcutModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaybreakShortcutModels.swift; sourceTree = "<group>"; };
+		E7D73B6C648B7598733ECA62 /* RecapScreenTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecapScreenTests.swift; sourceTree = "<group>"; };
+		E9E3A25B4DAF168CBE15DA37 /* WallpaperPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperPreviewView.swift; sourceTree = "<group>"; };
+		EA33C2E11717C9DF48A73CFC /* AboutSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutSettingsView.swift; sourceTree = "<group>"; };
+		EB4F2A93F86AD55BF6B80A0E /* ImageAssetLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAssetLoader.swift; sourceTree = "<group>"; };
+		ECF165DC1B407EF56A6D7E28 /* StoragePaginationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoragePaginationTests.swift; sourceTree = "<group>"; };
+		ED18BA10A26602429D52B4DA /* MacIntegration */ = {isa = PBXFileReference; lastKnownFileType = folder; name = MacIntegration; path = Platform/MacIntegration; sourceTree = SOURCE_ROOT; };
+		EE96317A8E9ADC6AB5DF98B3 /* TimelineDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineDetailView.swift; sourceTree = "<group>"; };
+		F072CFF95ADA07FF08358442 /* WallpaperPhotoSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperPhotoSaver.swift; sourceTree = "<group>"; };
+		F092C42E08B247AE934E3D3D /* TodayStoreIntegration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayStoreIntegration.swift; sourceTree = "<group>"; };
+		F1FA30C092068E97A2B2CBC7 /* MobileCachePolicyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileCachePolicyTests.swift; sourceTree = "<group>"; };
+		F5A017B066624F43A65BC682 /* Daybreak.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Daybreak.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F704C5484CAFA670CB095B96 /* TodayPresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayPresentation.swift; sourceTree = "<group>"; };
+		F83B5D7E8EE085DB294F6ADA /* TimelineSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineSupport.swift; sourceTree = "<group>"; };
+		F85F9AD809548C272FA42F33 /* TimelineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineTests.swift; sourceTree = "<group>"; };
+		FA72F59DD7968FC5AB5ADDB5 /* MobileIntentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileIntentService.swift; sourceTree = "<group>"; };
+		FA98E55123A12BA92F65610D /* MobileDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileDataStore.swift; sourceTree = "<group>"; };
+		FB98FCACF7FBD8EACE65BBDC /* MobileIntentDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileIntentDataTests.swift; sourceTree = "<group>"; };
+		FCD11E5CD55C11463FF1A798 /* TodayService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayService.swift; sourceTree = "<group>"; };
+		FF6611D6ECB0BA2B71618D50 /* MacLocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacLocalizedString.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8CF09C7B06D84DFEC162E60C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E90B1589699D9E5556E6FFAE /* DaybreakCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B31BBBBFF29AEDC2B89D525A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9C7539616F73DB2A09C77467 /* DaybreakCore in Frameworks */,
+				93B1078AB3587CA2B0A1A3D6 /* AppIntents.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D86BA216BA106B0357889289 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C02F8FC45D997AF1495D1451 /* DaybreakCore in Frameworks */,
+				FAD9F011A95AA8A5D92AEA14 /* MacIntegration in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E49B9B48717142707168A307 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C5BD534FCA5AAE5DAF072011 /* DaybreakCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0591B95449461F452F5CEBB3 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				298287FCC3BFE4C827ACCC0E /* AppShell.swift */,
+				55440B6AFDBD5A858AB69FA7 /* LibraryView.swift */,
+				B2F64290694CEAAE4CE30C39 /* MenuBarPanel.swift */,
+				A3994C9EDF54237B589ABDC3 /* RecapView.swift */,
+				B6D8B87D7DB2D3F60B62C2CB /* SettingsView.swift */,
+				8B2A62E25CC5F5E64B662601 /* StorageView.swift */,
+				01C7C7F10C740F57E90C5BA5 /* TodayView.swift */,
+				BF3283ECAF1FCAF4F1F3BECB /* WallpaperConfirmationDialog.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		21EAC7709081AF3531A88A12 /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				E5821FEEB565A83BA8C0FC36 /* AppShortcuts.xcstrings */,
+				8DE9CD6FE799705F63C357FD /* InfoPlist.xcstrings */,
+				A16962AD2B98ACF87D927E86 /* Localizable.xcstrings */,
+			);
+			path = Localization;
+			sourceTree = "<group>";
+		};
+		24A8C8370ECB13619833F2A0 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				0D024F04764AB5AD063004D1 /* AppLanguagePreference.swift */,
+				0FDF57DF21EC809A84FD770F /* AppModel.swift */,
+				C72C4D53C8BAFC61BB3BDC7C /* DailyNotificationController.swift */,
+				EB4F2A93F86AD55BF6B80A0E /* ImageAssetLoader.swift */,
+				B917316A94506522332B2C44 /* LibraryModel.swift */,
+				0E6AEE2379FEB69C7D79803F /* LoginItemController.swift */,
+				FF6611D6ECB0BA2B71618D50 /* MacLocalizedString.swift */,
+				AE01DE83E1F3F1FCADBB9717 /* RecapScreenModel.swift */,
+				F704C5484CAFA670CB095B96 /* TodayPresentation.swift */,
+				FCD11E5CD55C11463FF1A798 /* TodayService.swift */,
+				5BE5AC06E8908C4F56219ADD /* WallpaperDisplayCoordinator.swift */,
+				558A84553B867D42E8CC7967 /* WallpaperIntegration.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		2DFAB03A9562C3E258E35227 /* MobileApp */ = {
+			isa = PBXGroup;
+			children = (
+				3F8B3E7CA59704894914EB8C /* App */,
+				B2DA917E6E1E5A4B1AD5C538 /* Intents */,
+				21EAC7709081AF3531A88A12 /* Localization */,
+				D674B238EA1B0011EADF5FA9 /* Model */,
+				CAD65BFE023529D597CDA3C1 /* Preview */,
+				B5D3E4C5CA223D3F8F4EABC7 /* Settings */,
+				5AB0292A4815AD96BE1A25B5 /* Tests */,
+				FDDB70A0D2A127992D62FB18 /* Timeline */,
+				7308C92D20893F613C1ECC2A /* Today */,
+			);
+			path = MobileApp;
+			sourceTree = "<group>";
+		};
+		2E93DE60221B42EC6F1A9624 /* MacApp */ = {
+			isa = PBXGroup;
+			children = (
+				24A8C8370ECB13619833F2A0 /* Core */,
+				4D5F642947F41B42A4D48D95 /* Localization */,
+				9AB21E6EC9BB26D71A2A48E8 /* Tests */,
+				0591B95449461F452F5CEBB3 /* UI */,
+				DF614CDE50AD8BAC36319AD6 /* Assets.xcassets */,
+				13A5EC1F9D2157CD161E839A /* DaybreakMacApp.swift */,
+			);
+			path = MacApp;
+			sourceTree = "<group>";
+		};
+		3F8B3E7CA59704894914EB8C /* App */ = {
+			isa = PBXGroup;
+			children = (
+				3164D82F76AA75FA4B0B36BC /* DaybreakMobileApp.swift */,
+				B4D2E811573BA66059E40F13 /* MobileNavigationState.swift */,
+				BB601C1CDAEB495F446F283B /* MobileRootView.swift */,
+				44E9358E427870648634A7CF /* WindowBackground.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		4D5F642947F41B42A4D48D95 /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				ABA73AA7A47C5C311FA80662 /* Localizable.xcstrings */,
+			);
+			path = Localization;
+			sourceTree = "<group>";
+		};
+		4F48D5B571DF06C787491D16 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				3ED830B7BE21919E4447B385 /* DaybreakCore */,
+				ED18BA10A26602429D52B4DA /* MacIntegration */,
+			);
+			path = Packages;
+			sourceTree = "<group>";
+		};
+		514E22AB5FE114B646AD0E03 /* Apps */ = {
+			isa = PBXGroup;
+			children = (
+				2E93DE60221B42EC6F1A9624 /* MacApp */,
+				2DFAB03A9562C3E258E35227 /* MobileApp */,
+			);
+			path = Apps;
+			sourceTree = "<group>";
+		};
+		5AB0292A4815AD96BE1A25B5 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				F1FA30C092068E97A2B2CBC7 /* MobileCachePolicyTests.swift */,
+				3514FBD8B781911E4B639D6E /* MobileDataStoreTests.swift */,
+				FB98FCACF7FBD8EACE65BBDC /* MobileIntentDataTests.swift */,
+				C4480936CC76F87DB4941F41 /* MobileRepositoryLeaseTests.swift */,
+				A2C1BEF6E9A7A0682759C61B /* MobileSettingsContractTests.swift */,
+				736DB740F7DC5A92B8B55D83 /* MobileStoreCacheTests.swift */,
+				BB96E134533288896EDE99A7 /* MobileTestSupport.swift */,
+				66E7E437C3B5F80CD565D991 /* ShortcutIntentTests.swift */,
+				737FC5CD9D052BE069CDFCCF /* SyncDiagnosticExportTests.swift */,
+				F85F9AD809548C272FA42F33 /* TimelineTests.swift */,
+				DC4D10DA01354FAE55E83916 /* WallpaperCropExporterTests.swift */,
+				1515ACFDFB02C6BBD2AAF62A /* WallpaperCropGeometryTests.swift */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		7308C92D20893F613C1ECC2A /* Today */ = {
+			isa = PBXGroup;
+			children = (
+				97976B136F787B45B2581C0F /* TodayActionsView.swift */,
+				943C742D9951CA9EC2535708 /* TodayDisplayContent.swift */,
+				DE63A8E10BAB4E90AA111C77 /* TodayHeroView.swift */,
+				1928D22DEAEB50DCCC538B71 /* TodayImageDecoder.swift */,
+				9BED58E414FCA3416492A4D1 /* TodayScreen.swift */,
+				C68339C29004CBFBF7A8F0F9 /* TodayStatusView.swift */,
+				F092C42E08B247AE934E3D3D /* TodayStoreIntegration.swift */,
+				1BFF98BBA309A93A16A04A04 /* TodayStoryView.swift */,
+			);
+			path = Today;
+			sourceTree = "<group>";
+		};
+		75B913E34FBF614E2523B17D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C6A6645ABFACAAB9B4CA2819 /* AppIntents.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		805A46E5655F3BFC1FC81511 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				DBF0936704A6E2417D2F7005 /* Assets.xcassets */,
+			);
+			path = iOS;
+			sourceTree = "<group>";
+		};
+		8548C02D3DAB04A2533720CA = {
+			isa = PBXGroup;
+			children = (
+				514E22AB5FE114B646AD0E03 /* Apps */,
+				B3DF183EB374CFB699CD78B4 /* Assets */,
+				4F48D5B571DF06C787491D16 /* Packages */,
+				75B913E34FBF614E2523B17D /* Frameworks */,
+				9FB5F5ACE58EA1DACBE9AD91 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		9AB21E6EC9BB26D71A2A48E8 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				DC9432A67015B84926502541 /* AppliedWallpaperProtectionTests.swift */,
+				BDB63B01882E31362305887E /* DailyNotificationControllerTests.swift */,
+				9C87798C38AF9FB8848DFBE7 /* LibraryTests.swift */,
+				424619123724C98E13A027D4 /* LoginItemControllerTests.swift */,
+				26431D874F832872E1EF6AE4 /* MenuBarStoryTextTests.swift */,
+				E7D73B6C648B7598733ECA62 /* RecapScreenTests.swift */,
+				ECF165DC1B407EF56A6D7E28 /* StoragePaginationTests.swift */,
+				CE385BDB5774A842092A98B5 /* TodayPresentationTests.swift */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		9FB5F5ACE58EA1DACBE9AD91 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F5A017B066624F43A65BC682 /* Daybreak.app */,
+				82DCAF56AA3C7650864EA0D3 /* DaybreakMobile.app */,
+				4E33A0C269BA5C546DEB30A4 /* DaybreakMobileTests.xctest */,
+				C14E88A016A8E80548E9F161 /* DaybreakTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B2DA917E6E1E5A4B1AD5C538 /* Intents */ = {
+			isa = PBXGroup;
+			children = (
+				C20B300A597F2782EB1A8A2F /* DaybreakAppShortcuts.swift */,
+				E6C5E5393934A5C2B183C537 /* DaybreakSetWallpaperButton.swift */,
+				1AC350709F7F934580EEF64A /* DaybreakShortcutLinks.swift */,
+				E6F558D52D097F2C81A7225B /* DaybreakShortcutModels.swift */,
+				B98F952358D64EA643FFA909 /* DaybreakShortcutService.swift */,
+				3DD9775F009F414C672FBE4E /* DaybreakWallpaperIntents.swift */,
+				E614933F562059CC2BAFBBB0 /* ShortcutsGuideView.swift */,
+			);
+			path = Intents;
+			sourceTree = "<group>";
+		};
+		B3DF183EB374CFB699CD78B4 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				805A46E5655F3BFC1FC81511 /* iOS */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
+		B5D3E4C5CA223D3F8F4EABC7 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				EA33C2E11717C9DF48A73CFC /* AboutSettingsView.swift */,
+				21D4A26218AAE33254A661AA /* CacheCapacity.swift */,
+				7A039D1530AC7008D5270E7F /* CacheSettingsView.swift */,
+				033502116C89DC3058450208 /* FolderPickerView.swift */,
+				547DB154BB1821DD0BA67EF4 /* ImageQualityOption.swift */,
+				73C8AB9CB0B2E434490BE72D /* ImageQualitySettingsView.swift */,
+				74C340F3EAF014395EABD5FE /* LanguageSettingsView.swift */,
+				9A8861519F1818C259D7A478 /* MarketSettingsView.swift */,
+				2B4A5FC68B031C2AF9C159AF /* SettingsLanguage.swift */,
+				D369AFDC74D3C33E0E728030 /* SettingsScreen.swift */,
+				3BD6E5F84C7CEFA35E88861E /* ShortcutsSettingsView.swift */,
+				3430A64AE516855F7402258B /* SyncDiagnosticExport.swift */,
+				9D63E096B80C06381DA7990F /* SyncSettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		CAD65BFE023529D597CDA3C1 /* Preview */ = {
+			isa = PBXGroup;
+			children = (
+				DE7C7ECE4C8400C109F5C212 /* WallpaperCropExporter.swift */,
+				792EF70305852E34E21279B6 /* WallpaperCropGeometry.swift */,
+				F072CFF95ADA07FF08358442 /* WallpaperPhotoSaver.swift */,
+				4FA42D8BD3E291212FBBD265 /* WallpaperPreviewImageLoader.swift */,
+				14ED42F060DFDDFA42C03FE2 /* WallpaperPreviewModels.swift */,
+				E9E3A25B4DAF168CBE15DA37 /* WallpaperPreviewView.swift */,
+				0FEFD881B0E16A38847E66CE /* WallpaperShareSheet.swift */,
+			);
+			path = Preview;
+			sourceTree = "<group>";
+		};
+		D674B238EA1B0011EADF5FA9 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				FA98E55123A12BA92F65610D /* MobileDataStore.swift */,
+				7897F58624C3724DC517339D /* MobileDataStore+Cache.swift */,
+				1CD2B3B81427D90CB7128043 /* MobileDataStore+Refresh.swift */,
+				FA72F59DD7968FC5AB5ADDB5 /* MobileIntentService.swift */,
+				52B762926853BB512B5C61AA /* MobileIntentShortcutBridge.swift */,
+				B9A610E682A9AD8F67A41377 /* MobileModels.swift */,
+				D0C08D3D9CE26804AF6ADFFB /* MobileRepositoryLease.swift */,
+				4BF85F4F2154028A9BF22BBB /* MobileSettingsStore.swift */,
+				759C6899C157A168AB371EA8 /* MobileStore.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		FDDB70A0D2A127992D62FB18 /* Timeline */ = {
+			isa = PBXGroup;
+			children = (
+				2D100A1F898412A70EBB2037 /* TimelineCalendarView.swift */,
+				262400793E384EEC299E90CA /* TimelineComponents.swift */,
+				EE96317A8E9ADC6AB5DF98B3 /* TimelineDetailView.swift */,
+				94D856BE33D8DB30E402F5F1 /* TimelineGalleryView.swift */,
+				311E524DEA25B53AA5ED49A3 /* TimelineImageLoader.swift */,
+				06BFA96B3E30FAA0E38063BC /* TimelineMobileStore.swift */,
+				5DE97D63EDAFBC0ED35E3043 /* TimelineModel.swift */,
+				376F02982A5B82A811C99707 /* TimelineRecapView.swift */,
+				B8E4C183D6257D08622471B1 /* TimelineScreen.swift */,
+				F83B5D7E8EE085DB294F6ADA /* TimelineSupport.swift */,
+			);
+			path = Timeline;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		12C9A1515B40456782B29BF5 /* DaybreakMobileTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C2F5FABCC8D1B60E8C13F87C /* Build configuration list for PBXNativeTarget "DaybreakMobileTests" */;
+			buildPhases = (
+				36B678AB49482ED83DC5D764 /* Sources */,
+				E49B9B48717142707168A307 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4CE01419F1A13D13DCCBD41D /* PBXTargetDependency */,
+			);
+			name = DaybreakMobileTests;
+			packageProductDependencies = (
+				8C06A2582CE69A65758CF229 /* DaybreakCore */,
+			);
+			productName = DaybreakMobileTests;
+			productReference = 4E33A0C269BA5C546DEB30A4 /* DaybreakMobileTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		17F9569753E62FDEA54BB206 /* DaybreakMobile */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 39309FFA12DAE068BC3F6BC3 /* Build configuration list for PBXNativeTarget "DaybreakMobile" */;
+			buildPhases = (
+				78F5580D581571D30F356A0F /* Sources */,
+				812F253B85BB3A5AB4E3F3B2 /* Resources */,
+				B31BBBBFF29AEDC2B89D525A /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DaybreakMobile;
+			packageProductDependencies = (
+				D21C0D0D0FE20F0A5329048F /* DaybreakCore */,
+			);
+			productName = DaybreakMobile;
+			productReference = 82DCAF56AA3C7650864EA0D3 /* DaybreakMobile.app */;
+			productType = "com.apple.product-type.application";
+		};
+		30A0A24E5308A8265D9517DA /* DaybreakTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4FD67BF6D804075B5EDA8A4C /* Build configuration list for PBXNativeTarget "DaybreakTests" */;
+			buildPhases = (
+				13F22D8358A3304C7C6F8CB3 /* Sources */,
+				8CF09C7B06D84DFEC162E60C /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				05D8AB0ED78FFE46777DFE7F /* PBXTargetDependency */,
+			);
+			name = DaybreakTests;
+			packageProductDependencies = (
+				C8BE563B99BD2978BEF52F36 /* DaybreakCore */,
+			);
+			productName = DaybreakTests;
+			productReference = C14E88A016A8E80548E9F161 /* DaybreakTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		C261E455EA7AFEDC88D157A0 /* Daybreak */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DBD3117098F429C7764FD36A /* Build configuration list for PBXNativeTarget "Daybreak" */;
+			buildPhases = (
+				0862A18EA28155C099F5B854 /* Sources */,
+				73A14E2D358EDDFEF985F5A2 /* Resources */,
+				D86BA216BA106B0357889289 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Daybreak;
+			packageProductDependencies = (
+				1C312CF753D8F0C5E9DB7B79 /* DaybreakCore */,
+				E101FE92265989C29F602CFF /* MacIntegration */,
+			);
+			productName = Daybreak;
+			productReference = F5A017B066624F43A65BC682 /* Daybreak.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		11E6449B4CE4665FF45A0413 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					17F9569753E62FDEA54BB206 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = D3B71D026BA46FA8D9F9D301 /* Build configuration list for PBXProject "Daybreak" */;
+			developmentRegion = "zh-Hans";
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+				ja,
+				"zh-Hans",
+			);
+			mainGroup = 8548C02D3DAB04A2533720CA;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				C173F702C96004FC004166F3 /* XCLocalSwiftPackageReference "Packages/DaybreakCore" */,
+				88CDBA500E9B7E77CB9096F6 /* XCLocalSwiftPackageReference "Platform/MacIntegration" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 9FB5F5ACE58EA1DACBE9AD91 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C261E455EA7AFEDC88D157A0 /* Daybreak */,
+				30A0A24E5308A8265D9517DA /* DaybreakTests */,
+				17F9569753E62FDEA54BB206 /* DaybreakMobile */,
+				12C9A1515B40456782B29BF5 /* DaybreakMobileTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		73A14E2D358EDDFEF985F5A2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6C71F30C9A98CED9C78A3E00 /* Assets.xcassets in Resources */,
+				A57753786AFBEB39A01D401D /* Localizable.xcstrings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		812F253B85BB3A5AB4E3F3B2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2E043A0F665DD77A4D1D9C21 /* AppShortcuts.xcstrings in Resources */,
+				CE1F12E34ED5CFDDCB3BEBEE /* Assets.xcassets in Resources */,
+				731DF79E58C9CC6705626235 /* InfoPlist.xcstrings in Resources */,
+				54A519E0EBAD98469DB64327 /* Localizable.xcstrings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		0862A18EA28155C099F5B854 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				947F640574AEA781D593005C /* AppLanguagePreference.swift in Sources */,
+				C8E30B946A6A845443127387 /* AppModel.swift in Sources */,
+				8E521E8ECC05118B0B62285E /* AppShell.swift in Sources */,
+				E8FE214BB13DED6B8601A22B /* DailyNotificationController.swift in Sources */,
+				5A55CA0EDD681BBCE76159C0 /* DaybreakMacApp.swift in Sources */,
+				BD008981F37746AF0C369591 /* ImageAssetLoader.swift in Sources */,
+				4D927808D4018DFC5CD2DB4B /* LibraryModel.swift in Sources */,
+				3B9CEF065F51507089D1783B /* LibraryView.swift in Sources */,
+				4F3ED1BC84BCE1E91F4F19EC /* LoginItemController.swift in Sources */,
+				59CDB4F5E943E1B7E339F24C /* MacLocalizedString.swift in Sources */,
+				C166EFC69FAA0168A96C7B0A /* MenuBarPanel.swift in Sources */,
+				2AB58D50386A67BEA2B9ECB3 /* RecapScreenModel.swift in Sources */,
+				AF56F146EE0F7F484C483BC2 /* RecapView.swift in Sources */,
+				D689D4CE92F405AAF2117333 /* SettingsView.swift in Sources */,
+				934E624B6B316465BBB9E39F /* StorageView.swift in Sources */,
+				7536C654C05AB99A23807EAF /* TodayPresentation.swift in Sources */,
+				A812C178FC40DADAE000CB8A /* TodayService.swift in Sources */,
+				144355C1003A60F0386363D2 /* TodayView.swift in Sources */,
+				4B6C3F9C8A2150340FF63666 /* WallpaperConfirmationDialog.swift in Sources */,
+				BDDED1C0834294B1E35CC6A5 /* WallpaperDisplayCoordinator.swift in Sources */,
+				0C458791AD5E1EF97E4CC3BF /* WallpaperIntegration.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		13F22D8358A3304C7C6F8CB3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				66002138D0E97A5DFB1809DC /* AppliedWallpaperProtectionTests.swift in Sources */,
+				CE97F5D9BBFE1F90793D6F09 /* DailyNotificationControllerTests.swift in Sources */,
+				DEE77B7C950D77114DC31D34 /* LibraryTests.swift in Sources */,
+				24F9260FB3E860326F93F157 /* LoginItemControllerTests.swift in Sources */,
+				C132B5F0EC29F36D1A6407E4 /* MenuBarStoryTextTests.swift in Sources */,
+				E32ED2DC6CFC7A6818CDB09C /* RecapScreenTests.swift in Sources */,
+				79FCC38A80477419CFCE4BD3 /* StoragePaginationTests.swift in Sources */,
+				2C08777F775EBA34960AB801 /* TodayPresentationTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		36B678AB49482ED83DC5D764 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				809CCFCE45A1AE033720821F /* MobileCachePolicyTests.swift in Sources */,
+				99C89962952AEB947FEA32E7 /* MobileDataStoreTests.swift in Sources */,
+				9C4E538A9CFDD4A9359DF008 /* MobileIntentDataTests.swift in Sources */,
+				20487D1C207FB7B1A45C9107 /* MobileRepositoryLeaseTests.swift in Sources */,
+				FF4BF00534AA31B0494CBF6A /* MobileSettingsContractTests.swift in Sources */,
+				D3DC051F7F8D2F62E4AD7011 /* MobileStoreCacheTests.swift in Sources */,
+				C9F4EA713B7A6FEB63D6302A /* MobileTestSupport.swift in Sources */,
+				AF82CD1904C76F6319C54027 /* ShortcutIntentTests.swift in Sources */,
+				9FC2CA02EDBEEE5F3F497A64 /* SyncDiagnosticExportTests.swift in Sources */,
+				ADA341E3EE2D369A6D6F8BAB /* TimelineTests.swift in Sources */,
+				71067EBA5E8673CE2AAD13EC /* WallpaperCropExporterTests.swift in Sources */,
+				8CBCA29D19AE59ED3C8BD391 /* WallpaperCropGeometryTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		78F5580D581571D30F356A0F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				53C32B43E4B861FA7A9A9044 /* AboutSettingsView.swift in Sources */,
+				B599A1DE416A8D6F5C71BC5C /* CacheCapacity.swift in Sources */,
+				96D012C530FC619AF3715459 /* CacheSettingsView.swift in Sources */,
+				A017A2F3361529DDC5E6812C /* DaybreakAppShortcuts.swift in Sources */,
+				693D37A9A9E6EF72052A3508 /* DaybreakMobileApp.swift in Sources */,
+				D9152C778675F9A05FA0320F /* DaybreakSetWallpaperButton.swift in Sources */,
+				EB65ECDAD8C393267B31F575 /* DaybreakShortcutLinks.swift in Sources */,
+				2DCF66A05404D585C6B15AE3 /* DaybreakShortcutModels.swift in Sources */,
+				3E2AF020851D00F743AA8694 /* DaybreakShortcutService.swift in Sources */,
+				AB3A91F99BA146AB3802077E /* DaybreakWallpaperIntents.swift in Sources */,
+				1CE550A1BF5711666D521A4A /* FolderPickerView.swift in Sources */,
+				4098D814E9712F303590FEEC /* ImageQualityOption.swift in Sources */,
+				CF8C11BEA5BA08F8C6040716 /* ImageQualitySettingsView.swift in Sources */,
+				52DDED283A9BD8D744EBEEBB /* LanguageSettingsView.swift in Sources */,
+				0DC9AB80C9BB6E5E678ABBBB /* MarketSettingsView.swift in Sources */,
+				6DADEE3EA7A93AC225CF2070 /* MobileDataStore+Cache.swift in Sources */,
+				F7BEBD52A2B4C27396B4A880 /* MobileDataStore+Refresh.swift in Sources */,
+				5C826EE8F1EA28EDF84FDC40 /* MobileDataStore.swift in Sources */,
+				42C370D11C55AD2634BE5355 /* MobileIntentService.swift in Sources */,
+				94A2DD33668267EB4EE1415D /* MobileIntentShortcutBridge.swift in Sources */,
+				3C70A28531CE5A6C867ED0FD /* MobileModels.swift in Sources */,
+				4B9B1F51ECD2DCFEA2DDAF77 /* MobileNavigationState.swift in Sources */,
+				1C5B268CB277E2549FA042E7 /* MobileRepositoryLease.swift in Sources */,
+				9A9A5F825D25B6C270527233 /* MobileRootView.swift in Sources */,
+				B5B9A6E6F9C689A195F22679 /* MobileSettingsStore.swift in Sources */,
+				4AB631A46A6BB3D0464F374E /* MobileStore.swift in Sources */,
+				A4E76059A6C405C6C1CD1F19 /* SettingsLanguage.swift in Sources */,
+				9420BE0FF7B42B549E7DA3B7 /* SettingsScreen.swift in Sources */,
+				30DC38AAC4F29D7F7018E7F1 /* ShortcutsGuideView.swift in Sources */,
+				E866B99CBA671B76330AB1AD /* ShortcutsSettingsView.swift in Sources */,
+				C1F45D2953ED32C5EC689926 /* SyncDiagnosticExport.swift in Sources */,
+				4A245FB111A10FCDDED5C635 /* SyncSettingsView.swift in Sources */,
+				913572E58885AC80F2E68246 /* TimelineCalendarView.swift in Sources */,
+				15F86A0FD967AA06DDCE7E1B /* TimelineComponents.swift in Sources */,
+				21CA2D3A8A20D4DE31F23561 /* TimelineDetailView.swift in Sources */,
+				8F73B81F7807561A6EC09B4B /* TimelineGalleryView.swift in Sources */,
+				A257FA7502C0C7666CE18C08 /* TimelineImageLoader.swift in Sources */,
+				729EF75928177689036AC663 /* TimelineMobileStore.swift in Sources */,
+				2E4A646027A0BE907D2A07E4 /* TimelineModel.swift in Sources */,
+				7F98BB54008BAACED6C2FF4F /* TimelineRecapView.swift in Sources */,
+				3DBAF0873EEC87841827B700 /* TimelineScreen.swift in Sources */,
+				BD0D08FCB39ED64B7FDB38D0 /* TimelineSupport.swift in Sources */,
+				7691266EEBDF3D705CD226E5 /* TodayActionsView.swift in Sources */,
+				DCB42A6859794F0263F9BF3E /* TodayDisplayContent.swift in Sources */,
+				3E05881B1FA63D83AB20C662 /* TodayHeroView.swift in Sources */,
+				F06B07DC52E34F663759D5C9 /* TodayImageDecoder.swift in Sources */,
+				AB72A33207E8A688F4DA8BC4 /* TodayScreen.swift in Sources */,
+				44718AC6FE698C79F26794E2 /* TodayStatusView.swift in Sources */,
+				95EE94590C2DD2E26F0FC995 /* TodayStoreIntegration.swift in Sources */,
+				53F12D502F0EEA1601F39132 /* TodayStoryView.swift in Sources */,
+				8F9A2B8D38EEB959E3A27FC4 /* WallpaperCropExporter.swift in Sources */,
+				A4427C742802933B9BAF9749 /* WallpaperCropGeometry.swift in Sources */,
+				81CC15FB3F0AF7B208C69ACD /* WallpaperPhotoSaver.swift in Sources */,
+				22AEC3BE2C6FE9E2D03E1B13 /* WallpaperPreviewImageLoader.swift in Sources */,
+				703728915ED084CFC43AD6ED /* WallpaperPreviewModels.swift in Sources */,
+				138B99C2A1246AED80F9C8CD /* WallpaperPreviewView.swift in Sources */,
+				EB3CD7ED18072D29633EB73E /* WallpaperShareSheet.swift in Sources */,
+				416A9B26DD1E68AA8F3F372A /* WindowBackground.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		05D8AB0ED78FFE46777DFE7F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C261E455EA7AFEDC88D157A0 /* Daybreak */;
+			targetProxy = 229BBA4A0D725965BA632296 /* PBXContainerItemProxy */;
+		};
+		4CE01419F1A13D13DCCBD41D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 17F9569753E62FDEA54BB206 /* DaybreakMobile */;
+			targetProxy = F6F041CB3A05B01D6EBFC229 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		08EB77417FF82BDE07C1F95F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Daybreak;
+				INFOPLIST_KEY_CFBundleName = Daybreak;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
+				INFOPLIST_KEY_NSHighResolutionCapable = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Source code MIT licensed. Bing content remains with its owners.";
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.daybreak.mac;
+				PRODUCT_NAME = Daybreak;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		46CDD09EFA68C79A24D2F963 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = NO;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		4B212EB59F63E6FFFF946A14 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = dev.daybreak.mac.tests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Daybreak.app/Contents/MacOS/Daybreak";
+			};
+			name = Release;
+		};
+		7629C6FA798FAA57CCF71104 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 8;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Daybreak;
+				INFOPLIST_KEY_CFBundleName = Daybreak;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Source code MIT licensed. Bing content remains with its owners.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "保存壁纸预览到“照片”时需要你的授权；Daybreak 仅在你主动保存时写入图片。";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.daybreak.mobile;
+				PRODUCT_MODULE_NAME = DaybreakMobile;
+				PRODUCT_NAME = Daybreak;
+				SDKROOT = iphoneos;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = nonisolated;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		92376695636701F4BFD33F96 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = NO;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		A00C65E76DB5B9FC9A4B6B75 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 8;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Daybreak;
+				INFOPLIST_KEY_CFBundleName = Daybreak;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Source code MIT licensed. Bing content remains with its owners.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "保存壁纸预览到“照片”时需要你的授权；Daybreak 仅在你主动保存时写入图片。";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.daybreak.mobile;
+				PRODUCT_MODULE_NAME = DaybreakMobile;
+				PRODUCT_NAME = Daybreak;
+				SDKROOT = iphoneos;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = nonisolated;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		B466CF48319FEDDE0197E4E8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Daybreak;
+				INFOPLIST_KEY_CFBundleName = Daybreak;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
+				INFOPLIST_KEY_NSHighResolutionCapable = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Source code MIT licensed. Bing content remains with its owners.";
+				INFOPLIST_KEY_NSPrincipalClass = NSApplication;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.daybreak.mac;
+				PRODUCT_NAME = Daybreak;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		BA666D59324AAAAA7ED688A9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = dev.daybreak.mac.tests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Daybreak.app/Contents/MacOS/Daybreak";
+			};
+			name = Debug;
+		};
+		C6BE61A79B17C73600888478 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = dev.daybreak.mobile.tests;
+				SDKROOT = iphoneos;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = nonisolated;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Daybreak.app/Daybreak";
+			};
+			name = Release;
+		};
+		E9AC02A813728BCA0AF76028 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = dev.daybreak.mobile.tests;
+				SDKROOT = iphoneos;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = nonisolated;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Daybreak.app/Daybreak";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		39309FFA12DAE068BC3F6BC3 /* Build configuration list for PBXNativeTarget "DaybreakMobile" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7629C6FA798FAA57CCF71104 /* Debug */,
+				A00C65E76DB5B9FC9A4B6B75 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		4FD67BF6D804075B5EDA8A4C /* Build configuration list for PBXNativeTarget "DaybreakTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BA666D59324AAAAA7ED688A9 /* Debug */,
+				4B212EB59F63E6FFFF946A14 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		C2F5FABCC8D1B60E8C13F87C /* Build configuration list for PBXNativeTarget "DaybreakMobileTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E9AC02A813728BCA0AF76028 /* Debug */,
+				C6BE61A79B17C73600888478 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		D3B71D026BA46FA8D9F9D301 /* Build configuration list for PBXProject "Daybreak" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				46CDD09EFA68C79A24D2F963 /* Debug */,
+				92376695636701F4BFD33F96 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		DBD3117098F429C7764FD36A /* Build configuration list for PBXNativeTarget "Daybreak" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B466CF48319FEDDE0197E4E8 /* Debug */,
+				08EB77417FF82BDE07C1F95F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		88CDBA500E9B7E77CB9096F6 /* XCLocalSwiftPackageReference "Platform/MacIntegration" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Platform/MacIntegration;
+		};
+		C173F702C96004FC004166F3 /* XCLocalSwiftPackageReference "Packages/DaybreakCore" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/DaybreakCore;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		1C312CF753D8F0C5E9DB7B79 /* DaybreakCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DaybreakCore;
+		};
+		8C06A2582CE69A65758CF229 /* DaybreakCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DaybreakCore;
+		};
+		C8BE563B99BD2978BEF52F36 /* DaybreakCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DaybreakCore;
+		};
+		D21C0D0D0FE20F0A5329048F /* DaybreakCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DaybreakCore;
+		};
+		E101FE92265989C29F602CFF /* MacIntegration */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MacIntegration;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 11E6449B4CE4665FF45A0413 /* Project object */;
+}

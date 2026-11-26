@@ -7,6 +7,7 @@ import SwiftUI
 /// tree, so opening a second window shares content but never shares a selected
 /// tab, calendar date or reading surface.
 @main
+@MainActor
 struct DaybreakMobileApp: App {
     @State private var store = MobileStore.shared
 
@@ -18,6 +19,7 @@ struct DaybreakMobileApp: App {
     }
 }
 
+@MainActor
 private struct MobileSceneRoot: View {
     @Environment(MobileStore.self) private var store
     @Environment(\.scenePhase) private var scenePhase
@@ -32,6 +34,16 @@ private struct MobileSceneRoot: View {
         let interfaceLocale = store.interfaceLocale
 
         MobileRootView(store: store, navigation: navigation)
+            // Window-level page color. Duo's outer display can move the system
+            // tab bar into a trailing column that lies outside every screen's
+            // own background; without this the hosting window shows white
+            // there and along the home-indicator strip.
+            .background {
+                Color(uiColor: .systemBackground)
+                    .ignoresSafeArea()
+                WindowBackground(color: .systemBackground)
+                    .ignoresSafeArea()
+            }
             .environment(navigation)
             .environment(\.locale, interfaceLocale)
             .task {

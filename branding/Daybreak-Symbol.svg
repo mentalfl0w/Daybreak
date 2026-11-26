@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="Daybreak — calendar sunrise symbol">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0.87" y2="1"><stop stop-color="#09265D"/><stop offset="0.46" stop-color="#41267F"/><stop offset="0.82" stop-color="#C64A83"/><stop offset="1" stop-color="#F37D77"/></linearGradient>
+    <linearGradient id="page" x1="0.18" y1="0.1" x2="0.86" y2="1"><stop stop-color="#FFD3AE"/><stop offset="0.48" stop-color="#F67C94"/><stop offset="1" stop-color="#F9B477"/></linearGradient>
+    <linearGradient id="sun" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#FFF6CB"/><stop offset="0.65" stop-color="#FFE588"/><stop offset="1" stop-color="#FFBD5C"/></linearGradient>
+    <linearGradient id="hill1" x1="0" y1="0" x2="1" y2="0.7"><stop stop-color="#C34491"/><stop offset="0.75" stop-color="#F88767"/><stop offset="1" stop-color="#FEC68C"/></linearGradient>
+    <linearGradient id="hill2" x1="0" y1="0" x2="0.7" y2="1"><stop stop-color="#FBC17C"/><stop offset="0.25" stop-color="#C16D8D"/><stop offset="0.58" stop-color="#583F8B"/><stop offset="1" stop-color="#162C6B"/></linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="28"/></filter>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#sky)"/>
+  <circle cx="518" cy="635" r="254" fill="#FFCB79" opacity="0.24" filter="url(#glow)"/>
+  <path d="M185 704V372Q185 252 318 252H706Q839 252 839 372V704Z" fill="url(#page)"/>
+  <g fill="#682C68" opacity="0.4"><rect x="336" y="234" width="62" height="136" rx="30"/><rect x="638" y="234" width="62" height="136" rx="30"/></g>
+  <g fill="#FFE8C0"><rect x="338" y="193" width="60" height="137" rx="30"/><rect x="638" y="193" width="60" height="137" rx="30"/></g>
+  <circle cx="515" cy="647" r="220" fill="url(#sun)"/>
+  <path d="M0 661C150 609 296 630 420 673C514 706 572 745 657 762L664 1024H0Z" fill="url(#hill1)"/>
+  <path d="M0 919C206 884 389 835 556 748C738 654 879 666 1024 731V1024H0Z" fill="url(#hill2)"/>
+  <path d="M418 829C608 749 716 670 852 686" fill="none" stroke="#FFE39B" stroke-width="8" opacity="0.66" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,35 @@
+# Xcode / Swift
+.DS_Store
+.swiftpm/
+.build/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+*.xcuserdatad/
+*.xccheckout
+*.xcscmblueprint
+
+# Signing / developer secrets
+*.p12
+*.mobileprovision
+*.provisionprofile
+*.cer
+*.p8
+*.key
+*.pem
+*.env
+.env*
+secrets/
+
+# User and Bing media (never commit content archive)
+Cache/
+UserData/
+Downloads/
+wallpaper-cache/
+*.ipa
+*.dmg
+*.app/
+*.xcarchive/
+*.zip
+
+# Keep documentation and design assets managed intentionally

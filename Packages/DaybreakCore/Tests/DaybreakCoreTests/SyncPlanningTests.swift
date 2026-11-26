@@ -382,3 +382,63 @@ struct SyncPlanningTests {
         #expect(plan.causalContext.counter(for: .deviceB) == 1)
     }
 }
+
+/// Absence without any archive record is not evidence of a remote removal.
+/// The engine can see an empty or partially downloaded folder; imported
+/// favorites and pins must survive that until a real tombstone arrives.
+struct SyncArchiveEvidenceTests {
+    @Test func emptyArchiveKeepsImportedFavoritesAndPins() throws {
+        let image = SyncFixture.image("img-a")
+        let occurrence = SyncFixture.occurrence(imageID: "img-a")
+        let pin = PinnedOccurrence(key: occurrence.id, wallpaperID: image)
+        let local = SyncLocalSnapshot(
+            favorites: [image],
+            pinnedOccurrences: [pin],
+            occurrences: [occurrence],
+            metadata: [SyncFixture.metadata(imageID: "img-a")],
+            wallpapers: [SyncFixture.wallpaper(imageID: "img-a", variants: [SyncFixture.variant("img-a")])],
+            stories: [SyncFixture.story()]
+        )
+
+        let plan = try SyncMergePlanner.plan(
+            input: SyncReconciliationInput(
+                deviceID: .deviceA,
+                local: local,
+                nextLocalSequence: 1
+            ),
+            remoteOperations: []
+        )
+
+        #expect(plan.repositoryMutation.favoritesToRemove.isEmpty)
+        #expect(plan.repositoryMutation.pinKeysToRemove.isEmpty)
+        #expect(plan.repositoryMutation.favoritesToAdd.isEmpty)
+        #expect(plan.repositoryMutation.pinsToAdd.isEmpty)
+    }
+
+    @Test func tombstoneStillRemovesImportedFavoriteAndPin() throws {
+        let image = SyncFixture.image("img-a")
+        let occurrence = SyncFixture.occurrence(imageID: "img-a")
+        let pin = PinnedOccurrence(key: occurrence.id, wallpaperID: image)
+        let local = SyncLocalSnapshot(favorites: [image], pinnedOccurrences: [pin])
+        let operations = [
+            SyncFixture.favorite("img-a", isFavorite: false, device: .deviceB, sequence: 1),
+            SyncFixture.pin(
+                "2026-01-01",
+                market: .zhCN,
+                imageID: "img-a",
+                isPinned: false,
+                device: .deviceB,
+                sequence: 2,
+                prior: ["device-b": 1]
+            )
+        ]
+
+        let plan = try SyncMergePlanner.plan(
+            input: SyncReconciliationInput(deviceID: .deviceA, local: local),
+            remoteOperations: operations
+        )
+
+        #expect(plan.repositoryMutation.favoritesToRemove == [image])
+        #expect(plan.repositoryMutation.pinKeysToRemove == [pin.key])
+    }
+}
