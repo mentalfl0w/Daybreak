@@ -62,3 +62,13 @@ enum DaybreakShortcutShareLink {
     static let apply = URL(string: "https://www.icloud.com/shortcuts/9e944b28935f4b7da8ce9542ca059ef1")!
     static let daily = URL(string: "https://www.icloud.com/shortcuts/61f30d50e6bb42108c2e6b5c0a23b1e2")!
 }
+
+///
+/// The links open Apple's iCloud Shortcuts page in the browser. That page's
+/// “Get Shortcut” button hands the shortcut to the system Shortcuts app, where
+/// the user must confirm adding it. Opening the page is not evidence that a
+/// shortcut was installed, and Daybreak cannot verify the shortcut's actions.
+enum DaybreakShortcutShareLink {
+    static let apply = URL(string: "https://www.icloud.com/shortcuts/9e944b28935f4b7da8ce9542ca059ef1")!
+    static let daily = URL(string: "https://www.icloud.com/shortcuts/61f30d50e6bb42108c2e6b5c0a23b1e2")!
+}

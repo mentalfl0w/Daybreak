@@ -289,6 +289,1556 @@
       }
     },
     "按钮只打开 iCloud 上的快捷指令页面。请在页面点“获取快捷指令”，再在系统确认框中添加；Daybreak 无法检测你是否已添加。": {
+            "value": "The button only opens the shortcut page on iCloud. Tap “Get Shortcut” there, then confirm in the system prompt. Daybreak cannot detect whether you added it."
+            "value": "ボタンは iCloud 上のショートカットページを開くだけです。ページで「ショートカットを取得」をタップし、システムの確認画面で追加してください。Daybreak は追加されたかどうかを検出できません。"
+    "或手动创建": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Or create it manually"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "または手動で作成"
+          }
+        }
+      }
+    },
+    "我已添加 Daybreak Apply": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I added Daybreak Apply"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daybreak Apply を追加しました"
+          }
+        }
+      }
+    },
+    "我已添加 Daybreak Daily": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I added Daybreak Daily"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daybreak Daily を追加しました"
+          }
+        }
+      }
+    },
+    "先添加并确认 Daybreak Apply，运行按钮才会启用。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add and confirm Daybreak Apply first to enable the run button."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "先に Daybreak Apply を追加して確認すると、実行ボタンが有効になります。"
+          }
+        }
+      }
+    },
+    "回到这里打开“我已添加 Daybreak Apply”。这只是解锁运行按钮，不代表 Daybreak 检测到了快捷指令。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Return here and turn on “I added Daybreak Apply.” This only unlocks the run button; it does not mean Daybreak detected the shortcut."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ここに戻り、「Daybreak Apply を追加しました」をオンにします。これは実行ボタンを有効にするだけで、Daybreak がショートカットを検出したという意味ではありません。"
+          }
+        }
+      }
+    },
+    "每天获取当天壁纸。每日运行需要你在“快捷指令”的“自动化”中创建个人自动化。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gets the day's wallpaper each day. Daily runs require a personal automation you create in Shortcuts › Automation."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "毎日その日の壁紙を取得します。毎日の実行には、「ショートカット」の「オートメーション」で個人用オートメーションを作成する必要があります。"
+          }
+        }
+      }
+    },
+    "仅表示你已添加同名快捷指令。Daybreak 无法验证其内容或设置结果。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This only means you added a shortcut with that name. Daybreak cannot verify its actions or the result."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "同じ名前のショートカットを追加したことだけを示します。Daybreak はその内容や設定結果を検証できません。"
+          }
+        }
+      }
+    },
+    "仅表示你已添加该快捷指令并创建自动化，Daybreak 无法验证系统自动化是否启用。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This only means you added the shortcut and created an automation. Daybreak cannot verify that the system automation is enabled."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ショートカットを追加し、オートメーションを作成したことだけを示します。Daybreak はシステムのオートメーションが有効かどうかを検証できません。"
+          }
+        }
+      }
+    },
+    "无法打开 iCloud 快捷指令页面。请检查网络连接后重试。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not open the iCloud shortcut page. Check your network connection and try again."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud のショートカットページを開けませんでした。ネットワーク接続を確認して、もう一度お試しください。"
+          }
+        }
+      }
+    },
+    "Daybreak 仍可离线使用本机数据；关闭同步不会删除已缓存的内容。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daybreak still works offline with local data; turning sync off does not delete cached content."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daybreak は引き続きオフラインでローカルデータを使用できます。同期をオフにしても、キャッシュ済みのコンテンツは削除されません。"
+          }
+        }
+      }
+    },
+    "两个选项默认关闭。同步原图会增加存储与 iCloud 占用；内容地区偏好开启后可能改变其他设备的内容地区。关闭选项不会删除本机已有文件。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Both options are off by default. Syncing originals uses more storage and iCloud space; enabling the content-region preference can change the content region on your other devices. Turning either option off does not delete files already on this device."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "どちらのオプションもデフォルトではオフです。元画像を同期するとストレージと iCloud の使用量が増えます。コンテンツ地域の設定をオンにすると、他のデバイスのコンテンツ地域が変わる場合があります。オプションをオフにしても、このデバイスに既にあるファイルは削除されません。"
+          }
+        }
+      }
+    },
+    "上次同步": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last Sync"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "前回の同期"
+          }
+        }
+      }
+    },
+    "上次同步已在本机完成": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last sync finished on this device"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "前回の同期はこのデバイスで完了しました"
+          }
+        }
+      }
+    },
+    "上次同步未完成": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last sync did not finish"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "前回の同期は完了しませんでした"
+          }
+        }
+      }
+    },
+    "从未同步": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Never synced"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "同期履歴なし"
+          }
+        }
+      }
+    },
+    "关闭同步不会删除本机数据或文件夹中的旧记录；离线时仍可使用已缓存内容。重新开启后可继续使用原有文件夹。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turning sync off does not delete local data or older records in the folder; cached content stays available offline. Turning it back on reuses the existing folder."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "同期をオフにしても、ローカルデータやフォルダ内の以前の記録は削除されません。キャッシュ済みのコンテンツはオフラインでも利用できます。再度オンにすると、既存のフォルダを引き続き使用します。"
+          }
+        }
+      }
+    },
+    "只保留在本机：界面语言、缓存上限、壁纸目标、系统权限与文件夹授权书签。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kept only on this device: interface language, cache limits, wallpaper targets, system permissions and the folder authorization bookmark."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このデバイスにのみ保持: インターフェース言語、キャッシュ上限、壁紙の対象、システム権限、フォルダの認証用ブックマーク。"
+          }
+        }
+      }
+    },
+    "只申请该文件夹的访问权限；授权书签仅保存在本机，不随同步传播。Daybreak 不使用 CloudKit、专属 iCloud 容器或共享 App Group。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daybreak requests access only to this folder; the authorization bookmark stays on this device and is not synced. Daybreak does not use CloudKit, an app-specific iCloud container or a shared App Group."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daybreak はこのフォルダへのアクセス権のみを要求します。認証用ブックマークはこのデバイスにのみ保存され、同期されません。Daybreak は CloudKit、アプリ専用の iCloud コンテナ、共有 App Group を使用しません。"
+          }
+        }
+      }
+    },
+    "只表示本机已完成文件处理与写入，不代表其他设备已接收、导入或应用这些更改。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This means only that this device finished processing and writing files. It does not mean other devices have received, imported or applied the changes."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このデバイスでファイルの処理と書き込みが完了したことだけを示します。他のデバイスが変更を受信、読み込み、適用したことを意味しません。"
+          }
+        }
+      }
+    },
+    "同步": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sync"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "同期"
+          }
+        }
+      }
+    },
+    "同步关闭时选项不可更改，已保存的偏好仍保留在本机。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "These options cannot be changed while sync is off; saved preferences remain on this device."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "同期がオフの間はこれらのオプションを変更できません。保存済みの設定はこのデバイスに保持されます。"
+          }
+        }
+      }
+    },
+    "同步内容": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sync Content"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "同期する内容"
+          }
+        }
+      }
+    },
+    "同步内容地区偏好": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sync Content Region Preference"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "コンテンツ地域の設定を同期"
+          }
+        }
+      }
+    },
+    "同步原图": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sync Originals"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "元画像を同期"
+          }
+        }
+      }
+    },
+    "同步完成只表示本机已处理并写入记录，不代表其他设备已接收或已应用。文件同步不是跨设备锁。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A completed sync means only that this device processed and wrote records; it does not mean other devices have received or applied them. File sync is not a cross-device lock."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "同期の完了は、このデバイスが記録を処理して書き込んだことだけを示します。他のデバイスが受信または適用したことを意味しません。ファイル同期はデバイス間のロックではありません。"
+          }
+        }
+      }
+    },
+    "同步已关闭": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sync is off"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "同期はオフです"
+          }
+        }
+      }
+    },
+    "同步已关闭，Daybreak 不会读写此文件夹。重新开启后可继续使用。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sync is off, so Daybreak will not read or write this folder. Turn sync back on to continue using it."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "同期がオフのため、Daybreak はこのフォルダの読み書きを行いません。同期を再度オンにすると使用を再開できます。"
+          }
+        }
+      }
+    },
+    "同步失败": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sync failed"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "同期に失敗"
+          }
+        }
+      }
+    },
+    "同步文件夹暂不可用": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sync folder is temporarily unavailable"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "同期フォルダを一時的に利用できません"
+          }
+        }
+      }
+    },
+    "同步状态": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sync Status"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "同期の状態"
+          }
+        }
+      }
+    },
+    "诊断": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diagnostics"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "診断"
+          }
+        }
+      }
+    },
+    "导出同步诊断日志": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export Sync Diagnostic Log"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "同期の診断ログを書き出す"
+          }
+        }
+      }
+    },
+    "正在准备诊断日志…": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preparing Diagnostic Log…"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "診断ログを準備中…"
+          }
+        }
+      }
+    },
+    "诊断日志包含应用与系统版本、同步状态、最近同步阶段记录和错误类别；不包含文件夹路径、授权书签、壁纸或文字内容、设备名称。文件仅在本机生成，分享去向由你在系统分享面板中选择。": {
+    "iPad 横屏": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad Landscape"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad 横向き"
+          }
+        }
+      }
+    },
+    "iPad 横屏裁切": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad landscape crop"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad 横向きの切り抜き"
+          }
+        }
+      }
+    },
+    "iPad 横屏裁切导出": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad landscape crop export"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iPad 横向きの切り抜き書き出し"
+          }
+        }
+      }
+    },
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The diagnostic log includes app and system versions, sync status, recent sync stage records and error categories. It never includes folder paths, authorization bookmarks, wallpaper or story content, or the device name. The file is generated on this device only; you choose where it goes in the system share sheet."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "診断ログにはアプリとシステムのバージョン、同期状態、最近の同期段階の記録、エラー分類が含まれます。フォルダのパス、認可ブックマーク、壁紙や文章の内容、デバイス名は含まれません。ファイルはこの端末内でのみ生成され、共有先はシステムの共有シートで選択します。"
+          }
+        }
+      }
+    },
+    "无法导出诊断日志": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn’t Export Diagnostic Log"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "診断ログを書き出せません"
+          }
+        }
+      }
+    },
+    "诊断日志未能写入临时文件。请重试。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The diagnostic log couldn’t be written to a temporary file. Please try again."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "診断ログを一時ファイルに書き込めませんでした。もう一度お試しください。"
+          }
+        }
+      }
+    },
+    "同步通过你选择的 iCloud Drive 文件夹进行。每台设备保留独立的本地数据，只交换版本化记录与资源文件，不共享活动数据库或索引。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sync uses the iCloud Drive folder you choose. Each device keeps its own local data and exchanges only versioned records and asset files, never a live database or index."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "同期は選択した iCloud Drive のフォルダを通じて行われます。各デバイスは独立したローカルデータを保持し、バージョン管理された記録とリソースファイルのみを交換します。稼働中のデータベースやインデックスは共有しません。"
+          }
+        }
+      }
+    },
+    "在此设备启用同步": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enable Sync on This Device"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このデバイスで同期を有効にする"
+          }
+        }
+      }
+    },
+    "已关闭": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Off"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "オフ"
+          }
+        }
+      }
+    },
+    "已完成（本机）": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finished (this device)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "完了（このデバイス）"
+          }
+        }
+      }
+    },
+    "尚未选择同步文件夹": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No sync folder selected yet"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "同期フォルダがまだ選択されていません"
+          }
+        }
+      }
+    },
+    "同步文件夹尚未就绪": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sync folder is not ready"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "同期フォルダの準備ができていません"
+          }
+        }
+      }
+    },
+    "请重新选择同步文件夹以继续；选择后同步才会开始。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reselect the sync folder to continue; sync starts only after you do."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "続行するには同期フォルダを選択し直してください。選択すると同期が開始されます。"
+          }
+        }
+      }
+    },
+    "开启同步需要一个可访问的文件夹。请选择 iCloud Drive 中的文件夹；也可以稍后再选。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sync needs an accessible folder. Choose a folder in iCloud Drive, or do this later."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "同期にはアクセス可能なフォルダが必要です。iCloud Drive 内のフォルダを選択するか、後で選択してください。"
+          }
+        }
+      }
+    },
+    "当前文件夹": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Current Folder"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "現在のフォルダ"
+          }
+        }
+      }
+    },
+    "文件夹": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Folder"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "フォルダ"
+          }
+        }
+      }
+    },
+    "文件夹不可用": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Folder unavailable"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "フォルダを利用できません"
+          }
+        }
+      }
+    },
+    "文件夹访问授权已失效": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Folder access authorization has expired"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "フォルダへのアクセス権が無効になりました"
+          }
+        }
+      }
+    },
+    "无法打开所选文件夹。请重试或选择其他文件夹。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could not open the selected folder. Try again or choose a different folder."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "選択したフォルダを開けませんでした。もう一度お試しいただくか、別のフォルダを選択してください。"
+          }
+        }
+      }
+    },
+    "无法访问所选文件夹": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Could Not Access the Selected Folder"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "選択したフォルダにアクセスできません"
+          }
+        }
+      }
+    },
+    "更换同步文件夹": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Change Sync Folder"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "同期フォルダを変更"
+          }
+        }
+      }
+    },
+    "更换同步文件夹？": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Change sync folder?"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "同期フォルダを変更しますか？"
+          }
+        }
+      }
+    },
+    "更换后，Daybreak 会使用新文件夹继续同步。不会删除本机数据，也不会删除旧文件夹中的记录。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daybreak will continue syncing with the new folder. It will not delete local data or records in the old folder."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "変更後、Daybreak は新しいフォルダで同期を続けます。ローカルデータや以前のフォルダ内の記録は削除されません。"
+          }
+        }
+      }
+    },
+    "有更改等待同步": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Changes are waiting to sync"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "同期待ちの変更があります"
+          }
+        }
+      }
+    },
+    "同步尚未完成。保持应用运行并联网后，Daybreak 会继续处理；本机数据未受影响。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sync has not finished yet. Keep Daybreak running and online so it can continue; local data is unaffected."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "同期はまだ完了していません。Daybreak を起動したままネットワークに接続すると処理が続行されます。ローカルデータは影響を受けません。"
+          }
+        }
+      }
+    },
+    "正在同步": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Syncing"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "同期中"
+          }
+        }
+      }
+    },
+    "正在同步…": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Syncing…"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "同期中…"
+          }
+        }
+      }
+    },
+    "正在读取本地记录并写入同步文件夹。你可以继续使用其他页面。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reading local records and writing them to the sync folder. You can keep using other screens."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ローカルの記録を読み取り、同期フォルダに書き込んでいます。ほかの画面は引き続き使用できます。"
+          }
+        }
+      }
+    },
+    "立即同步": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sync Now"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今すぐ同期"
+          }
+        }
+      }
+    },
+    "等待同步": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waiting to sync"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "同期待ち"
+          }
+        }
+      }
+    },
+    "记录较少": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Limited records"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "記録が少ない"
+          }
+        }
+      }
+    },
+    "设备同步": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Device Sync"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "デバイスの同期"
+          }
+        }
+      }
+    },
+    "跨设备": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Across Devices"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "デバイス間"
+          }
+        }
+      }
+    },
+    "数据边界": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data Boundaries"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "データの範囲"
+          }
+        }
+      }
+    },
+    "尚未选择": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not selected"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未選択"
+          }
+        }
+      }
+    },
+    "未选择文件夹": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No folder selected"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "フォルダ未選択"
+          }
+        }
+      }
+    },
+    "需要授权": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Authorization needed"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "アクセス権が必要"
+          }
+        }
+      }
+    },
+    "默认同步收藏与固定日期、日期与地区记录、壁纸元数据、介绍与版权、缩略图。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Synced by default: favorites and pinned dates, date-and-region records, wallpaper metadata, stories and copyright, and thumbnails."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "デフォルトで同期: お気に入りと固定した日付、日付と地域の記録、壁紙のメタデータ、ストーリーと著作権情報、サムネイル。"
+          }
+        }
+      }
+    },
+    "请检查网络与文件夹状态后重试；本机数据与已缓存内容仍可离线使用。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check the network and folder, then try again. Local data and cached content remain available offline."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ネットワークとフォルダの状態を確認して、もう一度お試しください。ローカルデータとキャッシュ済みのコンテンツはオフラインでも利用できます。"
+          }
+        }
+      }
+    },
+    "请确认“文件”App 中的 iCloud Drive 已登录并可访问；本机数据与已写入的记录未受影响。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Make sure iCloud Drive is signed in and accessible in the Files app. Local data and records already written are unaffected."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「ファイル」App の iCloud Drive にサインインしてアクセスできることを確認してください。ローカルデータと書き込み済みの記録は影響を受けません。"
+          }
+        }
+      }
+    },
+    "请重新选择该文件夹以授予访问权限。不会删除本机数据，也不会删除文件夹中的旧记录。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reselect this folder to grant access again. Local data and older records in the folder will not be deleted."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このフォルダを選択し直してアクセス権を付与してください。ローカルデータやフォルダ内の以前の記録は削除されません。"
+          }
+        }
+      }
+    },
+    "选择其他文件夹": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose Another Folder"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "別のフォルダを選択"
+          }
+        }
+      }
+    },
+    "选择同步文件夹": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose Sync Folder"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "同期フォルダを選択"
+          }
+        }
+      }
+    },
+    "重新授权文件夹": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reauthorize Folder"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "フォルダへのアクセスを再許可"
+          }
+        }
+      }
+    "后台运行时，Daybreak 无法可靠读取窗口、屏幕方向或折叠状态，也不会按设备型号猜测 iPad 或 Duo。请在“输出”中手动固定目标比例；不确定时选原图，由系统自行裁切。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "While running in the background, Daybreak cannot reliably read the window, screen orientation, or fold state, and it won't guess iPad or Duo from the device model. Fix the target ratio manually in “Output”; when unsure, choose Original and let the system crop it."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "バックグラウンド実行中、Daybreak はウィンドウや画面の向き、折りたたみ状態を確実に取得できず、デバイスの機種名から iPad や Duo を推測することもありません。「出力」で目的の比率を手動で固定してください。不明な場合は元画像を選び、システム側で切り抜かせてください。"
+          }
+        }
+      }
+    },
+    "回到当前地区今天并显示月历": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Return to today in the current region and show the monthly calendar"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "現在の地域の今日に戻り、月間カレンダーを表示"
+          }
+        }
+      }
+    },
+    "已返回「%@」（%@ · %@）的%@文件。这是按 %@ 比例生成的构图导出，系统设置壁纸时可能再次裁切；请用快捷指令完成设置，Daybreak 不会直接修改系统壁纸。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Returned the %4$@ file for “%1$@” (%2$@ · %3$@). This is a composition export generated for the %5$@ aspect ratio; the system may crop it again when setting the wallpaper. Apply it with the shortcut; Daybreak does not change the system wallpaper directly."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「%1$@」（%2$@ · %3$@）の%4$@ファイルを返しました。これは %5$@ の比率で生成した構図の書き出しで、システムで壁紙を設定するときに再度切り抜かれる可能性があります。ショートカットで設定してください。Daybreak はシステムの壁紙を直接変更しません。"
+          }
+        }
+      }
+    },
+    "把“来源:图片 ID”文本（例如 bing:OHR.Example）解析为 Daybreak 已缓存的真实图片文件。用于“Daybreak Apply”快捷指令接住从应用传入的文本。“输出”可选原图或目标屏幕比例；后台不检测方向或折叠状态，请手动选择。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resolves “source:image ID” text (for example bing:OHR.Example) to a real cached Daybreak image file. Use this in the “Daybreak Apply” shortcut to receive the text passed in by the app. “Output” can return the original or a crop for the target screen ratio; the background mode doesn't detect orientation or fold state, so choose manually."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「ソース:画像 ID」形式のテキスト（例: bing:OHR.Example）を、Daybreak にキャッシュ済みの実際の画像ファイルに解決します。「Daybreak Apply」ショートカットで、アプリから渡されたテキストを受け取るために使います。「出力」では元画像または目的の画面比率の切り抜きを選べます。バックグラウンドでは向きや折りたたみ状態を検出しないため、手動で選択してください。"
+          }
+        }
+      }
+    },
+    "新建名为 Daybreak Daily 的快捷指令，添加“获取今日 Daybreak 壁纸”动作，并在“输出”中按目标设备选择：普通 iPhone 竖屏选锁屏或主屏幕（9:19.5），iPad 横屏选 iPad 横屏（近似 4:3），Duo 按目标屏幕选对应预设；不确定时选原图。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Create a shortcut named Daybreak Daily and add the “Get Today's Daybreak Wallpaper” action. Then, in “Output,” choose an option for the target device: for a regular iPhone in portrait, choose Lock Screen or Home Screen (9:19.5); for iPad landscape, choose iPad landscape (about 4:3); for Duo, choose the preset that matches the target screen. When unsure, choose Original."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daybreak Daily という名前のショートカットを作成し、「今日の Daybreak 壁紙を取得」アクションを追加します。次に「出力」で目的のデバイスに合わせて選択します。通常の iPhone の縦向きではロック画面またはホーム画面（9:19.5）、iPad の横向きでは iPad 横向き（約 4:3）、Duo では目的の画面に対応するプリセットを選びます。不明な場合は元画像を選択してください。"
+          }
+        }
+      }
+    },
+    "本地记录少于两天，尚不足以生成可比较的年度结论；下面只列出实际保存的内容。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fewer than two days have local records, which isn't enough for a comparable annual summary. Only content actually saved is shown below."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ローカル記録が2日未満のため、比較可能な年間のまとめを作成できません。以下には実際に保存された内容のみを表示します。"
+          }
+        }
+      }
+    },
+    "添加“按 ID 获取 Daybreak 壁纸”动作，把“壁纸 ID”设为“快捷指令输入”，并在“输出”中选择原图或目标屏幕比例。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add the “Get Daybreak Wallpaper by ID” action, set “Wallpaper ID” to Shortcut Input, and choose Original or the target screen ratio in “Output.”"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「ID で Daybreak 壁紙を取得」アクションを追加し、「壁紙 ID」を「ショートカットの入力」に設定してから、「出力」で元画像または目的の画面比率を選択します。"
+          }
+        }
+      }
+    },
+    "近似 4:3 构图；后台不检测方向或折叠状态，请手动选择": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Approximately 4:3 composition; background mode doesn't detect orientation or fold state, so choose manually"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "約 4:3 の構図。バックグラウンドでは向きや折りたたみ状態を検出しないため、手動で選択してください"
+          }
+        }
+      }
+    },
+    "返回 Daybreak 为应用当前地区缓存的今日壁纸文件；若今天尚未缓存会明确报错，不拿旧图冒充今日。“输出”可选原图或目标屏幕比例的构图裁切；后台不会检测方向或折叠状态，请按设备手动选择。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Returns the file for today's wallpaper cached for Daybreak's current market. If today is not cached, the intent reports an error instead of passing off an older image as today's. “Output” can return the original or a composition crop for the target screen ratio; the background mode doesn't detect orientation or fold state, so choose manually for each device."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daybreak の現在の地域向けにキャッシュされた今日の壁紙ファイルを返します。今日の分がキャッシュされていない場合は、古い画像を今日の壁紙として返さず、明確なエラーを報告します。「出力」では元画像または目的の画面比率の構図切り抜きを選べます。バックグラウンドでは向きや折りたたみ状態を検出しないため、デバイスに合わせて手動で選択してください。"
+          }
+        }
+      }
+    },
+    "锁屏、主屏幕、iPad 横屏和 Duo 裁切都是固定比例的构图导出，不承诺系统最终显示效果，也不承诺分别控制锁屏、主屏幕或内外屏。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lock Screen, Home Screen, iPad landscape, and Duo crops are fixed-ratio composition exports. They don't promise the final on-screen result, and they don't promise separate control of the Lock Screen, Home Screen, or inner/outer displays."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ロック画面、ホーム画面、iPad 横向き、Duo の切り抜きはいずれも固定比率の構図の書き出しです。システム上での最終的な表示結果や、ロック画面・ホーム画面・内側／外側画面を個別に制御できることを約束するものではありません。"
+          }
+        }
+      }
+    },
+    },
+    "Daybreak Apply：设置当前壁纸": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daybreak Apply: Set the current wallpaper"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daybreak Apply：現在の壁紙を設定"
+          }
+        }
+      }
+    },
+    "Daybreak Daily：每日自动更换": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daybreak Daily: Change the wallpaper daily"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daybreak Daily：毎日壁紙を切り替え"
+          }
+        }
+      }
+    },
+    "从 iCloud 添加 Daybreak Apply": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add Daybreak Apply from iCloud"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud から Daybreak Apply を追加"
+          }
+        }
+      }
+    },
+    "从 iCloud 添加 Daybreak Daily": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add Daybreak Daily from iCloud"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud から Daybreak Daily を追加"
+          }
+        }
+      }
+    },
+    "按钮只打开 iCloud 上的快捷指令页面。请在页面点“获取快捷指令”，再在系统确认框中添加；Daybreak 无法检测你是否已添加。": {
       "extractionState": "manual",
       "localizations": {
         "en": {
