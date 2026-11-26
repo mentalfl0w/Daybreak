@@ -35,6 +35,17 @@ public enum DaybreakSyncStatus: String, Hashable, Sendable, Codable {
 @MainActor
 @Observable
 public final class DaybreakSyncController {
+    // Allow iCloud time to materialize requested files before three bounded retries.
+    private static let pendingDownloadRetryLimit = 3
+
+    private static func pendingDownloadRetryDelay(for attempt: Int) -> UInt64 {
+        switch attempt {
+        case 0: return 1_000_000_000
+        case 1: return 2_000_000_000
+        default: return 4_000_000_000
+        }
+    }
+
     public private(set) var enabled: Bool = false
     public private(set) var folderName: String?
     public private(set) var status: DaybreakSyncStatus = .disabled
@@ -53,6 +64,9 @@ public final class DaybreakSyncController {
     @ObservationIgnored private let engine: CloudSyncEngine
     @ObservationIgnored private let market: @Sendable () -> Market
     @ObservationIgnored private var syncTask: Task<Void, Never>?
+    @ObservationIgnored private var pendingDownloadRetryTask: Task<Void, Never>?
+    @ObservationIgnored private var pendingDownloadRetryAttempt = 0
+    @ObservationIgnored private var pendingDownloadRetryID: UInt64 = 0
     @ObservationIgnored private var needsAnotherPass = false
     @ObservationIgnored private var generation: UInt64 = 0
     @ObservationIgnored private var restoreTask: Task<Void, Never>?
@@ -144,6 +158,7 @@ public final class DaybreakSyncController {
         isTransitioning = true
         generation &+= 1
         needsAnotherPass = false
+        cancelPendingDownloadRetry()
         await cancelInFlightPass()
         status = .syncing
 
@@ -264,8 +279,14 @@ public final class DaybreakSyncController {
 
     // MARK: Single-flight scheduling
 
-    private func triggerSync(waitForCompletion: Bool) async {
+    private func triggerSync(
+        waitForCompletion: Bool,
+        isPendingDownloadRetry: Bool = false
+    ) async {
         guard enabled, !isTransitioning else { return }
+        if !isPendingDownloadRetry {
+            cancelPendingDownloadRetry()
+        }
         needsAnotherPass = true
         if syncTask == nil {
             let startedGeneration = generation
@@ -280,21 +301,29 @@ public final class DaybreakSyncController {
     }
 
     private func runLoop(generation startedGeneration: UInt64) async {
+        var shouldRetryPendingDownloads = false
         while !Task.isCancelled, startedGeneration == generation, enabled {
             needsAnotherPass = false
-            await performPass(generation: startedGeneration)
-            if !needsAnotherPass { break }
+            shouldRetryPendingDownloads = await performPass(generation: startedGeneration)
+            if shouldRetryPendingDownloads || !needsAnotherPass {
+                break
+            }
         }
         syncTask = nil
+        if shouldRetryPendingDownloads {
+            schedulePendingDownloadRetry(generation: startedGeneration)
+        } else {
+            pendingDownloadRetryAttempt = 0
+        }
     }
 
-    private func performPass(generation startedGeneration: UInt64) async {
-        guard startedGeneration == generation, enabled else { return }
+    private func performPass(generation startedGeneration: UInt64) async -> Bool {
+        guard startedGeneration == generation, enabled else { return false }
         status = .syncing
         let markets: Set<Market> = syncMarket ? [] : [market()]
         let scope = SyncScope(markets: markets, includesOriginals: syncOriginals)
         let result = await engine.synchronize(scope: scope)
-        guard startedGeneration == generation else { return }
+        guard startedGeneration == generation else { return false }
         if result.didChangeLocalData {
             dataRevision &+= 1
         }
@@ -329,7 +358,47 @@ public final class DaybreakSyncController {
         case .cancelled:
             status = .pending
         }
+        return result.status == .pending && result.issue == .pendingDownloads
     }
+
+    private func schedulePendingDownloadRetry(generation startedGeneration: UInt64) {
+        guard pendingDownloadRetryTask == nil,
+              pendingDownloadRetryAttempt < Self.pendingDownloadRetryLimit,
+              startedGeneration == generation,
+              enabled,
+              !isTransitioning
+        else {
+            return
+        }
+
+        let delay = Self.pendingDownloadRetryDelay(for: pendingDownloadRetryAttempt)
+        pendingDownloadRetryAttempt += 1
+        pendingDownloadRetryID &+= 1
+        let retryID = pendingDownloadRetryID
+        pendingDownloadRetryTask = Task { [weak self] in
+            do {
+                try await Task.sleep(nanoseconds: delay)
+            } catch {
+                return
+            }
+            guard !Task.isCancelled, let self else { return }
+            await self.retryPendingDownloads(
+                generation: startedGeneration,
+                retryID: retryID
+            )
+        }
+    }
+
+    private func retryPendingDownloads(
+        generation startedGeneration: UInt64,
+        retryID: UInt64
+    ) async {
+        guard retryID == pendingDownloadRetryID else { return }
+        pendingDownloadRetryTask = nil
+        guard startedGeneration == generation, enabled, !isTransitioning else { return }
+        await triggerSync(waitForCompletion: false, isPendingDownloadRetry: true)
+    }
+
 
     // MARK: State transitions
 
@@ -359,6 +428,7 @@ public final class DaybreakSyncController {
 
     private func stopAndDisable() async {
         isTransitioning = true
+        cancelPendingDownloadRetry()
         try? await engine.setEnabled(false)
         generation &+= 1
         needsAnotherPass = false
@@ -369,6 +439,7 @@ public final class DaybreakSyncController {
     }
 
     private func forceDisabled(status newStatus: DaybreakSyncStatus) async {
+        cancelPendingDownloadRetry()
         if enabled {
             enabled = false
             try? await engine.setEnabled(false)
@@ -381,6 +452,12 @@ public final class DaybreakSyncController {
         task?.cancel()
         await task?.value
         syncTask = nil
+    }
+    private func cancelPendingDownloadRetry() {
+        pendingDownloadRetryID &+= 1
+        pendingDownloadRetryTask?.cancel()
+        pendingDownloadRetryTask = nil
+        pendingDownloadRetryAttempt = 0
     }
 
     private static func syncStatus(for reason: CloudSyncFolderRevocation) -> DaybreakSyncStatus {

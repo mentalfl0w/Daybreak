@@ -247,6 +247,7 @@ private actor TestCloudFolderStore: CloudSyncFolderAccessing {
     private(set) var writeCount = 0
     private(set) var operationListings = 0
     private(set) var downloadRequests: [String] = []
+    private var notDownloadedPaths: Set<String> = []
 
     init(root: URL) {
         self.root = root
@@ -257,6 +258,10 @@ private actor TestCloudFolderStore: CloudSyncFolderAccessing {
 
     func setState(_ state: CloudSyncFolderState) {
         stateValue = state
+    }
+
+    func setNotDownloadedPaths(_ paths: Set<String>) {
+        notDownloadedPaths = paths
     }
 
     func setFailIO(_ value: Bool) {
@@ -380,11 +385,14 @@ private actor TestCloudFolderStore: CloudSyncFolderAccessing {
                     isDownloaded: true
                 )
             }
+            let childPath = relativePath.isEmpty
+                ? child.lastPathComponent
+                : "\(relativePath)/\(child.lastPathComponent)"
             return CloudSyncFolderEntry(
                 name: child.lastPathComponent,
                 kind: .file,
                 byteCount: values.fileSize,
-                isDownloaded: true
+                isDownloaded: !notDownloadedPaths.contains(childPath)
             )
         }
         .sorted { $0.name < $1.name }
@@ -1272,6 +1280,72 @@ struct DaybreakSyncControllerTests {
         #expect(controller.status == .completed)
         #expect(await repository.snapshot().favoriteWallpaperIDs.contains(seed.wallpaperID))
     }
+
+    @MainActor
+    @Test func pendingDownloadsRetryAfterMaterializationAndCancelOnDisable() async throws {
+        let root = try CloudSyncFixture.makeDirectory("controller-pending-downloads")
+        defer { try? FileManager.default.removeItem(at: root) }
+        let shared = root.appendingPathComponent("shared", isDirectory: true)
+        try FileManager.default.createDirectory(at: shared, withIntermediateDirectories: true)
+        let scope = SyncScope(markets: [], includesOriginals: false)
+
+        let sourceRepository = try makeRepository(
+            at: try CloudSyncFixture.makeDirectory("controller-pending-source")
+        )
+        let seed = try await SyncSeeder.populate(sourceRepository)
+        let sourceStore = TestCloudFolderStore(root: shared)
+        await sourceStore.setState(.active(displayName: "Shared"))
+        let sourceEngine = makeEngine(
+            repository: sourceRepository,
+            folder: sourceStore,
+            stateDirectory: root.appendingPathComponent("source-state")
+        )
+        #expect(await sourceEngine.synchronize(scope: scope).status == .completed)
+
+        let operation = try #require(operationFiles(in: shared).first)
+        let sharedPath = shared.standardizedFileURL.path
+        let operationPath = operation.standardizedFileURL.path
+        let relativeOperationPath = String(operationPath.dropFirst(sharedPath.count + 1))
+
+        let receiver = try makeRepository(
+            at: try CloudSyncFixture.makeDirectory("controller-pending-receiver")
+        )
+        let store = TestCloudFolderStore(root: shared)
+        let controller = DaybreakSyncController(
+            repository: receiver,
+            stateDirectory: root.appendingPathComponent("receiver-state"),
+            folderStore: store,
+            now: { CloudSyncFixture.fixedNow }
+        )
+        await store.setState(.active(displayName: "Shared"))
+        await store.setNotDownloadedPaths([relativeOperationPath])
+        await controller.prepare()
+        await controller.selectFolder(shared)
+        await controller.syncNow()
+
+        #expect(controller.status == .pending)
+        #expect(controller.lastIssue == .pendingDownloads)
+        #expect(await store.downloadRequests.contains(relativeOperationPath))
+        let pendingListings = await store.operationListings
+
+        await store.setNotDownloadedPaths([])
+        let recovered = await waitUntil(timeout: 10) {
+            controller.status == .completed
+        }
+        #expect(recovered)
+        #expect(await store.operationListings > pendingListings)
+        #expect(await receiver.snapshot().favoriteWallpaperIDs.contains(seed.wallpaperID))
+
+        await store.setNotDownloadedPaths([relativeOperationPath])
+        await controller.syncNow()
+        #expect(controller.status == .pending)
+        let listingsBeforeDisable = await store.operationListings
+        await controller.setEnabled(false)
+        #expect(controller.status == .disabled)
+        try? await Task.sleep(nanoseconds: 1_200_000_000)
+        #expect(await store.operationListings == listingsBeforeDisable)
+    }
+
 }
 
 /// End-to-end through the production folder adapter: real bookmark file,
