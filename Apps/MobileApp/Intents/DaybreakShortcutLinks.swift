@@ -63,6 +63,7 @@ enum DaybreakShortcutShareLink {
     static let daily = URL(string: "https://www.icloud.com/shortcuts/61f30d50e6bb42108c2e6b5c0a23b1e2")!
 }
 
+
 ///
 /// The links open Apple's iCloud Shortcuts page in the browser. That page's
 /// “Get Shortcut” button hands the shortcut to the system Shortcuts app, where
