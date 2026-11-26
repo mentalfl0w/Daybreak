@@ -1,0 +1,29 @@
+{
+  "sourceLanguage" : "zh-Hans",
+  "strings" : {
+    "NSPhotoLibraryAddUsageDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daybreak only adds the image you export to your photo library. It never reads or changes your existing photos."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daybreak は書き出した画像を写真ライブラリに追加するだけで、既存の写真を読み取ったり変更したりしません。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daybreak 只会把你要导出的图片添加到照片图库，不会读取或修改已有照片。"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}
