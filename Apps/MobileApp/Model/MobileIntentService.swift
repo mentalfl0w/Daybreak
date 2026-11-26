@@ -9,6 +9,8 @@ public enum MobileIntentImageSelection: Hashable, Sendable {
     case today(market: Market?)
     case date(LocalDate, market: Market?)
     case wallpaper(WallpaperID)
+    /// One exact observation of an image, used by occurrence-aware Apply handoffs.
+    case occurrence(OccurrenceKey, WallpaperID)
     case latestFavorite
     case favorite(WallpaperID)
     case randomCached
@@ -97,17 +99,32 @@ public actor MobileIntentService {
         await dataStore.recordCurrentSelection(key)
     }
 
-    public func currentSelectionWallpaperID() async -> WallpaperID? {
-        guard let key = await dataStore.currentSelection() else { return nil }
-        guard let snapshot = try? await dataStore.repositorySnapshot() else {
+    func currentSelectionIdentity() async -> (
+        occurrenceKey: OccurrenceKey,
+        wallpaperID: WallpaperID
+    )? {
+        guard let key = await dataStore.currentSelection(),
+              let snapshot = try? await dataStore.repositorySnapshot(),
+              let occurrence = snapshot.occurrences.first(where: { $0.id == key })
+        else {
             return nil
         }
-        return snapshot.occurrences.first(where: { $0.id == key })?.wallpaperID
+        return (key, occurrence.wallpaperID)
     }
 
-    /// Accepts the canonical `bing:<sourceImageID>` text used by Shortcuts and
-    /// run-shortcut URLs. Lookup is image-level; duplicate dates/markets are
-    /// expected and do not change the identity.
+    public func currentSelectionWallpaperID() async -> WallpaperID? {
+        await currentSelectionIdentity()?.wallpaperID
+    }
+
+    /// Resolves metadata for a notification only when the exported image's
+    /// occurrence identity is still present in the shared repository.
+    func notificationSnapshot(for key: OccurrenceKey) async throws -> MobileDaySnapshot? {
+        try await dataStore.daySnapshot(for: key)
+    }
+
+    /// Resolves canonical source:image ID text to an image-level identifier.
+    /// It does not select a date or market occurrence; Apply uses the exact
+    /// occurrence-aware reference instead.
     public func lookupWallpaperID(_ rawValue: String) async -> WallpaperID? {
         let trimmed = rawValue.trimmingCharacters(in: .whitespacesAndNewlines)
         guard trimmed.utf8.count <= 512,
@@ -239,6 +256,21 @@ public actor MobileIntentService {
         case .wallpaper(let wallpaperID):
             return try await target(for: wallpaperID)
 
+        case .occurrence(let key, let expectedWallpaperID):
+            guard key.source == expectedWallpaperID.source,
+                  let day = try await dataStore.daySnapshot(for: key),
+                  day.wallpaperID == expectedWallpaperID
+            else {
+                throw MobileStoreError.unknownWallpaper(expectedWallpaperID.description)
+            }
+            return ResolvedTarget(
+                occurrence: day.occurrence,
+                metadata: day.metadata,
+                wallpaper: day.wallpaper,
+                market: day.market,
+                wallpaperID: day.wallpaperID
+            )
+
         case .latestFavorite:
             guard let wallpaperID = try await latestDatedFavorite() else {
                 throw MobileStoreError.noFavorites
@@ -280,6 +312,7 @@ public actor MobileIntentService {
             )
         }
     }
+
 
     private func target(for wallpaperID: WallpaperID) async throws -> ResolvedTarget {
         guard let occurrence = try await dataStore.latestOccurrence(for: wallpaperID) else {

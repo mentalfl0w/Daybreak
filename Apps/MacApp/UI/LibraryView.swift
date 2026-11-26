@@ -102,6 +102,9 @@ struct LibraryView: View {
                 .help("在照片图库与整月日历之间切换")
                 .accessibilityLabel("图库或日历")
 
+                marketMenu
+
+
                 Button {
                     revealSourceToday()
                 } label: {
@@ -294,6 +297,33 @@ struct LibraryView: View {
     private var marketLabel: String {
         LocalePresentation.marketName(for: model.market, in: locale)
     }
+
+    private var marketMenu: some View {
+        Menu {
+            if model.availableMarkets.isEmpty {
+                Text("没有已缓存图片的地区")
+                    .disabled(true)
+            } else {
+                ForEach(model.availableMarkets, id: \.self) { market in
+                    Button {
+                        appModel.selectMarket(.explicit(market))
+                    } label: {
+                        let name = LocalePresentation.marketName(for: market, in: locale)
+                        if market == model.market {
+                            Label(name, systemImage: "checkmark")
+                        } else {
+                            Text(verbatim: name)
+                        }
+                    }
+                }
+            }
+        } label: {
+            Label("地区", systemImage: "globe")
+        }
+        .accessibilityValue(Text(verbatim: marketLabel))
+        .disabled(appModel.isApplyingWallpaper)
+    }
+
 
     private var hasReadableHistory: Bool {
         model.month != nil

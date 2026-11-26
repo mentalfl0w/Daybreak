@@ -8,6 +8,7 @@ This changelog consolidates development records. Test and build entries reflect 
 
 - Refactored the application and infrastructure boundaries without changing product entry points. macOS display protection now lives in `WallpaperDisplayCoordinator`; repository storage, validation and protection calculations have focused files; Bing transport execution and image validation are separated from the public provider façade.
 - Added `scripts/check-import-boundaries.sh` and CI enforcement for Core, platform, mobile, SwiftPM and XcodeGen dependency direction.
+- Added timeline market menus across iOS/iPadOS and macOS, limited to supported markets with a locally available thumbnail or original image. Market changes preserve existing navigation state while the selected date remains valid.
 - The refactor verification passed 253 DaybreakCore tests, 79 MacIntegration tests, the import-boundary check, an unsigned macOS Release build, and an unsigned iOS Release build.
 - Real-device folder synchronization, cross-device propagation, authorization-bookmark persistence after free-account re-signing, complete multi-display and multi-Space acceptance, and full mobile device behavior remain **Not tested**.
 

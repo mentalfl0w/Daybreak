@@ -1,6 +1,159 @@
 {
   "sourceLanguage": "zh-Hans",
   "strings": {
+    "壁纸引用无效。请从 Daybreak 今日或时光页运行快捷指令，让应用传入图片 ID、地区和日期。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The wallpaper reference is invalid. Run the shortcut from Daybreak's Today or Timeline page so the app can pass the image ID, market, and date."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "壁紙参照が無効です。画像 ID、地域、日付をアプリから渡せるよう、Daybreak の今日またはタイムライン画面からショートカットを実行してください。"
+          }
+        }
+      }
+    },
+    "按图片引用获取 Daybreak 壁纸": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Get Daybreak Wallpaper by Reference"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "参照で Daybreak 壁紙を取得"
+          }
+        }
+      }
+    },
+    "把 Daybreak 传入的图片引用（图片 ID、地区和来源日期）解析为对应的已缓存真实图片文件。用于“Daybreak Apply”快捷指令接收应用传入的文本，不会按图片 ID 匹配其他日期或地区。“输出”可选原图或目标屏幕比例；后台不检测方向或折叠状态，请手动选择。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Resolves the image reference passed by Daybreak (wallpaper ID, market, and source date) to the corresponding cached image file. Use it in the “Daybreak Apply” shortcut to receive text from the app; it never matches another date or market by wallpaper ID. “Output” can return the original or a crop for the target screen ratio; background mode does not detect orientation or fold state, so choose manually."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daybreak から渡された画像参照（壁紙 ID、地域、取得元の日付）を、対応するキャッシュ済み画像ファイルに解決します。「Daybreak Apply」ショートカットでアプリからのテキストを受け取るために使います。壁紙 ID だけで別の日付や地域の画像を照合することはありません。「出力」では元画像または目的の画面比率の切り抜きを選べます。バックグラウンドでは向きや折りたたみ状態を検出しないため、手動で選択してください。"
+          }
+        }
+      }
+    },
+    "壁纸引用": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wallpaper Reference"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "壁紙参照"
+          }
+        }
+      }
+    },
+    "由 Daybreak 传入，包含图片 ID、地区和来源日期；可在快捷指令指南中复制。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passed by Daybreak; contains the image ID, market, and source date. Copy it from the Shortcuts guide."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Daybreak から渡される、画像 ID・地域・取得元の日付を含む参照です。ショートカットガイドからコピーできます。"
+          }
+        }
+      }
+    },
+    "按引用获取壁纸": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Get Wallpaper by Reference"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "参照で壁紙を取得"
+          }
+        }
+      }
+    },
+    "添加“按图片引用获取 Daybreak 壁纸”动作，把“壁纸引用”设为“快捷指令输入”，并在“输出”中选择原图或目标屏幕比例。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add the “Get Daybreak Wallpaper by Reference” action, set “Wallpaper Reference” to Shortcut Input, and choose Original or the target screen ratio in “Output.”"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「参照で Daybreak 壁紙を取得」アクションを追加し、「壁紙参照」を「ショートカットの入力」に設定してから、「出力」で元画像または目的の画面比率を選択します。"
+          }
+        }
+      }
+    },
+    "从“今日”或“时光”页运行时，Daybreak 会传入图片 ID、地区和来源日期，并按这条具体出现记录解析元数据。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "When run from Today or Timeline, Daybreak passes the image ID, market, and source date, then resolves metadata for that exact occurrence."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今日またはタイムラインから実行すると、Daybreak は画像 ID、地域、取得元の日付を渡し、その出現記録に一致するメタデータを解決します。"
+          }
+        }
+      }
+    },
+    "复制 %@，用于“按图片引用获取 Daybreak 壁纸”动作或测试。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copies %@ for the “Get Daybreak Wallpaper by Reference” action or for testing."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「参照で Daybreak 壁紙を取得」アクションやテスト用に %@ をコピーします。"
+          }
+        }
+      }
+    },
     " %lld 个受保护原图已保留。": {
       "extractionState": "manual",
       "localizations": {
@@ -8110,6 +8263,23 @@
         }
       }
     },
+    "没有已缓存图片的地区": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No markets have cached images."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "キャッシュ済み画像のある地域はありません"
+          }
+        }
+      }
+    },
     "没有添加到照片的权限，可在系统设置中允许": {
       "extractionState": "manual",
       "localizations": {
@@ -12171,6 +12341,195 @@
             "value": "技術的な詳細"
           }
         }
+      }
+    },
+    "无法创建壁纸通知引用。请重新获取图片后重试。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Could not create the wallpaper notification reference. Fetch the image again and try." } },
+        "ja": { "stringUnit": { "state": "translated", "value": "壁紙通知の参照を作成できませんでした。画像を再取得して、もう一度お試しください。" } }
+      }
+    },
+    "壁纸通知已提交。快捷指令无法确认系统壁纸动作是否成功。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "The wallpaper notification was submitted. Shortcuts cannot confirm whether the system wallpaper action succeeded." } },
+        "ja": { "stringUnit": { "state": "translated", "value": "壁紙通知を送信しました。ショートカットでは、システムの壁紙アクションが成功したか確認できません。" } }
+      }
+    },
+    "壁纸通知尚未授权。请先打开 Daybreak 的快捷指令指南并允许通知。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Wallpaper notifications are not authorized. Open Daybreak's Shortcuts guide and allow notifications first." } },
+        "ja": { "stringUnit": { "state": "translated", "value": "壁紙通知が許可されていません。先に Daybreak のショートカットガイドを開き、通知を許可してください。" } }
+      }
+    },
+    "这张图片没有对应的 Daybreak 记录。请重新获取壁纸后重试。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "No matching Daybreak record was found for this image. Fetch the wallpaper again and try." } },
+        "ja": { "stringUnit": { "state": "translated", "value": "この画像に対応する Daybreak の記録がありません。壁紙を再取得して、もう一度お試しください。" } }
+      }
+    },
+    "这张图片没有可用的来源知识点。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "No source quick fact is available for this image." } },
+        "ja": { "stringUnit": { "state": "translated", "value": "この画像には利用できる出典の豆知識がありません。" } }
+      }
+    },
+    "Daybreak 壁纸": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Daybreak Wallpaper" } },
+        "ja": { "stringUnit": { "state": "translated", "value": "Daybreak の壁紙" } }
+      }
+    },
+    "无法识别这张 Daybreak 图片。请将“壁纸图片”连接到 Daybreak 获取壁纸操作的输出。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "This Daybreak image could not be recognized. Connect Wallpaper Image to the output of a Daybreak wallpaper action." } },
+        "ja": { "stringUnit": { "state": "translated", "value": "この Daybreak 画像を識別できませんでした。「壁紙画像」を Daybreak の壁紙取得アクションの出力に接続してください。" } }
+      }
+    },
+    "无法读取这张图片对应的来源资料：%@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Could not read source information for this image: %@" } },
+        "ja": { "stringUnit": { "state": "translated", "value": "この画像の出典情報を読み込めませんでした：%@" } }
+      }
+    },
+    "无法读取快捷指令传入的图片或生成通知缩略图。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Could not read the image supplied by Shortcuts or create its notification thumbnail." } },
+        "ja": { "stringUnit": { "state": "translated", "value": "ショートカットから渡された画像を読み込むか、通知用サムネイルを作成できませんでした。" } }
+      }
+    },
+    "无法添加壁纸通知图片缩略图。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Could not attach the wallpaper thumbnail to the notification." } },
+        "ja": { "stringUnit": { "state": "translated", "value": "壁紙のサムネイルを通知に添付できませんでした。" } }
+      }
+    },
+    "无法安排本地壁纸通知：%@": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Could not schedule the local wallpaper notification: %@" } },
+        "ja": { "stringUnit": { "state": "translated", "value": "ローカル壁紙通知をスケジュールできませんでした：%@" } }
+      }
+    },
+    "壁纸通知": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Wallpaper notification" } },
+        "ja": { "stringUnit": { "state": "translated", "value": "壁紙通知" } }
+      }
+    },
+    "允许通知后，快捷指令可在“设置墙纸照片”之后显示同一张图片的缩略图、来源标题、地区与版权说明，以及可用的知识点。通知只表示已提交，不会证明系统壁纸动作成功。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "After notifications are allowed, Shortcuts can show a notification after Set Wallpaper Photo with a thumbnail of the same image, its source title, market and copyright, and an available quick fact. The notification only means it was submitted; it does not prove the system wallpaper action succeeded." } },
+        "ja": { "stringUnit": { "state": "translated", "value": "通知を許可すると、「壁紙写真を設定」の後に、同じ画像のサムネイル、出典タイトル、地域、著作権表示、利用可能な豆知識を含む通知をショートカットから表示できます。通知は送信されたことを示すだけで、システムの壁紙アクションの成功を証明するものではありません。" } }
+      }
+    },
+    "通知已允许。快捷指令可发送壁纸通知。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Notifications are allowed. Shortcuts can send wallpaper notifications." } },
+        "ja": { "stringUnit": { "state": "translated", "value": "通知は許可されています。ショートカットから壁紙通知を送信できます。" } }
+      }
+    },
+    "通知权限已关闭。请在系统设置中允许 Daybreak 通知。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Notifications are turned off. Allow Daybreak notifications in Settings." } },
+        "ja": { "stringUnit": { "state": "translated", "value": "通知はオフです。「設定」で Daybreak の通知を許可してください。" } }
+      }
+    },
+    "打开系统通知设置": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Open notification settings" } },
+        "ja": { "stringUnit": { "state": "translated", "value": "通知設定を開く" } }
+      }
+    },
+    "允许通知": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Allow notifications" } },
+        "ja": { "stringUnit": { "state": "translated", "value": "通知を許可" } }
+      }
+    },
+    "正在请求通知权限…": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Requesting notification permission…" } },
+        "ja": { "stringUnit": { "state": "translated", "value": "通知の許可をリクエスト中…" } }
+      }
+    },
+    "无法读取通知权限状态。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Could not read the notification permission status." } },
+        "ja": { "stringUnit": { "state": "translated", "value": "通知の許可状態を読み込めませんでした。" } }
+      }
+    },
+    "通知权限请求失败。请稍后重试。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Could not request notification permission. Try again later." } },
+        "ja": { "stringUnit": { "state": "translated", "value": "通知の許可をリクエストできませんでした。しばらくしてからもう一度お試しください。" } }
+      }
+    },
+    "无法打开系统设置。请手动在“设置”中查找 Daybreak 的通知选项。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Could not open Settings. Find Daybreak's notification options manually in Settings." } },
+        "ja": { "stringUnit": { "state": "translated", "value": "「設定」を開けませんでした。「設定」で Daybreak の通知オプションを手動で探してください。" } }
+      }
+    },
+    "发送 Daybreak 壁纸通知": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Send Daybreak Wallpaper Notification" } },
+        "ja": { "stringUnit": { "state": "translated", "value": "Daybreak の壁紙通知を送信" } }
+      }
+    },
+    "在系统“设置墙纸照片”动作后发送一条包含所选 Daybreak 图片缩略图、来源标题、地区、版权和可用知识点的本地通知。必须把图片输入连接到前一个 Daybreak 获取壁纸动作返回的同一张图片；此动作不会检查系统壁纸是否成功更改。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Send a local notification after the system Set Wallpaper Photo action, with a thumbnail of the selected Daybreak image, its source title, market, copyright and available quick fact. Connect the image input to the same image returned by the preceding Daybreak wallpaper action. This action does not check whether the system wallpaper changed successfully." } },
+        "ja": { "stringUnit": { "state": "translated", "value": "システムの「壁紙写真を設定」アクションの後に、選択した Daybreak 画像のサムネイル、出典タイトル、地域、著作権表示、利用可能な豆知識を含むローカル通知を送信します。画像入力を、前の Daybreak 壁紙取得アクションが返した同じ画像に接続してください。このアクションはシステムの壁紙変更が成功したか確認しません。" } }
+      }
+    },
+    "壁纸图片": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Wallpaper Image" } },
+        "ja": { "stringUnit": { "state": "translated", "value": "壁紙画像" } }
+      }
+    },
+    "选择前一个 Daybreak 获取壁纸动作返回的同一张图片。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Choose the same image returned by the preceding Daybreak wallpaper action." } },
+        "ja": { "stringUnit": { "state": "translated", "value": "前の Daybreak 壁紙取得アクションが返した同じ画像を選択してください。" } }
+      }
+    },
+    "发送壁纸通知": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "Send Wallpaper Notification" } },
+        "ja": { "stringUnit": { "state": "translated", "value": "壁紙通知を送信" } }
+      }
+    },
+    "在系统“设置墙纸照片”之后添加“发送 Daybreak 壁纸通知”动作，并将“壁纸图片”设为同一个 Daybreak 获取壁纸动作返回的图片（不要连接系统墙纸动作的结果）。通知使用这张图片的缩略图、来源标题、地区、版权和可用知识点；快捷指令无法确认系统墙纸是否更改。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "After Set Wallpaper Photo, add Send Daybreak Wallpaper Notification and set Wallpaper Image to the same image returned by the Daybreak wallpaper action (not the output of the system wallpaper action). The notification uses that image's thumbnail, source title, market, copyright and available quick fact; Shortcuts cannot confirm whether the system wallpaper changed." } },
+        "ja": { "stringUnit": { "state": "translated", "value": "「壁紙写真を設定」の後に「Daybreak の壁紙通知を送信」を追加し、「壁紙画像」を Daybreak 壁紙取得アクションが返した同じ画像に設定してください（システム壁紙アクションの結果は接続しません）。通知にはその画像のサムネイル、出典タイトル、地域、著作権表示、利用可能な豆知識が表示されます。ショートカットではシステム壁紙が変更されたか確認できません。" } }
       }
     }
   },

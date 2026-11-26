@@ -1,7 +1,9 @@
+import AppIntents
 import DaybreakCore
 import Foundation
 import ImageIO
 import UniformTypeIdentifiers
+import UserNotifications
 
 /// Prepared image plus the facts needed for an honest dialog.
 struct DaybreakPreparedWallpaper: Sendable {
@@ -184,7 +186,7 @@ struct DaybreakShortcutService: Sendable {
                     market: image.market
                 )
             }
-        case .randomCached, .favorite, .currentSelection, .wallpaperID:
+        case .randomCached, .favorite, .currentSelection, .wallpaperReference:
             break
         }
     }
@@ -247,5 +249,263 @@ struct DaybreakShortcutService: Sendable {
             }
             return result
         }
+    }
+}
+
+/// Local notification handoff for the exact `IntentFile` returned by a
+/// Daybreak wallpaper action. The filename carries its occurrence identity;
+/// the attachment is rendered from the same input file, never a re-fetched image.
+struct DaybreakWallpaperNotificationService: Sendable {
+    static let live = DaybreakWallpaperNotificationService()
+
+    func send(_ photo: IntentFile) async throws {
+        guard let reference = DaybreakShortcutNotificationReference(
+            fileName: photo.filename
+        ) else {
+            throw DaybreakWallpaperNotificationError.invalidImageReference
+        }
+
+        let center = UNUserNotificationCenter.current()
+        let settings = await center.notificationSettings()
+        guard Self.isAuthorized(settings.authorizationStatus) else {
+            throw DaybreakWallpaperNotificationError.notificationsNotAuthorized
+        }
+
+        let snapshot: MobileDaySnapshot
+        do {
+            guard let resolved = try await MobileIntentService.shared
+                .notificationSnapshot(for: reference.occurrenceKey),
+                  resolved.wallpaperID == reference.wallpaperID
+            else {
+                throw DaybreakWallpaperNotificationError.metadataUnavailable(
+                    MobileLocalizedString.resolve(
+                        "这张图片没有对应的 Daybreak 记录。请重新获取壁纸后重试。",
+                        locale: DaybreakShortcutLocale.current
+                    )
+                )
+            }
+            snapshot = resolved
+        } catch let error as DaybreakWallpaperNotificationError {
+            throw error
+        } catch {
+            throw DaybreakWallpaperNotificationError.metadataUnavailable(
+                MobileErrorText.describe(error)
+            )
+        }
+
+        let story = snapshot.storyMatch?.story
+        let payload = DaybreakWallpaperNotificationContent.make(
+            title: snapshot.title ?? story?.title ?? story?.headline,
+            copyright: snapshot.copyright ?? story?.copyright,
+            quickFact: snapshot.storyMatch?.availableStory?.quickFact,
+            market: reference.market,
+            sourceDate: reference.sourceDate,
+            locale: DaybreakShortcutLocale.current
+        )
+
+        let thumbnailURL = try Self.makeThumbnailURL(from: photo)
+        defer { try? FileManager.default.removeItem(at: thumbnailURL) }
+
+        let attachment: UNNotificationAttachment
+        do {
+            attachment = try UNNotificationAttachment(
+                identifier: "daybreak-wallpaper",
+                url: thumbnailURL,
+                options: nil
+            )
+        } catch {
+            throw DaybreakWallpaperNotificationError.attachmentUnavailable
+        }
+
+        let content = UNMutableNotificationContent()
+        content.title = payload.title
+        content.subtitle = payload.subtitle
+        content.body = payload.body
+        content.attachments = [attachment]
+
+        let request = UNNotificationRequest(
+            identifier: UUID().uuidString,
+            content: content,
+            trigger: nil
+        )
+        do {
+            try await center.add(request)
+        } catch {
+            throw DaybreakWallpaperNotificationError.schedulingFailed(
+                MobileErrorText.describe(error)
+            )
+        }
+    }
+
+    private static func isAuthorized(_ status: UNAuthorizationStatus) -> Bool {
+        switch status {
+        case .authorized, .provisional, .ephemeral:
+            return true
+        case .notDetermined, .denied:
+            return false
+        @unknown default:
+            return false
+        }
+    }
+
+    private static func makeThumbnailURL(from photo: IntentFile) throws -> URL {
+        let source: CGImageSource
+        if let fileURL = photo.fileURL {
+            let hasScopedAccess = fileURL.startAccessingSecurityScopedResource()
+            defer {
+                if hasScopedAccess {
+                    fileURL.stopAccessingSecurityScopedResource()
+                }
+            }
+            guard let imageSource = CGImageSourceCreateWithURL(
+                fileURL as CFURL,
+                nil
+            ) else {
+                throw DaybreakWallpaperNotificationError.imageUnavailable
+            }
+            source = imageSource
+            return try makeThumbnailURL(from: source)
+        }
+
+        let data = photo.data
+        guard let imageSource = CGImageSourceCreateWithData(data as CFData, nil) else {
+            throw DaybreakWallpaperNotificationError.imageUnavailable
+        }
+        source = imageSource
+        return try makeThumbnailURL(from: source)
+    }
+
+    private static func makeThumbnailURL(from source: CGImageSource) throws -> URL {
+        let options: [CFString: Any] = [
+            kCGImageSourceCreateThumbnailFromImageAlways: true,
+            kCGImageSourceCreateThumbnailWithTransform: true,
+            kCGImageSourceThumbnailMaxPixelSize: 512,
+            kCGImageSourceShouldCacheImmediately: true
+        ]
+        guard let thumbnail = CGImageSourceCreateThumbnailAtIndex(
+            source,
+            0,
+            options as CFDictionary
+        ) else {
+            throw DaybreakWallpaperNotificationError.imageUnavailable
+        }
+
+        let url = FileManager.default.temporaryDirectory
+            .appendingPathComponent("Daybreak-Notification-\(UUID().uuidString)")
+            .appendingPathExtension("jpg")
+        guard let destination = CGImageDestinationCreateWithURL(
+            url as CFURL,
+            UTType.jpeg.identifier as CFString,
+            1,
+            nil
+        ) else {
+            throw DaybreakWallpaperNotificationError.imageUnavailable
+        }
+        CGImageDestinationAddImage(
+            destination,
+            thumbnail,
+            [kCGImageDestinationLossyCompressionQuality: 0.82] as CFDictionary
+        )
+        guard CGImageDestinationFinalize(destination) else {
+            try? FileManager.default.removeItem(at: url)
+            throw DaybreakWallpaperNotificationError.imageUnavailable
+        }
+        return url
+    }
+}
+
+private enum DaybreakWallpaperNotificationError: Error, LocalizedError, Sendable {
+    case invalidImageReference
+    case notificationsNotAuthorized
+    case metadataUnavailable(String)
+    case imageUnavailable
+    case attachmentUnavailable
+    case schedulingFailed(String)
+
+    var errorDescription: String? {
+        let locale = DaybreakShortcutLocale.current
+        switch self {
+        case .invalidImageReference:
+            return MobileLocalizedString.resolve(
+                "无法识别这张 Daybreak 图片。请将“壁纸图片”连接到 Daybreak 获取壁纸操作的输出。",
+                locale: locale
+            )
+        case .notificationsNotAuthorized:
+            return MobileLocalizedString.resolve(
+                "壁纸通知尚未授权。请先打开 Daybreak 的快捷指令指南并允许通知。",
+                locale: locale
+            )
+        case .metadataUnavailable(let detail):
+            return String(
+                format: MobileLocalizedString.resolve(
+                    "无法读取这张图片对应的来源资料：%@",
+                    locale: locale
+                ),
+                detail
+            )
+        case .imageUnavailable:
+            return MobileLocalizedString.resolve(
+                "无法读取快捷指令传入的图片或生成通知缩略图。",
+                locale: locale
+            )
+        case .attachmentUnavailable:
+            return MobileLocalizedString.resolve(
+                "无法添加壁纸通知图片缩略图。",
+                locale: locale
+            )
+        case .schedulingFailed(let detail):
+            return String(
+                format: MobileLocalizedString.resolve(
+                    "无法安排本地壁纸通知：%@",
+                    locale: locale
+                ),
+                detail
+            )
+        }
+    }
+}
+
+struct DaybreakWallpaperNotificationContent: Equatable, Sendable {
+    let title: String
+    let subtitle: String
+    let body: String
+
+    static func make(
+        title: String?,
+        copyright: String?,
+        quickFact: String?,
+        market: Market,
+        sourceDate: LocalDate,
+        locale: Locale
+    ) -> DaybreakWallpaperNotificationContent {
+        let displayTitle = trimmed(title)
+            ?? MobileLocalizedString.resolve("Daybreak 壁纸", locale: locale)
+        var caption = [
+            DaybreakShortcutDisplay.marketName(market, locale: locale),
+            DaybreakShortcutDisplay.shortDate(sourceDate, locale: locale)
+        ]
+        if let copyright = trimmed(copyright) {
+            caption.append(copyright)
+        }
+        let body = trimmed(quickFact)
+            ?? MobileLocalizedString.resolve(
+                "这张图片没有可用的来源知识点。",
+                locale: locale
+            )
+
+        return DaybreakWallpaperNotificationContent(
+            title: displayTitle,
+            subtitle: caption.joined(separator: " · "),
+            body: body
+        )
+    }
+
+    private static func trimmed(_ value: String?) -> String? {
+        guard let value = value?.trimmingCharacters(in: .whitespacesAndNewlines),
+              !value.isEmpty
+        else {
+            return nil
+        }
+        return value
     }
 }

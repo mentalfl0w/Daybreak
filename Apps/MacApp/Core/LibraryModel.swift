@@ -211,6 +211,22 @@ enum LibraryGalleryBuilder {
     }
 }
 
+enum LibraryMarketBuilder {
+    static func availableMarkets(snapshot: RepositorySnapshot) -> [Market] {
+        let availableImages = snapshot.availableThumbnailIDs
+            .union(snapshot.availableOriginalIDs)
+        let marketsWithImages = Set(
+            snapshot.occurrences
+                .filter { availableImages.contains($0.wallpaperID) }
+                .map(\.market)
+        )
+        return BingMarketProfile.catalog.compactMap { profile in
+            marketsWithImages.contains(profile.market) ? profile.market : nil
+        }
+    }
+}
+
+
 enum LibraryCalendarMath {
     /// Monday-first weekday index: `0` is Monday and `6` is Sunday.
     ///
@@ -270,6 +286,7 @@ enum LibraryLoadState: Equatable, Sendable {
 final class LibraryModel {
     let service: TodayService
     private(set) var market: Market
+    private(set) var availableMarkets: [Market] = []
     private(set) var monthKey: LibraryMonthKey
     private(set) var scope: LibraryScope = .all
     private(set) var month: TimelineMonth?
@@ -376,11 +393,16 @@ final class LibraryModel {
         guard resolved != market else { return }
         market = resolved
         resetForMarketChange()
-        selectedDate = nil
         if let profile = BingMarketProfile.profile(for: resolved),
            let today = LocalDate(date: now(), timeZone: profile.timeZone) {
             asOf = today
-            monthKey = LibraryMonthKey(containing: today)
+            let currentMonth = LibraryMonthKey(containing: today)
+            if monthKey > currentMonth {
+                monthKey = currentMonth
+            }
+            if let selectedDate, selectedDate > today {
+                self.selectedDate = nil
+            }
         }
         reloadTask?.cancel()
         reloadTask = Task { [weak self] in
@@ -428,6 +450,7 @@ final class LibraryModel {
             try Task.checkCancellation()
             guard token == generation else { return }
             self.snapshot = snapshot
+            availableMarkets = LibraryMarketBuilder.availableMarkets(snapshot: snapshot)
             galleryItems = LibraryGalleryBuilder.items(snapshot: snapshot, market: market)
             month = try TimelineBuilder.month(
                 year: monthKey.year,

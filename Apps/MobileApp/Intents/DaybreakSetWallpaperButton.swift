@@ -1,13 +1,12 @@
+import DaybreakCore
 import SwiftUI
 
 /// Reusable “set wallpaper with Shortcuts” entry point.
 ///
-/// After the user confirms a `Daybreak Apply` shortcut exists, a tap runs that
-/// shortcut through the documented Shortcuts URL and passes the selected image
-/// ID as text. Otherwise it opens the setup guide. The label and status text
-/// never claim that Daybreak changed the system wallpaper itself.
+/// The handoff always carries the wallpaper ID and exact market/date
+/// occurrence selected in Daybreak.
 struct DaybreakSetWallpaperButton: View {
-    let wallpaperID: String
+    let wallpaperReference: DaybreakWallpaperReference
 
     @Environment(\.openURL) private var openURL
     @Environment(\.locale) private var locale
@@ -15,8 +14,15 @@ struct DaybreakSetWallpaperButton: View {
     @State private var isShowingGuide = false
     @State private var errorMessage: String?
 
-    init(wallpaperID: String) {
-        self.wallpaperID = wallpaperID
+    init(wallpaperID: WallpaperID, occurrenceKey: OccurrenceKey) {
+        self.wallpaperReference = DaybreakWallpaperReference(
+            wallpaperID: wallpaperID,
+            occurrenceKey: occurrenceKey
+        )
+    }
+
+    private var shortcutInput: String {
+        wallpaperReference.text
     }
 
     var body: some View {
@@ -29,7 +35,7 @@ struct DaybreakSetWallpaperButton: View {
         .tint(.daybreakActionTint)
         .accessibilityHint(
             applyConfigured
-                ? "运行 Daybreak Apply 快捷指令，并把当前壁纸 ID 作为文本传入。是否设置成功由系统显示。"
+                ? "运行 Daybreak Apply 快捷指令，并传入所选图片及其日期、地区。是否设置成功由系统显示。"
                 : "打开快捷指令设置说明。Daybreak 不会直接修改系统壁纸。"
         )
         .sheet(isPresented: $isShowingGuide) {
@@ -41,7 +47,7 @@ struct DaybreakSetWallpaperButton: View {
                                 .font(.footnote)
                                 .foregroundStyle(.red)
                         }
-                        ShortcutsGuideView(selectedWallpaperID: wallpaperID)
+                        ShortcutsGuideView(selectedWallpaperReference: wallpaperReference)
                     }
                     .padding()
                 }
@@ -66,7 +72,7 @@ struct DaybreakSetWallpaperButton: View {
         }
         guard let url = DaybreakShortcutURL.runShortcutURL(
             name: DaybreakShortcutName.apply,
-            textInput: wallpaperID
+            textInput: shortcutInput
         ) else {
             errorMessage = MobileLocalizedString.resolve("无法构造运行快捷指令的链接。", locale: DaybreakShortcutLocale.current)
             isShowingGuide = true
@@ -80,7 +86,7 @@ struct DaybreakSetWallpaperButton: View {
             }
             DaybreakShortcutGuideStorage.recordHandoff(
                 name: DaybreakShortcutName.apply,
-                wallpaperID: wallpaperID
+                wallpaperID: shortcutInput
             )
         }
     }

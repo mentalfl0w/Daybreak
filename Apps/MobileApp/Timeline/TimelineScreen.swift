@@ -119,7 +119,7 @@ struct TimelineScreen<Store: TimelineDataStore>: View {
         }
         .alert("无法打开快捷指令", isPresented: $shortcutHandoff.showsFailure) {
             Button("打开设置指南") {
-                showShortcutGuide(for: shortcutHandoff.pendingWallpaperID)
+                showShortcutGuide(for: shortcutHandoff.pendingWallpaperReference)
             }
             Button("取消", role: .cancel) {}
         } message: {
@@ -333,7 +333,7 @@ struct TimelineScreen<Store: TimelineDataStore>: View {
     private func sheetContent(_ guide: TimelineShortcutGuide) -> some View {
         NavigationStack {
             ScrollView {
-                ShortcutsGuideView(selectedWallpaperID: guide.wallpaperID)
+                ShortcutsGuideView(selectedWallpaperReference: guide.wallpaperReference)
                     .padding()
             }
             .navigationTitle("快捷指令设置壁纸", locale: locale)
@@ -392,19 +392,31 @@ struct TimelineScreen<Store: TimelineDataStore>: View {
         )
     }
 
-    /// Opens the user's `Daybreak Apply` shortcut with the canonical wallpaper
-    /// identity as text input. The system shortcut resolves the file through
-    /// Daybreak's App Intent and performs its own wallpaper step. Daybreak
-    /// never claims that step succeeded.
+    /// Runs the user's `Daybreak Apply` shortcut for the exact selected
+    /// occurrence. The system shortcut resolves that record and performs its
+    /// own wallpaper step; Daybreak never claims that step succeeded.
     private func runApplyShortcut(for request: WallpaperPreviewRequest) {
-        guard let wallpaperID = request.wallpaperID else {
+        guard let wallpaperID = request.wallpaperID,
+              let market = request.market,
+              let sourceDate = request.sourceDate
+        else {
+            shortcutHandoff.pendingWallpaperReference = nil
             shortcutHandoff.showsFailure = true
             return
         }
-        let text = DaybreakWallpaperReference(wallpaperID: wallpaperID).text
-        shortcutHandoff.pendingWallpaperID = text
+
+        let reference = DaybreakWallpaperReference(
+            wallpaperID: wallpaperID,
+            occurrenceKey: OccurrenceKey(
+                source: wallpaperID.source,
+                market: market,
+                localDate: sourceDate
+            )
+        )
+        let text = reference.text
+        shortcutHandoff.pendingWallpaperReference = reference
         guard applyShortcutConfigured else {
-            showShortcutGuide(for: text)
+            showShortcutGuide(for: reference)
             return
         }
         guard let url = DaybreakShortcutURL.runShortcutURL(
@@ -430,10 +442,10 @@ struct TimelineScreen<Store: TimelineDataStore>: View {
 
     /// The setup marker is a user confirmation, not proof that Shortcuts ran
     /// or that the system wallpaper changed.
-    private func showShortcutGuide(for wallpaperID: String?) {
+    private func showShortcutGuide(for reference: DaybreakWallpaperReference?) {
         Task {
             try? await Task.sleep(for: .milliseconds(320))
-            shortcutHandoff.activeGuide = TimelineShortcutGuide(wallpaperID: wallpaperID)
+            shortcutHandoff.activeGuide = TimelineShortcutGuide(wallpaperReference: reference)
         }
     }
 }
@@ -442,9 +454,9 @@ struct TimelineScreen<Store: TimelineDataStore>: View {
 /// Timeline hand-off state, so it can be shown by the screen that is current
 /// when the preview finishes rather than the one that presented it.
 struct TimelineShortcutGuide: Identifiable {
-    let wallpaperID: String?
+    let wallpaperReference: DaybreakWallpaperReference?
 
-    var id: String { "shortcutGuide-\(wallpaperID ?? "none")" }
+    var id: String { "shortcutGuide-\(wallpaperReference?.text ?? "none")" }
 }
 
 /// Timeline's shortcut hand-off UI state, owned by the window shell.
@@ -458,5 +470,5 @@ struct TimelineShortcutGuide: Identifiable {
 final class TimelineShortcutHandoff {
     var activeGuide: TimelineShortcutGuide?
     var showsFailure = false
-    var pendingWallpaperID: String?
+    var pendingWallpaperReference: DaybreakWallpaperReference?
 }

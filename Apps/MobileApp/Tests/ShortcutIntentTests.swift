@@ -8,38 +8,54 @@ import UniformTypeIdentifiers
 
 @Suite("Shortcuts intent link and identity rules")
 struct ShortcutIntentTests {
-    @Test("Canonical wallpaper text round-trips")
+    @Test("Wallpaper reference round-trips its ID, market, and source date")
     func wallpaperReferenceRoundTrip() throws {
-        let reference = try #require(DaybreakWallpaperReference(text: "  bing:OHR.Example_2026  "))
-        #expect(reference.text == "bing:OHR.Example_2026")
-        #expect(reference.wallpaperID == WallpaperID(source: .bing, sourceImageID: "OHR.Example_2026"))
+        let date = try #require(LocalDate(iso8601: "2026-11-25"))
+        let key = OccurrenceKey(source: .bing, market: .zhCN, localDate: date)
+        let reference = DaybreakWallpaperReference(
+            wallpaperID: WallpaperID(source: .bing, sourceImageID: "OHR.Example_2026"),
+            occurrenceKey: key
+        )
+        let parsed = try #require(DaybreakWallpaperReference(text: " \(reference.text) "))
+
+        #expect(parsed == reference)
+        #expect(parsed.wallpaperID == WallpaperID(source: .bing, sourceImageID: "OHR.Example_2026"))
+        #expect(parsed.occurrenceKey == key)
     }
 
     @Test("Colons inside the image identifier are preserved")
     func wallpaperReferenceAllowsColonInIdentifier() throws {
-        let reference = try #require(DaybreakWallpaperReference(text: "bing:album:frame"))
-        #expect(reference.wallpaperID.sourceImageID == "album:frame")
+        let date = try #require(LocalDate(iso8601: "2026-11-25"))
+        let reference = DaybreakWallpaperReference(
+            wallpaperID: WallpaperID(source: .bing, sourceImageID: "album:frame"),
+            occurrenceKey: OccurrenceKey(source: .bing, market: .zhCN, localDate: date)
+        )
+        let parsed = try #require(DaybreakWallpaperReference(text: reference.text))
+        #expect(parsed.wallpaperID.sourceImageID == "album:frame")
     }
 
     @Test(
-        "Malformed wallpaper text is rejected",
+        "Malformed or ID-only wallpaper text is rejected",
         arguments: [
             "",
             "   ",
             "bing",
             "bing:",
+            "bing:OHR.Example_2026",
             ":image",
             "bing:image\nnext",
-            String(repeating: "a", count: 513)
+            "daybreak-occurrence-v1|zh-CN|not-a-date|bing:image",
+            String(repeating: "a", count: 769)
         ]
     )
     func wallpaperReferenceRejectsInvalidText(_ text: String) {
         #expect(DaybreakWallpaperReference(text: text) == nil)
     }
 
-    @Test("Run URL passes the wallpaper ID as text without losing characters")
+
+    @Test("Run URL passes the full occurrence reference as text without losing characters")
     func runURLCarriesTextInput() throws {
-        let text = "bing:OHR.A+B & C/é"
+        let text = "daybreak-occurrence-v1|zh-CN|2026-11-25|bing:OHR.A+B & C/é"
         let url = try #require(
             DaybreakShortcutURL.runShortcutURL(
                 name: DaybreakShortcutName.apply,
@@ -73,8 +89,10 @@ struct ShortcutIntentTests {
     @Test("No import-shortcut URL is fabricated")
     func noImportURLIsOffered() {
         #expect(DaybreakShortcutURL.openShortcutsApp?.absoluteString == "shortcuts://")
-        #expect(DaybreakShortcutURL.runShortcutURL(name: "Daybreak Apply", textInput: "bing:x")?.absoluteString
-            .contains("import-shortcut") == false)
+        #expect(DaybreakShortcutURL.runShortcutURL(
+            name: "Daybreak Apply",
+            textInput: "daybreak-occurrence-v1|zh-CN|2026-11-25|bing:x"
+        )?.absoluteString.contains("import-shortcut") == false)
     }
 
     @Test("Published shortcut links are real HTTPS iCloud share pages")
@@ -168,6 +186,61 @@ struct ShortcutIntentTests {
             #expect(!text.contains("已设置壁纸"))
             #expect(!text.contains("wallpaper set"))
         }
+    }
+    @Test("Notification reference preserves the image occurrence across the Shortcuts handoff")
+    func notificationReferenceRoundTrip() throws {
+        let reference = DaybreakShortcutNotificationReference(
+            wallpaperID: WallpaperID(source: .bing, sourceImageID: "OHR.Test"),
+            sourceDate: LocalDate(iso8601: "2026-11-25")!,
+            market: .zhCN
+        )
+
+        let fileName = try reference.fileName(withExtension: "jpg")
+        #expect(fileName.hasSuffix(".jpg"))
+        #expect(DaybreakShortcutNotificationReference(fileName: fileName) == reference)
+        #expect(DaybreakShortcutNotificationReference(fileName: fileName)?.occurrenceKey == reference.occurrenceKey)
+        #expect(DaybreakShortcutNotificationReference(fileName: "unrelated.jpg") == nil)
+        #expect(DaybreakShortcutNotificationReference(fileName: "Daybreak-Notice-!!!.jpg") == nil)
+        let oversizedFileName = "Daybreak-Notice-" + String(repeating: "A", count: 240) + ".jpg"
+        #expect(DaybreakShortcutNotificationReference(fileName: oversizedFileName) == nil)
+    }
+
+    @Test("Notification content uses only the matched source title, caption, and fact")
+    func notificationContentPreservesSourceMetadata() {
+        let locale = Locale(identifier: "en")
+        let marketName = DaybreakShortcutDisplay.marketName(.zhCN, locale: locale)
+        let content = DaybreakWallpaperNotificationContent.make(
+            title: "Snowy mountain",
+            copyright: "© Source",
+            quickFact: "A source-provided fact.",
+            market: .zhCN,
+            sourceDate: LocalDate(iso8601: "2026-11-25")!,
+            locale: locale
+        )
+
+        #expect(content.title == "Snowy mountain")
+        #expect(content.subtitle.contains(marketName))
+        #expect(content.subtitle.contains("© Source"))
+        #expect(content.body == "A source-provided fact.")
+    }
+
+    @Test("Missing story facts are labeled unavailable instead of being invented")
+    func notificationContentDoesNotInventQuickFact() {
+        let locale = Locale(identifier: "en")
+        let content = DaybreakWallpaperNotificationContent.make(
+            title: nil,
+            copyright: nil,
+            quickFact: nil,
+            market: .zhCN,
+            sourceDate: LocalDate(iso8601: "2026-11-25")!,
+            locale: locale
+        )
+
+        #expect(content.title == MobileLocalizedString.resolve("Daybreak 壁纸", locale: locale))
+        #expect(content.body == MobileLocalizedString.resolve(
+            "这张图片没有可用的来源知识点。",
+            locale: locale
+        ))
     }
 }
 

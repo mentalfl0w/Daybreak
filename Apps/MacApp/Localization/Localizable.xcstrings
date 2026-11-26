@@ -7519,6 +7519,23 @@
         }
       }
     },
+    "没有已缓存图片的地区": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No markets have cached images."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "キャッシュ済み画像のある地域はありません"
+          }
+        }
+      }
+    },
     "本地图片缓存": {
       "extractionState": "manual",
       "localizations": {

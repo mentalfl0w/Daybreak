@@ -8,6 +8,7 @@
 
 - 在不改变产品入口的前提下整理了应用和基础设施边界。macOS 显示器保护移入 `WallpaperDisplayCoordinator`；仓库存储、校验和保护计算拆成聚焦文件；Bing 传输执行和图片校验从公开 Provider façade 中分离。
 - 增加 `scripts/check-import-boundaries.sh`，并在 CI 中检查 Core、平台、移动端、SwiftPM 与 XcodeGen 的依赖方向。
+- iOS/iPadOS 与 macOS 时光页均加入地区菜单，仅列出本机有可用缩略图或原图的受支持地区；所选日期仍有效时，切换地区会保留原有导航状态。
 - 本次重构验证通过 253 项 DaybreakCore 测试、79 项 MacIntegration 测试、模块边界检查、macOS 无签名 Release 构建和 iOS 无签名 Release 构建。
 - 真机文件夹同步、跨设备传播、免费账号重签后的授权书签持久性、完整多显示器和多 Space 验收，以及完整移动端设备行为仍为 **Not tested**。
 

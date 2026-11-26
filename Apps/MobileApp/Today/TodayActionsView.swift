@@ -25,7 +25,7 @@ struct TodayActionsView: View {
                     HStack(spacing: 10) {
                         favoriteButton
                         previewButton
-                        DaybreakSetWallpaperButton(wallpaperID: content.wallpaperID.description)
+                        DaybreakSetWallpaperButton(wallpaperID: content.wallpaperID, occurrenceKey: content.key)
                             .lineLimit(2)
                             .fixedSize(horizontal: false, vertical: true)
                         if content.imageAvailability != .original {
@@ -39,7 +39,7 @@ struct TodayActionsView: View {
                             previewButton
                         }
                         HStack(spacing: 10) {
-                            DaybreakSetWallpaperButton(wallpaperID: content.wallpaperID.description)
+                            DaybreakSetWallpaperButton(wallpaperID: content.wallpaperID, occurrenceKey: content.key)
                                 .lineLimit(2)
                                 .fixedSize(horizontal: false, vertical: true)
                             if content.imageAvailability != .original {
@@ -70,7 +70,7 @@ struct TodayActionsView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
             previewButton
                 .frame(maxWidth: .infinity, alignment: .leading)
-            DaybreakSetWallpaperButton(wallpaperID: content.wallpaperID.description)
+            DaybreakSetWallpaperButton(wallpaperID: content.wallpaperID, occurrenceKey: content.key)
                 .lineLimit(2)
                 .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity, alignment: .leading)

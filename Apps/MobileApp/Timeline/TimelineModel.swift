@@ -54,6 +54,7 @@ final class TimelineModel {
     private(set) var galleryItems: [TimelineGalleryItem] = []
     private(set) var undatedFavoriteCount = 0
     private(set) var marketRecordedDayCounts: [Market: Int] = [:]
+    private(set) var availableMarkets: [Market] = []
     private(set) var selectedDate: LocalDate?
     private(set) var detail: TimelineDayDetail?
     private(set) var monthRecap: TimelineMonthRecapData?
@@ -302,6 +303,7 @@ final class TimelineModel {
         }
 
         imageRevision &+= 1
+        availableMarkets = TimelineMarketBuilder.availableMarkets(snapshot: fresh)
         rebuildMarketCounts()
         rebuildMonth()
         rebuildGallery()

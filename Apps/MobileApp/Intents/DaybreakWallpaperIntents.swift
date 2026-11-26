@@ -8,10 +8,18 @@ import UniformTypeIdentifiers
 private enum DaybreakIntentResult {
     static func make(
         for prepared: DaybreakPreparedWallpaper
-    ) -> IntentResultContainer<IntentFile, Never, Never, IntentDialog> {
+    ) throws -> IntentResultContainer<IntentFile, Never, Never, IntentDialog> {
+        let reference = DaybreakShortcutNotificationReference(
+            wallpaperID: prepared.image.wallpaperID,
+            sourceDate: prepared.image.sourceDate,
+            market: prepared.image.market
+        )
+        let fileName = try reference.fileName(
+            withExtension: URL(fileURLWithPath: prepared.export.filename).pathExtension
+        )
         var file = IntentFile(
             fileURL: prepared.export.fileURL,
-            filename: prepared.export.filename,
+            filename: fileName,
             type: prepared.export.contentType
         )
         // Both files are intent-owned temporary copies. System removal after
@@ -65,7 +73,7 @@ struct GetTodayWallpaperIntent: AppIntent {
             target: .today(market: market.explicitMarket),
             output: output
         )
-        return DaybreakIntentResult.make(for: prepared)
+        return try DaybreakIntentResult.make(for: prepared)
     }
 }
 
@@ -101,7 +109,7 @@ struct GetDateWallpaperIntent: AppIntent {
             target: .date(sourceDate, market: market.explicitMarket),
             output: output
         )
-        return DaybreakIntentResult.make(for: prepared)
+        return try DaybreakIntentResult.make(for: prepared)
     }
 }
 
@@ -135,7 +143,7 @@ struct GetMarketWallpaperIntent: AppIntent {
             target: target,
             output: output
         )
-        return DaybreakIntentResult.make(for: prepared)
+        return try DaybreakIntentResult.make(for: prepared)
     }
 }
 
@@ -166,7 +174,7 @@ struct GetRandomWallpaperIntent: AppIntent {
             target: .randomCached,
             output: output
         )
-        return DaybreakIntentResult.make(for: prepared)
+        return try DaybreakIntentResult.make(for: prepared)
     }
 }
 
@@ -195,7 +203,7 @@ struct GetFavoriteWallpaperIntent: AppIntent {
             target: .favorite,
             output: output
         )
-        return DaybreakIntentResult.make(for: prepared)
+        return try DaybreakIntentResult.make(for: prepared)
     }
 }
 
@@ -226,26 +234,24 @@ struct GetCurrentWallpaperIntent: AppIntent {
             target: .currentSelection,
             output: output
         )
-        return DaybreakIntentResult.make(for: prepared)
+        return try DaybreakIntentResult.make(for: prepared)
     }
 }
 
-// MARK: - Wallpaper ID from Shortcuts text input
+// MARK: - Occurrence-aware wallpaper reference from Shortcuts text
 
-/// The bridge used by the `shortcuts://run-shortcut?name=…&input=text&text=…`
-/// flow: the app passes a canonical wallpaper ID as text, the shortcut feeds
-/// that text into this action, and the action returns a real file resolved
-/// through the app's own store. A sandbox file URL never crosses processes.
+/// The app passes a wallpaper ID, market, and source date through the public
+/// Shortcuts URL. This action returns that exact cached occurrence as a file.
 struct GetWallpaperByIDIntent: AppIntent {
-    static var title: LocalizedStringResource { "按 ID 获取 Daybreak 壁纸" }
+    static var title: LocalizedStringResource { "按图片引用获取 Daybreak 壁纸" }
     static var description: IntentDescription {
-        IntentDescription("把“来源:图片 ID”文本（例如 bing:OHR.Example）解析为 Daybreak 已缓存的真实图片文件。用于“Daybreak Apply”快捷指令接住从应用传入的文本。“输出”可选原图或目标屏幕比例；后台不检测方向或折叠状态，请手动选择。")
+        IntentDescription("把 Daybreak 传入的图片引用（图片 ID、地区和来源日期）解析为对应的已缓存真实图片文件。用于“Daybreak Apply”快捷指令接收应用传入的文本，不会按图片 ID 匹配其他日期或地区。“输出”可选原图或目标屏幕比例；后台不检测方向或折叠状态，请手动选择。")
     }
     static var supportedModes: IntentModes { .background }
 
     @Parameter(
-        title: "壁纸 ID",
-        description: "来源:图片 ID，例如 bing:OHR.Example。可在 Daybreak 的快捷指令指南中复制。",
+        title: "壁纸引用",
+        description: "由 Daybreak 传入，包含图片 ID、地区和来源日期；可在快捷指令指南中复制。",
         inputConnectionBehavior: .connectToPreviousIntentResult
     )
     var wallpaperID: String
@@ -258,7 +264,7 @@ struct GetWallpaperByIDIntent: AppIntent {
     }
 
     static var parameterSummary: some ParameterSummary {
-        Summary("按 ID 获取壁纸") {
+        Summary("按引用获取壁纸") {
             \.$wallpaperID
             \.$output
         }
@@ -266,9 +272,43 @@ struct GetWallpaperByIDIntent: AppIntent {
 
     func perform() async throws -> some IntentResult & ReturnsValue<IntentFile> & ProvidesDialog {
         let prepared = try await DaybreakShortcutService.live.prepare(
-            target: .wallpaperID(wallpaperID),
+            target: .wallpaperReference(wallpaperID),
             output: output
         )
-        return DaybreakIntentResult.make(for: prepared)
+        return try DaybreakIntentResult.make(for: prepared)
+    }
+}
+
+// MARK: - Wallpaper notification
+
+struct SendWallpaperNotificationIntent: AppIntent {
+    static var title: LocalizedStringResource { "发送 Daybreak 壁纸通知" }
+    static var description: IntentDescription {
+        IntentDescription("在系统“设置墙纸照片”动作后发送一条包含所选 Daybreak 图片缩略图、来源标题、地区、版权和可用知识点的本地通知。必须把图片输入连接到前一个 Daybreak 获取壁纸动作返回的同一张图片；此动作不会检查系统壁纸是否成功更改。")
+    }
+    static var supportedModes: IntentModes { .background }
+
+    @Parameter(
+        title: "壁纸图片",
+        description: "选择前一个 Daybreak 获取壁纸动作返回的同一张图片。"
+    )
+    var photo: IntentFile
+
+    static var parameterSummary: some ParameterSummary {
+        Summary("发送壁纸通知") {
+            \.$photo
+        }
+    }
+
+    func perform() async throws -> some IntentResult & ProvidesDialog {
+        try await DaybreakWallpaperNotificationService.live.send(photo)
+        return .result(
+            dialog: IntentDialog(
+                stringLiteral: MobileLocalizedString.resolve(
+                    "壁纸通知已提交。快捷指令无法确认系统壁纸动作是否成功。",
+                    locale: DaybreakShortcutLocale.current
+                )
+            )
+        )
     }
 }

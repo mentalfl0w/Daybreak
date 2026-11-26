@@ -2,6 +2,7 @@
 
 > 当前 App 图标使用 `../Assets/macOS/AppIcon.appiconset`、`../Assets/iOS/Assets.xcassets/AppIcon.appiconset` 与 `IconComposerSources/` 中的日出 + 层叠山峦图形，不含日历页。本目录的 `Daybreak-Logo-*` 与 `Daybreak-Symbol.*` 是带日历的早期品牌概念稿，保留作设计探索记录，不是当前发行图标。
 
+- `Daybreak-AppIcon-Rounded.png` — 当前 App 图标的圆角展示版本，仅用于 README 等展示；应用图标源文件仍使用 `../Assets/` 中的方形图。
 - `Daybreak-Logo-1024.png` — AI 生成的早期 Daybreak 概念 Logo 主视觉，1024×1024，RGB，非透明；带圆角日历与暖色朝阳，不是当前 App Icon。
 - `Daybreak-Logo-Transparent.png` — 将早期概念稿圆角视觉的外侧背景技术性裁剪为透明后形成的展示版，1024×1024，RGBA。
 - `Daybreak-Symbol.svg` — 基于早期概念稿的原生 SVG **简化矢量变体**，方便编辑形状/渐变，不是主视觉 PNG 的精确矢量描摹。
