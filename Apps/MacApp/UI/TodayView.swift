@@ -95,7 +95,6 @@ struct TodayView: View {
     private var subtitle: String {
         var parts = [model.marketChoice.displayName(in: locale)]
         if let payload = model.payload {
-            parts.append(payload.sourceDate.iso8601)
             if !payload.isSourceDateToday {
                 parts.append(MacLocalizedString.resolve("非今日来源", locale: locale))
             }
@@ -148,14 +147,14 @@ struct TodayView: View {
 
                     if !model.guardBlocks.isEmpty {
                         guardBlocksCard
+                            .frame(maxWidth: 980, alignment: .leading)
                     }
 
                     storySection
-                        .modifier(TodayCardStyle())
-
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     if !model.warnings.isEmpty {
                         warningsSection
-                            .modifier(TodayCardStyle(tone: .warning))
+                            .frame(maxWidth: 980, alignment: .leading)
                     }
                 }
                 .frame(maxWidth: 1480, alignment: .leading)
@@ -341,17 +340,12 @@ struct TodayView: View {
             ViewThatFits(in: .horizontal) {
                 HStack(alignment: .center, spacing: 16) {
                     sourceDateLabel(for: payload)
-                    imageStateLabel(for: payload)
                     Spacer(minLength: 12)
                     downloadControl(for: payload)
                 }
                 VStack(alignment: .leading, spacing: 10) {
                     sourceDateLabel(for: payload)
-                    HStack(spacing: 12) {
-                        imageStateLabel(for: payload)
-                        Spacer(minLength: 8)
-                        downloadControl(for: payload)
-                    }
+                    downloadControl(for: payload)
                 }
             }
 
@@ -476,19 +470,6 @@ struct TodayView: View {
         }
     }
 
-    private func imageStateLabel(for payload: TodayPayload) -> some View {
-        Group {
-            if model.heroImage == nil {
-                Label("图片未缓存", systemImage: "circle.dashed")
-            } else if payload.hasOriginal {
-                Label("原图已缓存", systemImage: "checkmark.circle")
-            } else {
-                Label("预览图已缓存", systemImage: "circle.lefthalf.filled")
-            }
-        }
-        .font(.caption)
-        .foregroundStyle(.secondary)
-    }
 
     @ViewBuilder
     private func downloadControl(for payload: TodayPayload) -> some View {
@@ -533,7 +514,7 @@ struct TodayView: View {
         .popover(isPresented: $isShowingStatusDetails, arrowEdge: .top) {
             statusDetails(for: payload)
                 .padding(18)
-                .frame(width: 360)
+                .frame(minWidth: 300, idealWidth: 360, maxWidth: 420)
         }
     }
 
@@ -666,17 +647,19 @@ struct TodayView: View {
 
     @ViewBuilder
     private var storySection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            sectionHeader("每日介绍", systemImage: "text.book.closed")
+        VStack(alignment: .leading, spacing: 16) {
+            Text("每日介绍")
+                .font(.headline)
+                .accessibilityAddTraits(.isHeader)
 
             switch model.storyPanel ?? .notFetched {
             case .available(let story):
-                storyAvailable(story)
+                storyAvailableWide(story)
             case .unavailable(let reason, _, let headline, let copyright, let sourceURL):
                 Text("该地区暂无可用介绍")
                     .font(.callout.weight(.semibold))
                 Text(StoryCopy.unavailableReason(reason))
-                    .font(.caption)
+                    .font(.callout)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
                 if let headline, !headline.isEmpty {
@@ -695,21 +678,9 @@ struct TodayView: View {
             case .unmatched(let hasCandidates):
                 Text(hasCandidates ? MacLocalizedString.resolve("无法确认介绍属于这张图片", locale: WallpaperInterfaceLocale.current) : MacLocalizedString.resolve("未取得当日介绍", locale: WallpaperInterfaceLocale.current))
                     .font(.callout.weight(.semibold))
-                Text(
-                    hasCandidates
-                        ? MacLocalizedString.resolve("当天有介绍，但无法确认它属于这张图片，因此没有显示，以免错配。", locale: WallpaperInterfaceLocale.current)
-                        : MacLocalizedString.resolve("该地区可能未提供当日介绍，或本次获取失败。不会用相邻日期或其他地区文本填充。", locale: WallpaperInterfaceLocale.current)
-                )
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
             case .notFetched:
                 Text("尚未获取当日介绍")
                     .font(.callout.weight(.semibold))
-                Text("点击刷新重试。缺失介绍不会影响图片使用，也不会用虚构文本补齐。")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
             }
         }
     }
@@ -740,16 +711,6 @@ struct TodayView: View {
                     .textSelection(.enabled)
                     .fixedSize(horizontal: false, vertical: true)
             }
-            .padding(12)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(
-                Color.primary.opacity(0.045),
-                in: RoundedRectangle(cornerRadius: 12, style: .continuous)
-            )
-            .overlay {
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .strokeBorder(Color.primary.opacity(0.06), lineWidth: 1)
-            }
         }
 
         if let body = story.body, !body.isEmpty {
@@ -773,6 +734,78 @@ struct TodayView: View {
             VStack(alignment: .leading, spacing: 5) {
                 storySourceLink(story.sourceURL)
                 storyFetchedLabel(story)
+            }
+        }
+    }
+
+    private func storyAvailableWide(_ story: StoryText) -> some View {
+        HStack(alignment: .top, spacing: 36) {
+            storyLead(story)
+                .frame(width: 300, alignment: .leading)
+
+            storyBody(story)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .layoutPriority(1)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    @ViewBuilder
+    private func storyLead(_ story: StoryText) -> some View {
+        VStack(alignment: .leading, spacing: 14) {
+            if let headline = story.headline, !headline.isEmpty {
+                Text(headline)
+                    .font(.title3.weight(.semibold))
+                    .lineSpacing(2)
+                    .textSelection(.enabled)
+                    .fixedSize(horizontal: false, vertical: true)
+            } else if let title = story.title, !title.isEmpty {
+                Text(title)
+                    .font(.title3.weight(.semibold))
+                    .lineSpacing(2)
+                    .textSelection(.enabled)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            if let quickFact = story.quickFact, !quickFact.isEmpty {
+                VStack(alignment: .leading, spacing: 5) {
+                    Text("来源速览")
+                        .font(.caption2.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                    Text(quickFact)
+                        .font(.callout)
+                        .textSelection(.enabled)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func storyBody(_ story: StoryText) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            if let body = story.body, !body.isEmpty {
+                Text(body)
+                    .font(.callout)
+                    .lineSpacing(3)
+                    .textSelection(.enabled)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            if let copyright = story.copyright, !copyright.isEmpty {
+                storyMetadata("版权：\(copyright)")
+            }
+
+            ViewThatFits(in: .horizontal) {
+                HStack(alignment: .firstTextBaseline, spacing: 12) {
+                    storySourceLink(story.sourceURL)
+                    Spacer(minLength: 8)
+                    storyFetchedLabel(story)
+                }
+                VStack(alignment: .leading, spacing: 5) {
+                    storySourceLink(story.sourceURL)
+                    storyFetchedLabel(story)
+                }
             }
         }
     }
@@ -843,7 +876,7 @@ struct TodayView: View {
                 }
             }
         }
-        .modifier(TodayCardStyle(tone: .warning, padding: 16))
+        .modifier(TodayWarningCardStyle(padding: 16))
     }
 
     private var warningsSection: some View {
@@ -916,7 +949,7 @@ struct TodayView: View {
             Button("重试", action: model.retry)
                 .disabled(model.isRefreshing)
         }
-        .modifier(TodayCardStyle(tone: .warning, padding: 14))
+        .modifier(TodayWarningCardStyle(padding: 14))
     }
 
     private func wallpaperAutomationBanner(_ message: String) -> some View {
@@ -944,7 +977,7 @@ struct TodayView: View {
                 .disabled(model.isUpdatingAutomation)
             }
         }
-        .modifier(TodayCardStyle(tone: .warning, padding: 14))
+        .modifier(TodayWarningCardStyle(padding: 14))
     }
 }
 
@@ -995,14 +1028,7 @@ private enum TodayMetrics {
     static let minimumPhotoHeight: CGFloat = 240
 }
 
-private enum TodayCardTone: Equatable {
-    case neutral
-    case warning
-}
-
-/// Opaque semantic card keeps text readable over the frosted window.
-private struct TodayCardStyle: ViewModifier {
-    var tone: TodayCardTone = .neutral
+private struct TodayWarningCardStyle: ViewModifier {
     var padding: CGFloat = 18
 
     private var shape: RoundedRectangle {
@@ -1015,18 +1041,11 @@ private struct TodayCardStyle: ViewModifier {
             .frame(maxWidth: .infinity, alignment: .leading)
             .background {
                 shape.fill(Color(nsColor: .controlBackgroundColor))
-                if tone == .warning {
-                    shape.fill(Color.orange.opacity(0.10))
-                }
+                shape.fill(Color.orange.opacity(0.10))
             }
             .clipShape(shape)
             .overlay {
-                shape.strokeBorder(
-                    tone == .warning
-                        ? Color.orange.opacity(0.24)
-                        : Color.primary.opacity(0.07),
-                    lineWidth: 1
-                )
+                shape.strokeBorder(Color.orange.opacity(0.24), lineWidth: 1)
             }
             .shadow(color: .black.opacity(0.10), radius: 16, x: 0, y: 6)
     }

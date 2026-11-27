@@ -141,12 +141,9 @@ struct TodayStatusView: View {
             if let copyright = content.copyright, !copyright.isEmpty {
                 statusRow(label: "版权", value: copyright, systemImage: "c.circle")
             }
-            statusRow(label: "图片文件", value: imageStateText, systemImage: content.imageAvailability == .missing ? "circle.dashed" : "internaldrive")
+            statusRow(label: "图片缓存", value: imageStateText, systemImage: content.imageAvailability == .missing ? "circle.dashed" : "internaldrive")
             if let fetchedAt = content.fetchedAt {
                 statusRow(label: "最近来源获取", value: TodayFormatting.dateTime(fetchedAt, locale: locale), systemImage: "clock.arrow.circlepath")
-            }
-            if let cachedAt = content.cachedAt {
-                statusRow(label: "本地记录", value: TodayFormatting.dateTime(cachedAt, locale: locale), systemImage: "internaldrive")
             }
             if let lastUpdated {
                 statusRow(label: "最近更新时间", value: TodayFormatting.dateTime(lastUpdated, locale: locale), systemImage: "clock")
@@ -212,19 +209,8 @@ struct TodayStatusView: View {
 
             switch content.storyMatch {
             case .matched(let story, _) where story.isAvailable:
-                Label("该地区的介绍已缓存", systemImage: "checkmark.circle")
+                Label("介绍可用", systemImage: "checkmark.circle")
                     .font(.callout)
-                if let headline = story.headline, !headline.isEmpty {
-                    Text(verbatim: headline)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .lineLimit(2)
-                }
-                if let language = TodayFormatting.sourceLanguageName(story.originalLocale, locale: locale) {
-                    Text("来源语言：\(language)")
-                        .font(.caption2)
-                        .foregroundStyle(.tertiary)
-                }
             case .unavailable(let story):
                 Label("该地区暂无可用介绍", systemImage: "text.badge.xmark")
                     .font(.callout)
@@ -234,13 +220,9 @@ struct TodayStatusView: View {
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
                 }
-            case .unmatched(let failure):
-                Label("暂无可匹配的介绍", systemImage: "text.badge.xmark")
+            case .unmatched:
+                Label("暂无可显示的介绍", systemImage: "text.badge.xmark")
                     .font(.callout)
-                Text(TodayStoryView.failureText(failure))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
             case .matched(let story, _):
                 Label("介绍内容不可用", systemImage: "text.badge.xmark")
                     .font(.callout)
@@ -250,7 +232,7 @@ struct TodayStatusView: View {
                         .foregroundStyle(.secondary)
                 }
             case nil:
-                Label("尚未获取介绍", systemImage: "text.badge.xmark")
+                Label("尚未获取今日介绍", systemImage: "text.badge.xmark")
                     .font(.callout)
             }
         }

@@ -82,10 +82,10 @@ struct TimelineRecapView: View {
                 model.goToPreviousMonth()
             } label: {
                 Image(systemName: "chevron.left")
-                    .frame(width: 30, height: 30)
+                    .frame(width: 44, height: 44)
             }
-            .buttonStyle(.bordered)
-            .buttonBorderShape(.circle)
+            .buttonStyle(.plain)
+            .foregroundStyle(.secondary)
             .disabled(!model.canGoToPreviousMonth)
             .accessibilityLabel(Text("上个月"))
 
@@ -97,10 +97,10 @@ struct TimelineRecapView: View {
                 model.goToNextMonth()
             } label: {
                 Image(systemName: "chevron.right")
-                    .frame(width: 30, height: 30)
+                    .frame(width: 44, height: 44)
             }
-            .buttonStyle(.bordered)
-            .buttonBorderShape(.circle)
+            .buttonStyle(.plain)
+            .foregroundStyle(.secondary)
             .disabled(!model.canGoToNextMonth)
             .accessibilityLabel(Text("下个月"))
 
@@ -112,32 +112,31 @@ struct TimelineRecapView: View {
                 Label("日历", systemImage: "calendar")
                     .font(.footnote)
             }
-            .buttonStyle(.bordered)
+            .buttonStyle(.plain)
             .tint(.daybreakActionTint)
+            .frame(minHeight: 44)
+            .contentShape(Rectangle())
         }
 
         if let data = model.monthRecap {
-            TimelineRecapStatsGrid(summary: data.recap.summary)
-            TimelineCoverageNote(summary: data.recap.summary)
-
             if data.recap.summary.observedDays > 0 {
                 monthImageGrid(data)
-                TimelineRecapMonthGrid(month: data.month, onOpenDate: onOpenDate)
-                if !favoriteIDs(in: data).isEmpty {
-                    favoriteStrip(
-                        ids: favoriteIDs(in: data),
-                        title: Text("本月收藏")
-                    )
+                let favorites = favoriteIDs(in: data)
+                if !favorites.isEmpty {
+                    favoriteStrip(ids: favorites, title: Text("本月收藏"))
                 }
+                TimelineRecapMonthGrid(month: data.month, onOpenDate: onOpenDate)
             } else {
-                TimelineStateCard(
-                    systemImage: "calendar.badge.exclamationmark",
-                    title: Text("本月没有本地记录"),
-                    message: Text("没有记录不代表 Bing 当月没有发布壁纸。应用未运行、该地区未启用或获取失败都可能造成空白。")
-                )
+                Label("本月没有本地记录", systemImage: "calendar")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, minHeight: 96, alignment: .center)
             }
+
+            TimelineRecapStatsGrid(summary: data.recap.summary)
+            TimelineCoverageNote(summary: data.recap.summary)
         } else {
-            ProgressView("正在计算本月回顾")
+            ProgressView("正在读取本月记录")
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 30)
         }
@@ -246,10 +245,10 @@ struct TimelineRecapView: View {
                 model.goToPreviousYear()
             } label: {
                 Image(systemName: "chevron.left")
-                    .frame(width: 30, height: 30)
+                    .frame(width: 44, height: 44)
             }
-            .buttonStyle(.bordered)
-            .buttonBorderShape(.circle)
+            .buttonStyle(.plain)
+            .foregroundStyle(.secondary)
             .disabled(!model.canGoToPreviousYear)
             .accessibilityLabel(Text("上一年"))
 
@@ -261,10 +260,10 @@ struct TimelineRecapView: View {
                 model.goToNextYear()
             } label: {
                 Image(systemName: "chevron.right")
-                    .frame(width: 30, height: 30)
+                    .frame(width: 44, height: 44)
             }
-            .buttonStyle(.bordered)
-            .buttonBorderShape(.circle)
+            .buttonStyle(.plain)
+            .foregroundStyle(.secondary)
             .disabled(!model.canGoToNextYear)
             .accessibilityLabel(Text("下一年"))
 
@@ -277,33 +276,27 @@ struct TimelineRecapView: View {
                 Label("年历", systemImage: "square.grid.3x3")
                     .font(.footnote)
             }
-            .buttonStyle(.bordered)
+            .buttonStyle(.plain)
             .tint(.daybreakActionTint)
+            .frame(minHeight: 44)
+            .contentShape(Rectangle())
         }
 
         if let data = model.yearRecap {
             if data.recap.summary.observedDays == 0 {
-                TimelineStateCard(
-                    systemImage: "chart.bar.xaxis",
-                    title: Text("尚不足以生成年度回顾"),
-                    message: Text("这一年没有本地记录，无法计算覆盖率或选出图片。Daybreak 不会补写不存在的历史。")
-                )
+                Label("没有本地记录", systemImage: "chart.bar.xaxis")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, minHeight: 96, alignment: .center)
             } else {
-                if !data.recap.summary.hasComparableObservations {
-                    TimelineStateCard(
-                        systemImage: "chart.bar.xaxis",
-                        title: Text("记录较少"),
-                        message: Text("本地记录少于两天，尚不足以生成可比较的年度结论；下面只列出实际保存的内容。")
-                    )
-                }
-                TimelineRecapStatsGrid(summary: data.recap.summary)
-                TimelineCoverageNote(summary: data.recap.summary)
                 yearImageGrid()
-                yearMonthGrid(data)
                 observedMonthsList(data)
             }
+
+            TimelineRecapStatsGrid(summary: data.recap.summary)
+            TimelineCoverageNote(summary: data.recap.summary)
         } else {
-            ProgressView("正在计算年度回顾")
+            ProgressView("正在读取本地时光")
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 30)
         }
@@ -361,55 +354,6 @@ struct TimelineRecapView: View {
         }
     }
 
-    private func yearMonthGrid(_ data: TimelineYearRecapData) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text("月度记录")
-                .font(.headline)
-            LazyVGrid(
-                columns: [GridItem(.adaptive(minimum: 116, maximum: 200), spacing: 8)],
-                spacing: 8
-            ) {
-                ForEach(data.months) { summary in
-                    Button {
-                        onOpenMonth(summary.year, summary.month)
-                    } label: {
-                        VStack(alignment: .leading, spacing: 3) {
-                            TimelineDateText(locale: locale, timeZone: model.timeZone)
-                                .monthName(summary.month, year: summary.year)
-                                .font(.subheadline.weight(.medium))
-                            if summary.observedDays > 0 {
-                                Text("\(summary.observedDays)/\(summary.totalDays) 天")
-                                    .font(.caption2)
-                                    .foregroundStyle(.secondary)
-                                    .monospacedDigit()
-                                if summary.favoriteImageCount > 0 {
-                                    Label(
-                                        "\(summary.favoriteImageCount)",
-                                        systemImage: "heart.fill"
-                                    )
-                                    .font(.caption2)
-                                    .foregroundStyle(.pink)
-                                    .monospacedDigit()
-                                }
-                            } else {
-                                Text("无记录")
-                                    .font(.caption2)
-                                    .foregroundStyle(.tertiary)
-                            }
-                        }
-                        .frame(maxWidth: .infinity, minHeight: 62, alignment: .topLeading)
-                        .padding(8)
-                        .background(
-                            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                .fill(Color(uiColor: .secondarySystemBackground))
-                        )
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityHint(Text("打开这个月的日历"))
-                }
-            }
-        }
-    }
 
     @ViewBuilder
     private func observedMonthsList(_ data: TimelineYearRecapData) -> some View {
@@ -417,10 +361,6 @@ struct TimelineRecapView: View {
             VStack(alignment: .leading, spacing: 6) {
                 Text("有记录的月份")
                     .font(.headline)
-                Text("只统计本机实际保存的日期，不代表 Bing 全年发布数量。")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
 
                 VStack(spacing: 0) {
                     ForEach(data.recap.months) { month in
@@ -446,7 +386,7 @@ struct TimelineRecapView: View {
                                     .font(.caption.weight(.semibold))
                                     .foregroundStyle(.tertiary)
                             }
-                            .padding(.vertical, 9)
+                            .padding(.vertical, 12)
                             .contentShape(Rectangle())
                         }
                         .buttonStyle(.plain)
@@ -455,11 +395,6 @@ struct TimelineRecapView: View {
                         }
                     }
                 }
-                .padding(.horizontal, 12)
-                .background(
-                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .fill(Color(uiColor: .secondarySystemBackground))
-                )
             }
         }
     }
@@ -470,42 +405,23 @@ struct TimelineRecapView: View {
     private var favoritesContent: some View {
         if let data = model.favoritesRecap {
             if data.recap.favoriteImageCount == 0 {
-                TimelineStateCard(
-                    systemImage: "heart",
-                    title: Text("还没有收藏"),
-                    message: Text("在今日或图片详情中点按收藏后，这里会按图片整理，不按日期重复。")
-                )
+                Label("还没有收藏", systemImage: "heart")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, minHeight: 96, alignment: .center)
             } else {
-                TimelineRecapStatsGrid(
-                    tiles: [
-                        .init(
-                            title: "收藏图片",
-                            value: "\(data.recap.favoriteImageCount)",
-                            systemImage: "heart.fill"
-                        ),
-                        .init(
-                            title: "有日期记录",
-                            value: "\(data.recap.datedFavoriteImageCount)",
-                            systemImage: "calendar"
-                        ),
-                        .init(
-                            title: "无日期记录",
-                            value: "\(data.recap.undatedFavoriteImageCount)",
-                            systemImage: "questionmark.folder"
-                        ),
-                        .init(
-                            title: "涉及地区",
-                            value: "\(data.recap.distinctMarketCount)",
-                            systemImage: "globe"
-                        )
-                    ]
-                )
-
                 favoriteMonths(data)
 
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("收藏图片")
-                        .font(.headline)
+                    HStack(alignment: .firstTextBaseline) {
+                        Text("收藏图片")
+                            .font(.headline)
+                        Spacer()
+                        Text(verbatim: "\(data.recap.favoriteImageCount)")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .monospacedDigit()
+                    }
                     Text("按图片收藏，同一张图片跨日期或跨地区只计一次。没有本地出现记录的收藏仍会保留。")
                         .font(.caption)
                         .foregroundStyle(.secondary)
@@ -586,51 +502,23 @@ struct TimelineRecapStatTile: Identifiable {
 
 struct TimelineRecapStatsGrid: View {
     let tiles: [TimelineRecapStatTile]
-
     init(summary: RecapSummary) {
-        var values: [TimelineRecapStatTile] = []
-        values.append(
+
+        self.tiles = [
             .init(
                 title: "已记录",
                 value: summary.eligibleDays.map { "\(summary.observedDays)/\($0) 天" }
                     ?? "\(summary.observedDays) 天",
                 caption: "观察窗口内",
                 systemImage: "calendar"
-            )
-        )
-        values.append(
+            ),
             .init(
                 title: "覆盖率",
                 value: summary.coverage.map { "\(Int(($0 * 100).rounded()))%" } ?? "—",
                 caption: Self.coverageCaption(summary.coverageState),
                 systemImage: "chart.pie"
             )
-        )
-        values.append(
-            .init(
-                title: "收藏",
-                value: "\(summary.favoriteImageCount)",
-                caption: "图片去重",
-                systemImage: "heart.fill"
-            )
-        )
-        values.append(
-            .init(
-                title: "有介绍",
-                value: "\(summary.storyCoveredDays)",
-                caption: "严格匹配图片",
-                systemImage: "text.book.closed"
-            )
-        )
-        values.append(
-            .init(
-                title: "地区",
-                value: "\(summary.distinctMarketCount)",
-                caption: "有本地记录",
-                systemImage: "globe"
-            )
-        )
-        self.tiles = values
+        ]
     }
 
     init(tiles: [TimelineRecapStatTile]) {
@@ -663,13 +551,12 @@ struct TimelineRecapStatsGrid: View {
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(10)
-                .background(
-                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .fill(Color(uiColor: .secondarySystemBackground))
-                )
                 .accessibilityElement(children: .combine)
             }
+        }
+        .padding(.vertical, 10)
+        .overlay(alignment: .top) {
+            Divider().opacity(0.5)
         }
     }
 
@@ -701,24 +588,20 @@ struct TimelineCoverageNote: View {
                     .foregroundStyle(.tertiary)
             }
         }
-        .padding(10)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .fill(Color(uiColor: .tertiarySystemBackground))
-        )
+        .padding(.top, 4)
     }
 
     private var note: LocalizedStringKey {
         switch summary.coverageState {
         case .firstObservedDateUnknown:
-            return "本地没有可用的观察起点，无法计算覆盖率。上面的数字只来自本机实际保存的记录。"
+            return "缺少观察起点"
         case .noObservation:
-            return "可观察窗口内没有本地记录，不能据此判断 Bing 没有发布壁纸。"
+            return "窗口内无记录"
         case .partial:
-            return "覆盖率只表示本机在可观察窗口内保存了多少天，不代表 Bing 实际发布数量。"
+            return "部分日期有记录"
         case .complete:
-            return "可观察窗口内的每一天都有本地记录；这仍不代表 Bing 全球范围的全部发布。"
+            return "窗口内完整"
         }
     }
 
@@ -773,12 +656,6 @@ struct TimelineRecapMonthGrid: View {
                                     RoundedRectangle(cornerRadius: 5, style: .continuous)
                                         .fill(fill(for: day))
                                 )
-                                .overlay {
-                                    if model.isFavorite(day.content?.wallpaperID) {
-                                        RoundedRectangle(cornerRadius: 5, style: .continuous)
-                                            .strokeBorder(.pink, lineWidth: 1.2)
-                                    }
-                                }
                         }
                         .buttonStyle(.plain)
                         .accessibilityLabel(Text(verbatim: TimelinePresentation.fullDate(

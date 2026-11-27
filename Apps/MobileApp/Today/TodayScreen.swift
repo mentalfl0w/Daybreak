@@ -46,12 +46,11 @@ struct TodayScreen: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
+                VStack(alignment: .leading, spacing: 20) {
                     if let content = store.todayDisplayContent {
-                        errorBannerIfNeeded
                         contentLayout(content)
+                        errorBannerIfNeeded
                         warningsSection
-                        attributionFooter
                     } else {
                         unavailableContent
                     }
@@ -136,7 +135,7 @@ struct TodayScreen: View {
     /// navigation title, so the system never has to move a text item into the
     /// bar's overflow menu to make room for the actions.
     private var usesInlineLargeTitle: Bool {
-        viewportSize.width >= 760
+        !dynamicTypeSize.isAccessibilitySize && viewportSize.width >= 760
     }
 
     @ToolbarContentBuilder
@@ -169,10 +168,19 @@ struct TodayScreen: View {
 
     // MARK: Layout
 
-    private var isWide: Bool {
-        guard !dynamicTypeSize.isAccessibilitySize else { return false }
-        return contentWidth >= 760
-            && viewportSize.width > viewportSize.height * 1.15
+    private enum LayoutMode {
+        case compact
+        case intermediate
+        case expanded
+    }
+
+    private var layoutMode: LayoutMode {
+        guard !dynamicTypeSize.isAccessibilitySize else { return .compact }
+        if contentWidth < 620 { return .compact }
+        if contentWidth >= 920 && viewportSize.width > viewportSize.height * 1.15 {
+            return .expanded
+        }
+        return .intermediate
     }
 
     private var horizontalPadding: CGFloat { 20 }
@@ -185,39 +193,91 @@ struct TodayScreen: View {
         min(420, max(320, contentWidth * 0.42))
     }
 
+    private var intermediateActionsWidth: CGFloat {
+        min(300, max(220, contentWidth * 0.34))
+    }
+
     private var photoWidth: CGFloat {
-        isWide ? max(300, contentWidth - storyColumnWidth - 24) : contentWidth
+        switch layoutMode {
+        case .expanded:
+            return max(300, contentWidth - storyColumnWidth - 24)
+        case .compact, .intermediate:
+            return contentWidth
+        }
     }
 
     private var heroHeight: CGFloat {
-        if isWide {
+        switch layoutMode {
+        case .compact:
+            return min(max(photoWidth * 0.86, 280), 560)
+        case .intermediate:
+            let availableHeight = max(320, min(560, viewportSize.height * 0.7))
+            return min(max(photoWidth * 0.66, 280), availableHeight)
+        case .expanded:
             return min(max(photoWidth * 0.64, 320), 640)
         }
-        return min(max(photoWidth * 0.86, 280), 560)
     }
 
     @ViewBuilder
     private func contentLayout(_ content: TodayDisplayContent) -> some View {
-        if isWide {
+        switch layoutMode {
+        case .compact:
+            VStack(alignment: .leading, spacing: 16) {
+                hero(for: content)
+                wallpaperActions(for: content)
+                storyColumn(for: content)
+            }
+        case .intermediate:
+            VStack(alignment: .leading, spacing: 20) {
+                hero(for: content)
+                HStack(alignment: .top, spacing: 24) {
+                    wallpaperActions(for: content)
+                        .frame(width: intermediateActionsWidth, alignment: .leading)
+                    storyColumn(for: content)
+                }
+            }
+        case .expanded:
             HStack(alignment: .top, spacing: 24) {
-                VStack(spacing: 14) {
+                VStack(alignment: .leading, spacing: 16) {
                     hero(for: content)
-                    actionsCard(for: content)
+                    wallpaperActions(for: content)
                 }
                 .frame(maxWidth: .infinity, alignment: .top)
 
-                VStack(spacing: 14) {
-                    storyCard(content)
-                }
-                .frame(width: storyColumnWidth, alignment: .top)
-            }
-        } else {
-            VStack(spacing: 14) {
-                hero(for: content)
-                actionsCard(for: content)
-                storyCard(content)
+                storyColumn(for: content)
+                    .frame(width: storyColumnWidth, alignment: .top)
             }
         }
+    }
+
+    private func wallpaperActions(for content: TodayDisplayContent) -> some View {
+        TodayActionsView(
+            content: content,
+            isPreparingPreview: isPreparingPreview,
+            isDownloadingOriginal: store.isDownloadingOriginal,
+            onToggleFavorite: {
+                Task { await store.toggleTodayFavorite() }
+            },
+            onPreview: startPreviewPreparation,
+            onRequestOriginal: requestImage
+        )
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private func storyColumn(for content: TodayDisplayContent) -> some View {
+        VStack(alignment: .leading, spacing: 16) {
+            TodayStoryView(content: content)
+
+            Button {
+                navigation.openTimeline(date: content.sourceDate, market: content.market)
+            } label: {
+                Label("在时光中查看这一天", systemImage: "calendar")
+            }
+            .font(.callout)
+            .tint(.daybreakActionTint)
+            .accessibilityHint("切换到时光并选中这张图片的来源日期")
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private func hero(for content: TodayDisplayContent) -> some View {
@@ -227,7 +287,6 @@ struct TodayScreen: View {
             image: heroImageKey == content.key ? heroImage : nil,
             isLoadingImage: isLoadingHeroImage || store.isDownloadingOriginal,
             onRequestImage: requestImage,
-            onShowStatus: { isShowingStatus = true }
         )
     }
 
@@ -405,12 +464,6 @@ struct TodayScreen: View {
         }
     }
 
-    private var attributionFooter: some View {
-        Text("Bing 图片与文字版权归原权利人；应用源代码以 MIT 许可发布。介绍文本来自所选地区可获取的来源，不自动翻译。")
-            .font(.caption2)
-            .foregroundStyle(.tertiary)
-            .fixedSize(horizontal: false, vertical: true)
-    }
 
     // MARK: Image and preview
 
