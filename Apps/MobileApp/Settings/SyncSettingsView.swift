@@ -129,7 +129,7 @@ struct SyncSettingsView: View {
         } header: {
             Text("设备同步")
         } footer: {
-            Text("同步通过你选择的 iCloud Drive 文件夹进行。每台设备保留独立的本地数据，只交换版本化记录与资源文件，不共享活动数据库或索引。")
+            Text("你选择的 iCloud Drive 文件夹用于在设备间传递 Daybreak 内容。每台设备仍保留自己的本地数据。")
         }
     }
 
@@ -159,11 +159,11 @@ struct SyncSettingsView: View {
             Text("文件夹")
         } footer: {
             if syncController.folderName == nil {
-                Text("推荐使用 iCloud Drive 中的 Daybreak 文件夹；选择 iCloud Drive 根目录时 Daybreak 会自动创建并进入该文件夹。在“文件”中选中文件夹本身后点“打开”，不要先进入文件夹内部。")
+                Text("请选择 iCloud Drive 中的文件夹。选择根目录后，Daybreak 会在里面创建“Daybreak”文件夹。在“文件”中选中文件夹本身后点“打开”。")
             } else if isSyncEnabled {
-                Text("只申请该文件夹的访问权限；授权书签仅保存在本机，不随同步传播。Daybreak 不使用 CloudKit、专属 iCloud 容器或共享 App Group。")
+                Text("Daybreak 只访问你选的文件夹。访问权限保存在此设备，不会同步到其他设备。")
             } else {
-                Text("同步已关闭，Daybreak 不会读写此文件夹。重新开启后可继续使用。")
+                Text("同步已关闭；Daybreak 不会访问此文件夹。重新开启后可继续使用这个文件夹。")
             }
         }
     }
@@ -217,13 +217,6 @@ struct SyncSettingsView: View {
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
 
-                if let detail = syncController.lastFailureDetail {
-                    Text(verbatim: "\(MobileLocalizedString.resolve("技术详情", locale: locale))：\(detail)")
-                        .font(.caption2.monospaced())
-                        .foregroundStyle(.secondary)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .textSelection(.enabled)
-                }
             }
 
             Spacer(minLength: 0)
@@ -247,6 +240,15 @@ struct SyncSettingsView: View {
                 Label(diagnosticButtonTitle, systemImage: "square.and.arrow.up")
             }
             .disabled(isPreparingDiagnostics)
+            if let detail = syncController.lastFailureDetail {
+                DisclosureGroup("技术详情") {
+                    Text(verbatim: detail)
+                        .font(.caption2.monospaced())
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .textSelection(.enabled)
+                }
+            }
         } header: {
             Text("诊断")
         } footer: {
@@ -263,7 +265,7 @@ struct SyncSettingsView: View {
         } header: {
             Text("同步内容")
         } footer: {
-            Text("两个选项默认关闭。同步原图会增加存储与 iCloud 占用；内容地区偏好开启后可能改变其他设备的内容地区。关闭选项不会删除本机已有文件。")
+            Text("原图和内容地区偏好默认关闭。同步原图会占用更多设备与 iCloud 储存；开启内容地区偏好后，其他设备也会使用所选地区。关闭选项不会删除已有内容。")
             Text("同步关闭时选项不可更改，已保存的偏好仍保留在本机。")
         }
         .disabled(!isSyncEnabled || isSyncing || isRequestingSync)
@@ -273,13 +275,13 @@ struct SyncSettingsView: View {
 
     private var boundarySection: some View {
         Section {
-            Text("默认同步收藏与固定日期、日期与地区记录、壁纸元数据、介绍与版权、缩略图。")
-            Text("只保留在本机：界面语言、缓存上限、壁纸目标、系统权限与文件夹授权书签。")
+            Text("默认同步收藏、固定日期、图片日期与地区、壁纸信息、来源介绍和缩略图。原图与内容地区偏好由上方选项控制。")
+            Text("界面语言、缓存上限、壁纸设置和文件夹访问权限只保留在此设备。")
         } header: {
             Text("数据边界")
         } footer: {
-            Text("关闭同步不会删除本机数据或文件夹中的旧记录；离线时仍可使用已缓存内容。重新开启后可继续使用原有文件夹。")
-            Text("同步完成只表示本机已处理并写入记录，不代表其他设备已接收或已应用。文件同步不是跨设备锁。")
+            Text("关闭同步不会删除此设备的数据或文件夹中的已有内容。离线时仍可查看已缓存内容；重新开启后可继续使用同一文件夹。")
+            Text("同步完成表示更改已写入所选文件夹，不代表其他设备已收到或处理。到达时间由 iCloud Drive 和各设备决定。")
         }
     }
 
@@ -559,13 +561,13 @@ struct SyncSettingsView: View {
 
     private var statusDetail: LocalizedStringKey {
         guard syncController.enabled else {
-            return "Daybreak 仍可离线使用本机数据；关闭同步不会删除已缓存的内容。"
+            return "同步已关闭。此设备中的内容与文件夹里已有内容都会保留。"
         }
         guard syncController.folderName != nil else {
-            return "开启同步需要一个可访问的文件夹。请选择 iCloud Drive 中的文件夹；也可以稍后再选。"
+            return "还没有选择同步文件夹。选择 iCloud Drive 中的文件夹即可开启同步；也可以稍后设置。"
         }
         if isRequestingSync {
-            return "正在读取本地记录并写入同步文件夹。你可以继续使用其他页面。"
+            return "Daybreak 正在把此设备的更改写入文件夹。完成后，iCloud Drive 会继续传给其他设备。"
         }
         switch syncController.status {
         case .disabled:
@@ -573,32 +575,32 @@ struct SyncSettingsView: View {
         case .awaitingFolder:
             return "请重新选择同步文件夹以继续；选择后同步才会开始。"
         case .syncing:
-            return "正在读取本地记录并写入同步文件夹。你可以继续使用其他页面。"
+            return "Daybreak 正在把此设备的更改写入文件夹。完成后，iCloud Drive 会继续传给其他设备。"
         case .completed:
-            return "只表示本机已完成文件处理与写入，不代表其他设备已接收、导入或应用这些更改。"
+            return "此设备已将更改写入所选文件夹。其他设备何时收到并处理，由 iCloud Drive 和设备状态决定。"
         case .pending:
             switch syncController.lastIssue {
             case .folderAccess:
-                return "无法读写同步文件夹。请确认 iCloud Drive 中的 Daybreak 文件夹可写后重试。"
+                return "无法访问同步文件夹。请在“文件”中检查 iCloud Drive 和文件夹权限，再点“立即同步”。"
             case .passInProgress:
-                return "上一次同步仍在处理，稍后会自动继续；本机数据未受影响。"
+                return "上一次同步仍在处理。请稍后再试；此设备的内容未受影响。"
             default:
-                return "同步尚未完成。保持应用运行并联网后，Daybreak 会继续处理；本机数据未受影响。"
+                return "更改尚未写入同步文件夹。请保持联网并点“立即同步”；此设备中的内容未受影响。"
             }
         case .unavailable:
-            return "请确认“文件”App 中的 iCloud Drive 已登录并可访问；本机数据与已写入的记录未受影响。"
+            return "iCloud Drive 暂不可用。请在“文件”中检查连接状态后重试；此设备的内容未受影响。"
         case .unauthorized:
-            return "请重新选择该文件夹以授予访问权限。不会删除本机数据，也不会删除文件夹中的旧记录。"
+            return "Daybreak 无权访问所选文件夹。请重新选择文件夹并授权；此设备的数据和文件夹中已有内容会保留。"
         case .failed:
             switch syncController.lastIssue {
             case .incompatibleFolder:
-                return "该文件夹不是兼容的 Daybreak 同步文件夹。请选择其他文件夹后重试。"
+                return "所选文件夹不是 Daybreak 同步文件夹。请重新选择之前使用的文件夹，或选择其他文件夹。"
             case .repositoryFailure:
-                return "本机同步记录读取失败。请重启 Daybreak 后重试，本机数据仍可离线使用。"
+                return "无法读取此设备的同步内容。请重新打开 Daybreak 后重试；其他本地内容仍可使用。"
             case .folderAccess:
-                return "写入同步文件夹失败。请检查 iCloud Drive 中的 Daybreak 文件夹后重试。"
+                return "无法写入同步文件夹。请在“文件”中确认文件夹可用且仍有权限，然后重试。"
             default:
-                return "请检查网络与文件夹状态后重试；本机数据与已缓存内容仍可离线使用。"
+                return "这次同步未能完成。请检查网络和文件夹访问权限后点“立即同步”；此设备的内容仍可使用。"
             }
         }
     }

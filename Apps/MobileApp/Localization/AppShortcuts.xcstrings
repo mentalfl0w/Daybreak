@@ -30,14 +30,14 @@
         }
       }
     },
-    "打开${applicationName}获取当前壁纸" : {
+    "打开${applicationName}获取所选壁纸" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringSet" : {
             "state" : "translated",
             "values" : [
-              "Open ${applicationName} to get the current wallpaper"
+              "Open ${applicationName} to get the selected wallpaper"
             ]
           }
         },
@@ -45,7 +45,7 @@
           "stringSet" : {
             "state" : "translated",
             "values" : [
-              "${applicationName}を開いて現在の壁紙を取得"
+              "${applicationName}を開いて選択した壁紙を取得"
             ]
           }
         },
@@ -53,7 +53,7 @@
           "stringSet" : {
             "state" : "translated",
             "values" : [
-              "打开${applicationName}获取当前壁纸"
+              "打开${applicationName}获取所选壁纸"
             ]
           }
         }
@@ -88,14 +88,14 @@
         }
       }
     },
-    "在${applicationName}中获取当前选中的壁纸" : {
+    "在${applicationName}中获取所选壁纸" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringSet" : {
             "state" : "translated",
             "values" : [
-              "Get the current wallpaper in ${applicationName}"
+              "Get the selected wallpaper in ${applicationName}"
             ]
           }
         },
@@ -103,7 +103,7 @@
           "stringSet" : {
             "state" : "translated",
             "values" : [
-              "${applicationName}で現在選択中の壁紙を取得"
+              "${applicationName}で選択した壁紙を取得"
             ]
           }
         },
@@ -111,7 +111,7 @@
           "stringSet" : {
             "state" : "translated",
             "values" : [
-              "在${applicationName}中获取当前选中的壁纸"
+              "在${applicationName}中获取所选壁纸"
             ]
           }
         }
@@ -146,14 +146,14 @@
         }
       }
     },
-    "用${applicationName}获取当前壁纸" : {
+    "用${applicationName}获取所选壁纸" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringSet" : {
             "state" : "translated",
             "values" : [
-              "Get the current wallpaper with ${applicationName}"
+              "Get the selected wallpaper with ${applicationName}"
             ]
           }
         },
@@ -161,7 +161,7 @@
           "stringSet" : {
             "state" : "translated",
             "values" : [
-              "${applicationName}で現在の壁紙を取得"
+              "${applicationName}で選択した壁紙を取得"
             ]
           }
         },
@@ -169,7 +169,7 @@
           "stringSet" : {
             "state" : "translated",
             "values" : [
-              "用${applicationName}获取当前壁纸"
+              "用${applicationName}获取所选壁纸"
             ]
           }
         }

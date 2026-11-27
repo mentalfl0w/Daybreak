@@ -188,7 +188,7 @@ struct CacheSettingsView: View {
                 }
             }
         } footer: {
-            Text("这里只统计图片缓存文件；图片元数据与每日介绍文字单独保存，不计入容量条。")
+            Text("图片说明和每日介绍不计入图片缓存容量。")
         }
     }
 
@@ -231,7 +231,7 @@ struct CacheSettingsView: View {
             }
 
             if usage.assetCount == 0 {
-                Text("本机还没有图片缓存。打开今日或时光后，Daybreak 会按需缓存。")
+                Text("目前没有缓存图片。打开“今日”或“时光”，图片会在需要时保存到本机。")
                     .font(.callout)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -286,22 +286,10 @@ struct CacheSettingsView: View {
                 }
             }
 
-            HStack {
-                VStack(alignment: .leading, spacing: 3) {
-                    Text("当前分配")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    Text("缩略图 \(SettingsByteText.string(cacheLimits.thumbnailBytes)) · 原图 \(SettingsByteText.string(cacheLimits.originalBytes))")
-                        .font(.caption.monospacedDigit())
-                        .foregroundStyle(.secondary)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-                Spacer(minLength: 8)
-                if isBusy {
-                    ProgressView()
-                        .controlSize(.small)
-                        .accessibilityLabel("正在应用缓存上限")
-                }
+            if isBusy {
+                ProgressView()
+                    .controlSize(.small)
+                    .accessibilityLabel("正在应用缓存上限")
             }
 
             Button {
@@ -313,8 +301,7 @@ struct CacheSettingsView: View {
         } header: {
             Text("容量上限")
         } footer: {
-            Text("上限是软限制：新建缓存超过上限时，Daybreak 会优先清理最久未使用的未受保护图片。应用预设上限后按 20% 缩略图、80% 原图分配，并立即清理未受保护的多余文件。")
-            Text("收藏、固定日期和当前壁纸保护的原图不会因容量或清理操作被删除；受保护内容可能让实际占用高于上限。")
+            Text("缓存上限用于控制图片占用。超过上限时，Daybreak 会优先清理较久未使用的图片。收藏、固定日期和受保护壁纸的原图会保留，因此实际用量可能超过上限。")
         }
     }
 
@@ -339,11 +326,6 @@ struct CacheSettingsView: View {
             }
 
             if let report {
-                LabeledContent("受保护缩略图") {
-                    Text("\(report.protectedThumbnailAssetCount) 个文件")
-                        .monospacedDigit()
-                        .foregroundStyle(.secondary)
-                }
                 LabeledContent("受保护原图") {
                     Text("\(report.protectedOriginalAssetCount) 个文件")
                         .monospacedDigit()
@@ -351,9 +333,9 @@ struct CacheSettingsView: View {
                 }
             }
         } header: {
-            Text("清理保护")
+            Text("保留的图片")
         } footer: {
-            Text("同一个图片或日期可能同时属于多个保护类别，因此各类别数量不能直接相加。公开系统能力无法确认旧壁纸是否仍被使用，Daybreak 不会自动解除原图保护；只有用户明确清理时才会释放未受保护的原图。")
+            Text("同一张图片可能同时被收藏或固定，因此各项数量可能重复。壁纸设置结果由系统显示，Daybreak 无法确认图片是否已应用。")
         }
     }
 
@@ -371,7 +353,7 @@ struct CacheSettingsView: View {
         } header: {
             Text("选择性清理")
         } footer: {
-            Text("三种清理互不影响：清除图片不会删除文字，清除介绍不会删除图片；收藏与固定日期始终保留。操作无法撤销，但之后可以重新联网获取。")
+            Text("图片和每日介绍可以分别清理。收藏与固定日期会保留；联网后可重新获取已删除内容。清理无法撤销。")
         }
     }
 
@@ -391,13 +373,13 @@ struct CacheSettingsView: View {
             Button {
                 Task { await onRepair() }
             } label: {
-                Label("检查并修复缓存索引", systemImage: "wrench.and.screwdriver")
+                Label("检查并修复缓存", systemImage: "wrench.and.screwdriver")
             }
             .disabled(isBusy)
         } header: {
             Text("缓存修复")
         } footer: {
-            Text("只检查 Daybreak 自己的缓存目录：移除索引未引用的孤儿文件，并列出记录仍在但文件缺失的项目；不会删除收藏、元数据或介绍，也不会扫描其他应用的文件。")
+            Text("查找本机缓存中不再使用的图片和缺少本机文件的记录；不会扫描其他应用的文件，也不会删除收藏和每日介绍。")
         }
     }
 
@@ -452,7 +434,7 @@ struct CacheCapacitySelectionView: View {
                     .accessibilityAddTraits(capacity == selection ? .isSelected : [])
                 }
             } footer: {
-                Text("上限是软限制：新建缓存超过上限时，Daybreak 会优先清理最久未使用的未受保护图片。应用预设上限后按 20% 缩略图、80% 原图分配，并立即清理未受保护的多余文件。")
+                Text("缓存上限用于控制图片占用。超过上限时，Daybreak 会优先清理较久未使用的图片。收藏、固定日期和受保护壁纸的原图会保留，因此实际用量可能超过上限。")
             }
         }
         .navigationTitle("缓存总上限", locale: locale)
