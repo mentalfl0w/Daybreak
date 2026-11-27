@@ -124,11 +124,14 @@ cp "$archive_path" "$update_input/$archive_name"
 mkdir -p "$output_dir"
 appcast_path="$output_dir/appcast.xml"
 release_notes_url="https://github.com/mentalfl0w/Daybreak/releases/tag/$tag"
-# Sparkle accepts process-substitution key files; keep the decoded private key off disk and out of Keychain.
-private_key_stream=<(printf '%s' "$private_key_base64" | python3 -c 'import base64,sys; sys.stdout.buffer.write(base64.b64decode(sys.stdin.buffer.read(), validate=True))' 2>/dev/null)
+private_key_file="$scratch_dir/private.edKey"
+printf '%s' "$private_key_base64" |
+    python3 -c 'import base64,sys; sys.stdout.buffer.write(base64.b64decode(sys.stdin.buffer.read(), validate=True))' \
+    > "$private_key_file"
+chmod 600 "$private_key_file"
 unset private_key_base64
 if ! "$generate_appcast" \
-    --ed-key-file "$private_key_stream" \
+    --ed-key-file "$private_key_file" \
     --download-url-prefix "https://github.com/mentalfl0w/Daybreak/releases/download/$tag/" \
     --full-release-notes-url "$release_notes_url" \
     -o "$appcast_path" \
