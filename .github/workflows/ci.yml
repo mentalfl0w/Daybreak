@@ -24,7 +24,7 @@ permissions:
 
 jobs:
   build:
-    name: Build unsigned macOS and iOS packages
+    name: Build macOS ad hoc-signed and unsigned iOS packages
     runs-on: xcode-27
     timeout-minutes: 45
     env:
@@ -95,6 +95,32 @@ jobs:
             CODE_SIGNING_ALLOWED=NO \
             build
 
+      - name: Ad hoc sign and verify macOS app
+        shell: bash
+        run: |
+          set -euo pipefail
+          app="$RUNNER_TEMP/daybreak-derived-data/Build/Products/Release/Daybreak.app"
+          bundle_identifier=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$app/Contents/Info.plist")
+          if [[ -z "$bundle_identifier" ]]; then
+            echo "macOS app bundle identifier is empty" >&2
+            exit 1
+          fi
+
+          codesign --force --deep --sign - --identifier "$bundle_identifier" "$app"
+          codesign --verify --deep --strict "$app"
+
+          signature_details=$(codesign --display --verbose=2 "$app" 2>&1)
+          signature_identifier=$(printf '%s\n' "$signature_details" | awk -F= '$1 == "Identifier" { print substr($0, index($0, "=") + 1); exit }')
+          if [[ "$signature_identifier" != "$bundle_identifier" ]]; then
+            echo "Expected signature identifier '$bundle_identifier', got '$signature_identifier'" >&2
+            exit 1
+          fi
+          if [[ "$signature_details" != *"Signature=adhoc"* ]]; then
+            echo "Expected an ad-hoc signature for $app" >&2
+            exit 1
+          fi
+
+          echo "Verified ad-hoc signature for $bundle_identifier"
       - name: Build iOS app without code signing
         shell: bash
         run: |
@@ -107,7 +133,7 @@ jobs:
             CODE_SIGNING_ALLOWED=NO \
             build
 
-      - name: Package unsigned DMG and IPA
+      - name: Package ad hoc-signed macOS DMG and unsigned iOS IPA
         shell: bash
         env:
           PACKAGE_VERSION: ${{ steps.metadata.outputs.version }}

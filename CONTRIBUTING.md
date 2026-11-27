@@ -74,7 +74,7 @@ A successful compile does not establish device behavior. Do not install iOS simu
 - `Assets` and `branding` contain app resources and design assets.
 - `docs/DATA_AND_STORY.md` and `docs/DATA_AND_STORY.zh-CN.md` describe data provenance and recap rules.
 - `docs/DECISIONS.md` and `docs/CHANGELOG.md` describe architecture decisions and observed history.
-- `.github/workflows/ci.yml` builds unsigned DMG and IPA artifacts on pushes and publishes tag/manual releases.
+- `.github/workflows/ci.yml` builds the macOS app unsigned, ad-hoc signs it using its `CFBundleIdentifier`, then packages a DMG; it leaves the iOS app unsigned and packages an IPA.
 
 ## Implementation boundaries
 
@@ -98,6 +98,6 @@ Keep each change narrow and explain the user-visible behavior or maintenance nee
 
 For interface changes, include screenshots only when they reflect the actual app and do not contain private user data. Never claim that a system or device scenario passed based on a build, test double, or screenshot from another version.
 
-CI uploads build artifacts for pushes and pull requests. Release runs are started by a version tag or manually; published macOS DMGs and unsigned iOS IPAs are not pre-signed installation packages. Do not commit signing credentials or alter signing settings for convenience.
+CI uploads build artifacts for pushes and pull requests. Release runs are started by a version tag or manually. CI applies and verifies an ad-hoc signature to the macOS app in the DMG using the app's `CFBundleIdentifier`; this is not a Developer ID signature. The iOS IPA remains unsigned for user signing. Do not commit signing credentials or alter signing settings for convenience.
 
 See [AGENTS.md](AGENTS.md) for repository-wide implementation constraints and the [documentation index](docs/README.md) for maintained references.

@@ -70,7 +70,7 @@ xcodebuild -project Daybreak.xcodeproj -scheme DaybreakMobile \
 - `Platform/MacIntegration` 包含 macOS 壁纸与显示器集成。
 - `Assets` 和 `branding` 包含应用资源与设计素材。
 - `docs/DATA_AND_STORY.md` 和 `docs/DATA_AND_STORY.zh-CN.md` 说明数据来源与回顾规则；`docs/DECISIONS.md` 和 `docs/CHANGELOG.md` 说明架构决策与已观察历史。
-- `.github/workflows/ci.yml` 会在提交和 PR 上构建未签名 DMG 与 IPA，并在 tag 或手动运行时发布 Release。
+- `.github/workflows/ci.yml` 会先无签名构建 macOS 应用，再使用其 `CFBundleIdentifier` 作为签名标识进行 ad-hoc 签名，随后打包 DMG；iOS 应用保持未签名并打包为 IPA。
 
 ## 实现边界
 
@@ -94,6 +94,6 @@ Bing 标题、介绍和版权信息属于来源内容，不是界面文案。保
 
 界面变更可附上真实应用截图，但不得包含用户隐私。不能仅凭构建、测试替身或其他版本的截图声称系统或设备场景已经通过。
 
-CI 会为推送和拉取请求上传构建产物。发布由版本标签或手动流程触发；发布的 macOS DMG 和未签名 iOS IPA 都不是预签名的安装包。不得提交签名凭据，也不得为了方便而更改签名设置。
+CI 会为推送和拉取请求上传构建产物。发布由版本标签或手动流程触发。CI 会对 DMG 中的 macOS 应用执行 ad-hoc 签名并验签，签名标识与应用的 `CFBundleIdentifier` 一致；这不是 Developer ID 签名。iOS IPA 保持未签名，供用户自行签名。不得提交签名凭据，也不得为了方便而更改签名设置。
 
 仓库级实现限制见 [AGENTS.md](AGENTS.md)；维护中的参考文档见[文档索引](docs/README.zh-CN.md)。
