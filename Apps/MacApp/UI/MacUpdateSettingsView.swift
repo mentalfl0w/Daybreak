@@ -23,8 +23,17 @@ struct MacUpdateSettingsSections: View {
         Section("Updates") {
             LabeledContent("Current Version", value: controller.currentVersion)
             LabeledContent("Latest Version") {
-                Text(controller.latestRelease?.tagName ?? "—")
-                    .foregroundStyle(.secondary)
+                if let release = controller.latestRelease {
+                    Text(release.tagName)
+                        .foregroundStyle(.secondary)
+                } else if MacSparkleUpdaterController.shared.isConfigured,
+                          automaticChecksEnabled {
+                    Text("Checking…")
+                        .foregroundStyle(.secondary)
+                } else {
+                    Text("—")
+                        .foregroundStyle(.secondary)
+                }
             }
 
             if controller.isChecking {
@@ -135,6 +144,10 @@ struct MacUpdateSettingsSections: View {
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
+        }
+        .task {
+            guard automaticChecksEnabled, controller.latestRelease == nil else { return }
+            await controller.check()
         }
 
         if let release = controller.latestRelease {
