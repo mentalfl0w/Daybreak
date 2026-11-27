@@ -82,14 +82,14 @@ struct ShortcutsGuideView: View {
     private var notificationCard: some View {
         card(title: "壁纸通知", systemImage: "bell.badge") {
             VStack(alignment: .leading, spacing: 10) {
-                Text("允许通知后，快捷指令可在“设置墙纸照片”之后显示同一张图片的缩略图、来源标题、地区与版权说明，以及可用的知识点。通知只表示已提交，不会证明系统壁纸动作成功。")
+                Text("允许通知后，快捷指令可在设置壁纸后显示图片缩略图和来源信息。通知是否显示取决于系统权限；收到通知不代表壁纸已更换。")
                     .font(.callout)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
 
                 switch notificationAuthorizationStatus {
                 case .authorized, .provisional, .ephemeral:
-                    Label("通知已允许。快捷指令可发送壁纸通知。", systemImage: "checkmark.circle.fill")
+                    Label("通知已开启。快捷指令可以发送壁纸通知。", systemImage: "checkmark.circle.fill")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                 case .denied:
@@ -113,7 +113,7 @@ struct ShortcutsGuideView: View {
                     .buttonStyle(.borderedProminent)
                     .disabled(isRequestingNotificationAuthorization)
                 @unknown default:
-                    Text("无法读取通知权限状态。")
+                    Text("无法读取通知权限。请在系统设置中查看 Daybreak 的通知选项。")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                 }
@@ -179,7 +179,7 @@ struct ShortcutsGuideView: View {
             Label("用 Apple 快捷指令设置壁纸", systemImage: "wand.and.stars")
                 .font(.title3.weight(.semibold))
                 .accessibilityAddTraits(.isHeader)
-            Text("Daybreak 只负责把已缓存的真实图片交给系统快捷指令。真正修改壁纸的动作由系统“设置墙纸照片”完成，Daybreak 不会声称已经设置成功。")
+            Text("Daybreak 会把所选图片交给快捷指令。系统负责设置壁纸并显示结果；Daybreak 无法确认壁纸是否已更换。")
                 .font(.callout)
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
@@ -189,7 +189,7 @@ struct ShortcutsGuideView: View {
     // MARK: Apply shortcut
 
     private var applyCard: some View {
-        card(title: "Daybreak Apply：设置当前壁纸", systemImage: "wand.and.stars") {
+        card(title: "Daybreak Apply：设置所选壁纸", systemImage: "wand.and.stars") {
             VStack(alignment: .leading, spacing: 12) {
                 installButton(
                     title: "从 iCloud 添加 Daybreak Apply",
@@ -226,7 +226,7 @@ struct ShortcutsGuideView: View {
 
                 lastHandoffStatus
 
-                Text("这个按钮只把所选图片及其具体出现位置交给快捷指令。是否成功、是否需要确认，都由系统快捷指令显示；Daybreak 不会读取系统壁纸，也不会把“已打开”当成“已设置”。")
+                Text("运行后会打开系统快捷指令并传入所选图片。请按系统提示预览并设置壁纸。")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -265,14 +265,22 @@ struct ShortcutsGuideView: View {
     @ViewBuilder
     private var currentSelection: some View {
         if let effectiveWallpaperID {
-            Text("当前壁纸 ID：\(effectiveWallpaperID)")
-                .font(.footnote.monospaced())
-                .textSelection(.enabled)
-                .foregroundStyle(.secondary)
-            Text("从“今日”或“时光”页运行时，Daybreak 会传入图片 ID、地区和来源日期，并按这条具体出现记录解析元数据。")
+            Text("已选择图片，可在快捷指令中继续。")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
+            DisclosureGroup("技术详情") {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("当前壁纸 ID：\(effectiveWallpaperID)")
+                        .font(.footnote.monospaced())
+                        .textSelection(.enabled)
+                        .foregroundStyle(.secondary)
+                    Text("从“今日”或“时光”页运行时，Daybreak 会传入图片 ID、地区和来源日期，并按这条具体出现记录解析元数据。")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .padding(.top, 4)
+            }
         } else if isLoadingSelection {
             ProgressView("正在读取当前选择…")
                 .font(.footnote)
@@ -345,7 +353,7 @@ struct ShortcutsGuideView: View {
 
                 manualDaily
 
-                Text("Daybreak 没有后台准点触发器。后台刷新只是更新缓存的机会；真正的每日更换依赖你在系统中创建的自动化及其权限。")
+                Text("每日更换由系统自动化触发。系统可能要求确认；Daybreak 无法保证在设定时间运行。")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -449,11 +457,11 @@ struct ShortcutsGuideView: View {
 
     private var installNote: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text("按钮只打开 iCloud 上的快捷指令页面。请在页面点“获取快捷指令”，再在系统确认框中添加；Daybreak 无法检测你是否已添加。")
+            Text("打开 iCloud 页面后，点“获取快捷指令”，再按系统提示添加。")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
-            Text("iCloud 分享内容由外部托管，Daybreak 无法随应用更新修改它们。链接失效或缺少通知动作时，请按下方的手动步骤创建或编辑快捷指令。")
+            Text("如果页面打不开或缺少通知动作，请使用下方的手动步骤。")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)

@@ -12,6 +12,11 @@ This changelog consolidates development records. Test and build entries reflect 
 - The refactor verification passed 253 DaybreakCore tests, 79 MacIntegration tests, the import-boundary check, an unsigned macOS Release build, and an unsigned iOS Release build.
 - Real-device folder synchronization, cross-device propagation, authorization-bookmark persistence after free-account re-signing, complete multi-display and multi-Space acceptance, and full mobile device behavior remain **Not tested**.
 
+## 2026-11-27
+
+- Refined mobile settings, sync and Shortcuts copy to foreground user-visible outcomes while keeping local folder writes distinct from cross-device propagation and treating the final system wallpaper state as unknown to Daybreak.
+- Added the cross-platform product design and copy reference. Mobile and macOS UI changes compile with the unsigned builds recorded below; physical-device and full visual checks remain **Not tested**.
+
 ## 2026-11-26
 
 - Added bounded automatic download requests for iCloud-backed sync files that are present but not yet materialized. The sync pass reports pending work and retries after the file provider has had time to finish downloading.

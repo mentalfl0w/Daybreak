@@ -34,11 +34,11 @@ struct DaybreakAppShortcuts: AppShortcutsProvider {
         AppShortcut(
             intent: GetCurrentWallpaperIntent(),
             phrases: [
-                "用\(.applicationName)获取当前壁纸",
-                "在\(.applicationName)中获取当前选中的壁纸",
-                "打开\(.applicationName)获取当前壁纸"
+                "用\(.applicationName)获取所选壁纸",
+                "在\(.applicationName)中获取所选壁纸",
+                "打开\(.applicationName)获取所选壁纸"
             ],
-            shortTitle: "获取当前选中的壁纸",
+            shortTitle: "获取所选壁纸",
             systemImageName: "photo"
         )
     }

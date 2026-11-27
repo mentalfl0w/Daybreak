@@ -58,7 +58,7 @@ struct SettingsScreen: View {
                 .ignoresSafeArea(edges: .top)
         }
         .alert(
-            "无法切换内容地区",
+            "无法更新内容",
             isPresented: Binding(
                 get: { marketErrorMessage != nil },
                 set: { if !$0 { marketErrorMessage = nil } }
@@ -67,7 +67,7 @@ struct SettingsScreen: View {
         ) { _ in
             Button("好", role: .cancel) { marketErrorMessage = nil }
         } message: { message in
-            Text(verbatim: message)
+            Text(verbatim: MobileLocalizedString.resolve("内容暂时无法更新。请检查网络后重试；已缓存内容仍可使用。", locale: locale))
         }
         .task {
             if cacheReport == nil {
@@ -222,7 +222,10 @@ struct SettingsScreen: View {
                     let previousError = store.lastErrorMessage
                     await store.setMarketSelection(preference)
                     if let newError = store.lastErrorMessage, newError != previousError {
-                        marketErrorMessage = newError
+                        marketErrorMessage = MobileLocalizedString.resolve(
+                            "内容暂时无法更新。请检查网络后重试；已缓存内容仍可使用。",
+                            locale: locale
+                        )
                     }
                 }
             }
@@ -290,7 +293,7 @@ struct SettingsScreen: View {
         do {
             cacheReport = try await store.cacheReport()
         } catch {
-            cacheLoadError = describe(error)
+            cacheLoadError = MobileLocalizedString.resolve("无法读取缓存状态。请点“重试”再查看。", locale: locale)
         }
         isReadingCache = false
     }
@@ -318,7 +321,10 @@ struct SettingsScreen: View {
                 )
             }
         } catch {
-            cacheMessage = CacheOperationMessage(tone: .failure, text: describe(error))
+            cacheMessage = CacheOperationMessage(
+                tone: .failure,
+                text: MobileLocalizedString.resolve("无法应用缓存上限。请重试。", locale: locale)
+            )
         }
         await loadCacheReport()
     }
@@ -346,7 +352,10 @@ struct SettingsScreen: View {
             }
             cacheMessage = CacheOperationMessage(tone: tone, text: message)
         } catch {
-            cacheMessage = CacheOperationMessage(tone: .failure, text: describe(error))
+            cacheMessage = CacheOperationMessage(
+                tone: .failure,
+                text: MobileLocalizedString.resolve("无法清理所选内容。请重试。", locale: locale)
+            )
         }
         await loadCacheReport()
     }
@@ -389,19 +398,14 @@ struct SettingsScreen: View {
                 text: text
             )
         } catch {
-            cacheMessage = CacheOperationMessage(tone: .failure, text: describe(error))
+            cacheMessage = CacheOperationMessage(
+                tone: .failure,
+                text: MobileLocalizedString.resolve("无法检查缓存。请刷新缓存状态后重试。", locale: locale)
+            )
         }
         await loadCacheReport()
     }
 
-    private func describe(_ error: any Error) -> String {
-        if let localized = error as? any LocalizedError,
-           let description = localized.errorDescription,
-           !description.isEmpty {
-            return description
-        }
-        return error.localizedDescription
-    }
 
     // MARK: Values
 

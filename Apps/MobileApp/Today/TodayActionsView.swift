@@ -50,17 +50,6 @@ struct TodayActionsView: View {
                 }
             }
 
-            if content.imageAvailability == .thumbnail {
-                Text("当前仅缓存了预览图；预览或分享时会先尝试获取原图，失败时只能使用预览分辨率。")
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-            } else if content.imageAvailability == .missing {
-                Text("图片尚未缓存；可以刷新获取，或稍后联网重试。")
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
         }
     }
 
@@ -121,8 +110,10 @@ struct TodayActionsView: View {
                         .accessibilityHidden(true)
                     Text("正在下载原图…")
                 }
-            } else {
+            } else if content.imageAvailability == .thumbnail {
                 Label("下载原图", systemImage: "arrow.down.circle")
+            } else {
+                Label("刷新", systemImage: "arrow.clockwise")
             }
         }
         .buttonStyle(.bordered)

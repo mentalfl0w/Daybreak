@@ -23,10 +23,6 @@ struct MenuBarPanel: View {
     /// size on its first layout pass; the measured content height replaces it
     /// immediately after.
     @State private var contentHeight: CGFloat = 520
-    /// Pending overwrite confirmed directly from the menu bar. This alert is
-    /// attached to the panel itself and never depends on the main window.
-    @State private var overwriteCandidate: WallpaperGuardInfo?
-
     private static let panelWidth: CGFloat = 380
     private static let maximumVisibleHeight: CGFloat = 640
 
@@ -50,56 +46,26 @@ struct MenuBarPanel: View {
             contentHeight = height
         }
         .task { model.start() }
-        .alert(
-            "确认覆盖当前壁纸？",
-            isPresented: overwriteAlertBinding,
-            presenting: overwriteCandidate
-        ) { block in
-            Button("取消", role: .cancel) {
-                overwriteCandidate = nil
-            }
-            Button("确认覆盖", role: .destructive) {
-                overwriteCandidate = nil
-                model.confirmGuardOverwrite(
-                    displayID: block.displayID,
-                    observedImageURL: block.observedImageURL
-                )
-            }
-        } message: { block in
-            Text(
-                "\(block.displayName)\n\n当前壁纸：\(block.observedImageURL?.lastPathComponent ?? MacLocalizedString.resolve("无法读取", locale: WallpaperInterfaceLocale.current))\n将替换为：\(block.desiredImageURL?.lastPathComponent ?? MacLocalizedString.resolve("目标壁纸", locale: WallpaperInterfaceLocale.current))\n\n仅修改当前可访问的桌面；如果当前壁纸已经变化，写入会被拒绝。"
-            )
-        }
     }
 
-    private var overwriteAlertBinding: Binding<Bool> {
-        Binding(
-            get: { overwriteCandidate != nil },
-            set: { presented in
-                if !presented { overwriteCandidate = nil }
-            }
-        )
-    }
 
     private var panelContent: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 14) {
             hero
             storyLine
             statusSection
 
-            if let wallpaperError = model.wallpaperError,
-               !wallpaperError.isEmpty {
-                issueBanner(wallpaperError)
+            if !model.guardBlocks.isEmpty {
+                guardSummary
+            }
+            if model.pendingWallpaperConfirmation != nil {
+                pendingConfirmationNotice
+            }
+            if model.wallpaperError?.isEmpty == false {
+                issueNotice
             }
 
             quickActions
-
-            Text("设置壁纸前只确认一次目标显示器与目标图片；只修改当前可访问的桌面。")
-                .font(.caption2)
-                .foregroundStyle(.tertiary)
-                .fixedSize(horizontal: false, vertical: true)
-
-            footer
         }
         .padding(14)
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -132,10 +98,6 @@ struct MenuBarPanel: View {
             .clipShape(heroShape)
             .overlay {
                 heroShape.strokeBorder(Color.primary.opacity(0.10), lineWidth: 1)
-            }
-            .overlay(alignment: .topTrailing) {
-                statusBadge
-                    .padding(10)
             }
             .shadow(color: .black.opacity(0.16), radius: 12, x: 0, y: 5)
             .accessibilityElement(children: .ignore)
@@ -225,18 +187,6 @@ struct MenuBarPanel: View {
         .padding(14)
     }
 
-    private var statusBadge: some View {
-        MenuBarStatusBadge(title: model.statusTitle, color: statusColor)
-    }
-
-    private var statusColor: Color {
-        switch model.loadState {
-        case .ready, .refreshing: return .green
-        case .offline: return .orange
-        case .failed: return .red
-        case .empty, .idle, .loadingCache: return .secondary
-        }
-    }
 
     private var heroTitle: String {
         model.payload?.title ?? MacLocalizedString.resolve("今日内容尚未载入", locale: WallpaperInterfaceLocale.current)
@@ -276,15 +226,10 @@ struct MenuBarPanel: View {
     private var storyLine: some View {
         let text = MenuBarStoryText.line(for: model.storyPanel ?? .notFetched)
 
-        return HStack(alignment: .top, spacing: 10) {
+        return HStack(alignment: .top, spacing: 8) {
             Image(systemName: "text.book.closed")
                 .font(.caption)
                 .foregroundStyle(.secondary)
-                .frame(width: 24, height: 24)
-                .background(
-                    Color.primary.opacity(0.06),
-                    in: RoundedRectangle(cornerRadius: 7, style: .continuous)
-                )
                 .accessibilityHidden(true)
 
             Text(text)
@@ -295,7 +240,6 @@ struct MenuBarPanel: View {
 
             Spacer(minLength: 0)
         }
-        .modifier(MenuBarInsetCardStyle(padding: 12))
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("每日介绍：\(text)")
     }
@@ -303,107 +247,30 @@ struct MenuBarPanel: View {
     // MARK: Status
 
     private var statusSection: some View {
-        VStack(alignment: .leading, spacing: 9) {
-            HStack(alignment: .firstTextBaseline, spacing: 8) {
-                Image(systemName: automationInfo.systemImage)
-                    .font(.callout)
-                    .foregroundStyle(automationInfo.color)
+        HStack(spacing: 8) {
+            Image(systemName: automationInfo.systemImage)
+                .font(.callout)
+                .foregroundStyle(automationInfo.color)
+                .accessibilityHidden(true)
 
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(automationInfo.label)
-                        .font(.caption.weight(.semibold))
-                    Text(automationDetail)
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
+            Text(automationInfo.label)
+                .font(.callout.weight(.medium))
                 .frame(maxWidth: .infinity, alignment: .leading)
 
-                if model.isUpdatingAutomation
-                    || model.isPreparingConsent
-                    || model.isApplyingWallpaper {
-                    ProgressView()
-                        .controlSize(.mini)
-                        .accessibilityLabel("正在更新壁纸设置")
-                }
-            }
-
-            if let status = model.wallpaperStatusMessage, !status.isEmpty {
-                Text(status)
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-
-
-            if model.requiresDisableRetry {
+            if model.isUpdatingAutomation
+                || model.isPreparingConsent
+                || model.isApplyingWallpaper {
+                ProgressView()
+                    .controlSize(.mini)
+                    .accessibilityLabel("正在更新壁纸设置")
+            } else if model.requiresDisableRetry {
                 Button("重试关闭自动同步") {
                     model.setAutoSync(false)
                 }
                 .controlSize(.small)
                 .disabled(model.isUpdatingAutomation)
             }
-
-            if !model.guardBlocks.isEmpty {
-                Divider()
-                    .opacity(0.6)
-            }
-
-            if !model.guardBlocks.isEmpty {
-                VStack(alignment: .leading, spacing: 7) {
-                    HStack(spacing: 6) {
-                        Image(systemName: "exclamationmark.shield")
-                            .foregroundStyle(.orange)
-                        Text("\(model.guardBlocks.count) 台显示器等待确认")
-                        Spacer(minLength: 8)
-                    }
-                    .font(.caption2)
-
-                    ForEach(model.guardBlocks) { block in
-                        HStack(alignment: .firstTextBaseline, spacing: 6) {
-                            VStack(alignment: .leading, spacing: 1) {
-                                Text(block.displayName)
-                                    .font(.caption2.weight(.medium))
-                                Text(block.reason)
-                                    .font(.caption2)
-                                    .foregroundStyle(.secondary)
-                                    .lineLimit(2)
-                                    .fixedSize(horizontal: false, vertical: true)
-                            }
-                            Spacer(minLength: 6)
-                            if block.canConfirm {
-                                Button("确认覆盖…") {
-                                    overwriteCandidate = block
-                                }
-                                .controlSize(.small)
-                                .disabled(model.isApplyingWallpaper)
-                                .accessibilityLabel("确认覆盖 \(block.displayName) 的当前壁纸")
-                            } else {
-                                Text("无法读取当前壁纸，暂不能确认")
-                                    .font(.caption2)
-                                    .foregroundStyle(.secondary)
-                            }
-                        }
-                    }
-                }
-                .font(.caption2)
-            }
-
-            if model.pendingWallpaperConfirmation != nil {
-                HStack(spacing: 6) {
-                    Text("壁纸操作等待确认")
-                    Spacer(minLength: 8)
-                    Button("打开今日窗口", action: openTodayWindow)
-                        .controlSize(.small)
-                    Button("取消") {
-                        model.cancelPendingWallpaperConfirmation()
-                    }
-                    .controlSize(.small)
-                }
-                .font(.caption2)
-            }
         }
-        .modifier(MenuBarInsetCardStyle(padding: 12))
     }
 
     private var automationInfo: (label: String, systemImage: String, color: Color) {
@@ -419,33 +286,45 @@ struct MenuBarPanel: View {
         return (MacLocalizedString.resolve("自动同步未开启", locale: WallpaperInterfaceLocale.current), "pause.circle", .secondary)
     }
 
-    private var automationDetail: String {
-        if model.requiresDisableRetry {
-            return MacLocalizedString.resolve("本次会话已停止自动写入，但保存的设置可能仍为自动同步；重新启动后可能恢复。", locale: WallpaperInterfaceLocale.current)
+    private var guardSummary: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "exclamationmark.shield")
+                .foregroundStyle(.orange)
+                .accessibilityHidden(true)
+            Text("\(model.guardBlocks.count) 台显示器等待确认")
+                .font(.caption)
+            Spacer(minLength: 8)
+            Button("打开今日窗口", action: openTodayWindow)
+                .controlSize(.small)
         }
-        if model.autoSyncEnabled {
-            return model.autoOverwriteEnabled
-                ? MacLocalizedString.resolve("自动同步已开启，并会替换未知的当前壁纸；手动保护仍会暂停。未激活的 Space 不会立即更新。", locale: WallpaperInterfaceLocale.current)
-                : MacLocalizedString.resolve("自动同步已开启；遇到未知壁纸会暂停并等待逐台确认。重新启动后继续。", locale: WallpaperInterfaceLocale.current)
-        }
-        return MacLocalizedString.resolve("自动同步未开启；不会自动修改壁纸。重新启动后保持关闭。", locale: WallpaperInterfaceLocale.current)
     }
 
-    private func issueBanner(_ message: String) -> some View {
-        HStack(alignment: .top, spacing: 8) {
-            Image(systemName: "exclamationmark.triangle.fill")
-                .foregroundStyle(.orange)
-            Text(message)
-                .font(.caption2)
-                .lineLimit(3)
-                .fixedSize(horizontal: false, vertical: true)
-            Spacer(minLength: 0)
-            Button("设置") {
-                openSettingsPanel()
+    private var pendingConfirmationNotice: some View {
+        HStack(spacing: 6) {
+            Text("壁纸操作等待确认")
+            Spacer(minLength: 8)
+            Button("打开今日窗口", action: openTodayWindow)
+                .controlSize(.small)
+            Button("取消") {
+                model.cancelPendingWallpaperConfirmation()
             }
             .controlSize(.small)
         }
-        .modifier(MenuBarInsetCardStyle(padding: 10, accent: .orange))
+        .font(.caption2)
+    }
+
+    private var issueNotice: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "exclamationmark.triangle.fill")
+                .foregroundStyle(.orange)
+                .accessibilityHidden(true)
+            Text("壁纸状态")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            Spacer(minLength: 8)
+            Button("主窗口", action: openTodayWindow)
+                .controlSize(.small)
+        }
     }
 
     // MARK: Actions
@@ -543,23 +422,6 @@ struct MenuBarPanel: View {
         onSettings()
     }
 
-    // MARK: Footer
-
-    private var footer: some View {
-        HStack(spacing: 6) {
-            Text(model.marketChoice.displayName(in: locale))
-            Text("·")
-                .foregroundStyle(.tertiary)
-            Text(model.sourceOriginLabel)
-            Spacer(minLength: 8)
-            if let lastUpdated = model.lastUpdated {
-                Text("更新于 \(StatusFormatter.dateTime(lastUpdated, locale: locale))")
-            }
-        }
-        .font(.caption2)
-        .foregroundStyle(.tertiary)
-        .lineLimit(1)
-    }
 }
 
 /// Measures the panel's intrinsic content height so the menu bar window can
@@ -646,68 +508,6 @@ enum MenuBarStoryText {
 /// Inset card layered on the menu bar window material. Using a light
 /// semantic tint instead of another material avoids stacking translucent
 /// surfaces while still grouping the story and automation status.
-private struct MenuBarInsetCardStyle: ViewModifier {
-    var padding: CGFloat = 12
-    var accent: Color? = nil
-
-    private var shape: RoundedRectangle {
-        RoundedRectangle(cornerRadius: 14, style: .continuous)
-    }
-
-    func body(content: Content) -> some View {
-        content
-            .padding(padding)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background {
-                shape.fill(Color.primary.opacity(0.045))
-                if let accent {
-                    shape.fill(accent.opacity(0.10))
-                }
-            }
-            .clipShape(shape)
-            .overlay {
-                shape.strokeBorder(
-                    accent?.opacity(0.24) ?? Color.primary.opacity(0.06),
-                    lineWidth: 1
-                )
-            }
-    }
-}
-
-/// Status capsule over the photograph. macOS 26 uses native Liquid Glass with
-/// a dark tint for legibility; older systems and Reduce Transparency use the
-/// previous solid dark capsule.
-private struct MenuBarStatusBadge: View {
-    let title: String
-    let color: Color
-    @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
-
-    var body: some View {
-        if #available(macOS 26.0, *), !reduceTransparency {
-            label
-                .foregroundStyle(.white)
-                .glassEffect(.regular.tint(.black.opacity(0.30)), in: Capsule())
-        } else {
-            label
-                .foregroundStyle(.white)
-                .background(.black.opacity(0.5), in: Capsule())
-        }
-    }
-
-    private var label: some View {
-        HStack(spacing: 5) {
-            Circle()
-                .fill(color)
-                .frame(width: 6, height: 6)
-            Text(title)
-        }
-        .font(.caption2.weight(.medium))
-        .padding(.horizontal, 8)
-        .padding(.vertical, 4)
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel("状态：\(title)")
-    }
-}
 
 // MARK: - Liquid Glass button styles
 

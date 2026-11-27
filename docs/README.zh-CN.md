@@ -13,7 +13,7 @@
 以下参考文档维护英文和简体中文两个版本：
 
 - [数据与每日介绍合同](DATA_AND_STORY.zh-CN.md) · [English](DATA_AND_STORY.md)：来源、内容可用性、缓存和回顾规则。
-- [架构决策](DECISIONS.zh-CN.md) · [English](DECISIONS.md)：已接受的决策、证据和延后问题。
+- [产品设计与文案规范](PRODUCT_DESIGN.zh-CN.md) · [English](PRODUCT_DESIGN.md)：内容优先的视觉层级、响应式布局、无障碍、本地化和产品文案。
 - [更新记录](CHANGELOG.zh-CN.md) · [English](CHANGELOG.md)：已记录的实现历史和待完成设备检查。
 
 更新记录只写已观察到的证据。构建或自动化测试成功，不能证明尚未实测的真机或系统场景正常。

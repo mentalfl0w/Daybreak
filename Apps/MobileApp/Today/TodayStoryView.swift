@@ -3,10 +3,8 @@ import SwiftUI
 
 /// Full-width daily story panel.
 ///
-/// The photograph is the primary surface; this panel is the single complete
-/// reading row. Story copy is always shown verbatim with its source language
-/// and fetch time. Missing or mismatched stories are explained instead of
-/// being filled with text from another date, market or image.
+/// The source's original text is shown only when it matches this image. Missing
+/// or unmatched stories stay empty rather than being filled from another record.
 @MainActor
 struct TodayStoryView: View {
     let content: TodayDisplayContent
@@ -26,8 +24,8 @@ struct TodayStoryView: View {
                 // Defensive: `.matched` should carry usable text, but never
                 // fabricate a body if a record's availability changed.
                 unavailableStory(story)
-            case .unmatched(let failure):
-                unmatchedStory(failure)
+            case .unmatched:
+                unmatchedStory()
             case nil:
                 emptyStory
             }
@@ -65,17 +63,6 @@ struct TodayStoryView: View {
                         .textSelection(.enabled)
                         .fixedSize(horizontal: false, vertical: true)
                 }
-                .padding(14)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(
-                    Color.accentColor.opacity(0.08),
-                    in: RoundedRectangle(cornerRadius: 16, style: .continuous)
-                )
-                .overlay {
-                    RoundedRectangle(cornerRadius: 16, style: .continuous)
-                        .strokeBorder(Color.accentColor.opacity(0.16), lineWidth: 1)
-                }
-                .accessibilityElement(children: .combine)
             }
 
             if let body = story.body, !body.isEmpty {
@@ -101,12 +88,6 @@ struct TodayStoryView: View {
             Label("该地区暂无可用介绍", systemImage: "text.badge.xmark")
                 .font(.callout.weight(.semibold))
 
-            if case .unavailable(let reason) = story.availability {
-                Text(Self.reasonText(reason))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
 
             if let headline = story.headline, !headline.isEmpty {
                 Text(verbatim: headline)
@@ -128,31 +109,14 @@ struct TodayStoryView: View {
         }
     }
 
-    private func unmatchedStory(_ failure: StoryMatchFailure) -> some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Label("暂无可显示的介绍", systemImage: "text.badge.xmark")
-                .font(.callout.weight(.semibold))
-
-            Text(Self.failureText(failure))
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-
-            Text("介绍缺失不会影响图片浏览；Daybreak 不会用其他日期或地区的文本补齐。")
-                .font(.caption2)
-                .foregroundStyle(.tertiary)
-                .fixedSize(horizontal: false, vertical: true)
-        }
+    private func unmatchedStory() -> some View {
+        Label("暂无可显示的介绍", systemImage: "text.badge.xmark")
+            .font(.callout.weight(.semibold))
     }
 
     private var emptyStory: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Label("尚未获取今日介绍", systemImage: "text.badge.xmark")
-                .font(.callout.weight(.semibold))
-            Text("刷新后会重新尝试获取该地区当天的来源介绍。")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-        }
+        Label("尚未获取今日介绍", systemImage: "text.badge.xmark")
+            .font(.callout.weight(.semibold))
     }
 
     // MARK: Shared footer
@@ -215,20 +179,6 @@ struct TodayStoryView: View {
         }
     }
 
-    static func failureText(_ failure: StoryMatchFailure) -> LocalizedStringKey {
-        switch failure {
-        case .noCandidate:
-            "该地区当天没有可匹配的介绍记录。"
-        case .imageIdentityMissing(let count):
-            "当天有 \(count) 条介绍，但无法确认它属于这张图片，已隐藏。"
-        case .dateMismatch, .marketMismatch:
-            "当天记录属于其他日期或地区，已隐藏。"
-        case .imageIdentityConflict:
-            "介绍关联到另一张图片，已隐藏。"
-        case .ambiguousCandidates(let count):
-            "当天有 \(count) 条介绍内容存在冲突，已隐藏。"
-        }
-    }
 }
 
 // MARK: - Shared section header
