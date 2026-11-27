@@ -22,9 +22,10 @@ Daybreak is an open-source, native Swift 6 / SwiftUI application for macOS, iOS 
 
 1. `docs/README.md` — documentation index and current project entry point.
 2. `docs/DATA_AND_STORY.md` — canonical data contract; story retrieval, provenance, persistence, recap eligibility.
-3. `docs/DECISIONS.md` — accepted architecture decisions and deferred questions.
-4. `docs/CHANGELOG.md` — dated implementation evidence, limitations and release history.
-5. `CONTRIBUTING.md` — build, test and packaging commands.
+3. `docs/PRODUCT_DESIGN.md` — cross-platform content-first visual hierarchy, responsive layout, accessibility, localization and product language.
+4. `docs/DECISIONS.md` — accepted architecture decisions and deferred questions.
+5. `docs/CHANGELOG.md` — dated implementation evidence, limitations and release history.
+6. `CONTRIBUTING.md` — build, test and packaging commands.
 
 If a requested task conflicts with a documented hard constraint, report it and propose the smallest compliant change. Update docs and tests when a decision changes. A deferred check remains `Not tested`; it is not a failure of the implemented slice and must not be reported as passing.
 

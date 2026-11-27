@@ -13,7 +13,7 @@
 Most references are maintained as English and Simplified Chinese pairs:
 
 - [Data and story contract](DATA_AND_STORY.md) · [中文](DATA_AND_STORY.zh-CN.md) — source provenance, availability, caching and recap rules.
-- [Architecture decisions](DECISIONS.md) · [中文](DECISIONS.zh-CN.md) — accepted decisions, evidence and deferred questions.
+- [Product design and copy](PRODUCT_DESIGN.md) · [中文](PRODUCT_DESIGN.zh-CN.md) — content-first visual hierarchy, responsive layout, accessibility, localization and product language.
 - [Changelog](CHANGELOG.md) · [中文](CHANGELOG.zh-CN.md) — recorded implementation history and outstanding device checks.
 
 The changelog records only observed evidence. A successful build or automated test is not evidence that an untested physical-device or system scenario works.
