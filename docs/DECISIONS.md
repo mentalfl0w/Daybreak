@@ -20,6 +20,11 @@ The app preserves source locale and provenance. Missing story content is shown a
 ### Distribution
 macOS apps in CI DMGs receive an ad-hoc signature whose identifier matches `CFBundleIdentifier`; this is not a Developer ID signature. iOS and iPadOS artifacts remain unsigned IPAs for user signing and sideloading. The project does not use App Store distribution, telemetry, backend services or bundled Bing media.
 
+### macOS release checks
+Use Sparkle 2.10.1 for macOS updates from a stable HTTPS GitHub Release appcast. Require an EdDSA-signed feed and verify update archives before extraction. Automatic checks and installation are opt-in; a public GitHub Release DMG remains available as a manual fallback. A build without a provisioned public key cannot perform authenticated Sparkle updates. Ad-hoc signing is not Developer ID signing.
+
+In disposable ad-hoc-signed Sparkle 2.10.1 hosts, an EdDSA-signed archive was accepted and a tampered archive was rejected. A Launch Services test installed an update from build 1 to 2 and relaunched build 2 after the documented immediate-install callback; without that callback, replacement occurred but relaunch was not observed. The test used a localhost HTTP feed and an unquarantined app in a writable user directory. It did not validate Daybreak's production DMG, Gatekeeper, notification identity, user permissions or data preservation; those scenarios and the authenticated release-feed process require separate verification.
+
 ## Deferred questions
 
 - Long-term stability and field coverage of the Bing homepage model across `zh-CN`, `en-US` and `ja-JP`.

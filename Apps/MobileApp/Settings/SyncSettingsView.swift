@@ -129,7 +129,7 @@ struct SyncSettingsView: View {
         } header: {
             Text("设备同步")
         } footer: {
-            Text("你选择的 iCloud Drive 文件夹用于在设备间传递 Daybreak 内容。每台设备仍保留自己的本地数据。")
+            Text("选择 iCloud Drive 文件夹后，Daybreak 会在设备间同步内容。每台设备仍保留自己的本地数据。")
         }
     }
 
@@ -159,7 +159,7 @@ struct SyncSettingsView: View {
             Text("文件夹")
         } footer: {
             if syncController.folderName == nil {
-                Text("请选择 iCloud Drive 中的文件夹。选择根目录后，Daybreak 会在里面创建“Daybreak”文件夹。在“文件”中选中文件夹本身后点“打开”。")
+                Text("请选择 iCloud Drive 中的文件夹。若选择 iCloud Drive 根目录，Daybreak 会在其中创建“Daybreak”文件夹。请在“文件”中选中文件夹本身，再点“打开”。")
             } else if isSyncEnabled {
                 Text("Daybreak 只访问你选的文件夹。访问权限保存在此设备，不会同步到其他设备。")
             } else {
@@ -241,7 +241,7 @@ struct SyncSettingsView: View {
             }
             .disabled(isPreparingDiagnostics)
             if let detail = syncController.lastFailureDetail {
-                DisclosureGroup("技术详情") {
+                DisclosureGroup("错误详情") {
                     Text(verbatim: detail)
                         .font(.caption2.monospaced())
                         .foregroundStyle(.secondary)
@@ -252,7 +252,7 @@ struct SyncSettingsView: View {
         } header: {
             Text("诊断")
         } footer: {
-            Text("诊断日志包含应用与系统版本、同步状态、最近同步阶段记录和错误类别；不包含文件夹路径、授权书签、壁纸或文字内容、设备名称。文件仅在本机生成，分享去向由你在系统分享面板中选择。")
+            Text("诊断报告会记录应用与系统版本、同步状态、最近的同步阶段和错误类别；不含文件夹路径、文件夹访问信息、壁纸或文字内容、设备名称。报告只在本机生成；你可以通过系统分享面板决定是否分享。")
         }
     }
 
@@ -265,8 +265,8 @@ struct SyncSettingsView: View {
         } header: {
             Text("同步内容")
         } footer: {
-            Text("原图和内容地区偏好默认关闭。同步原图会占用更多设备与 iCloud 储存；开启内容地区偏好后，其他设备也会使用所选地区。关闭选项不会删除已有内容。")
-            Text("同步关闭时选项不可更改，已保存的偏好仍保留在本机。")
+            Text("原图和内容地区偏好默认关闭。同步原图会占用更多设备和 iCloud 存储空间；同步内容地区偏好后，其他设备也会使用你选择的地区。关闭选项不会删除已有内容。")
+            Text("同步关闭时无法更改这些选项；已保存的设置仍保留在此设备。")
         }
         .disabled(!isSyncEnabled || isSyncing || isRequestingSync)
     }
@@ -280,8 +280,8 @@ struct SyncSettingsView: View {
         } header: {
             Text("数据边界")
         } footer: {
-            Text("关闭同步不会删除此设备的数据或文件夹中的已有内容。离线时仍可查看已缓存内容；重新开启后可继续使用同一文件夹。")
-            Text("同步完成表示更改已写入所选文件夹，不代表其他设备已收到或处理。到达时间由 iCloud Drive 和各设备决定。")
+            Text("关闭同步不会删除此设备的数据或所选文件夹中的内容。离线时仍可查看已缓存内容；重新开启后可继续使用同一文件夹。")
+            Text("同步完成表示更改已写入所选文件夹。其他设备何时收到并处理更新，取决于 iCloud Drive 和各设备状态。")
         }
     }
 

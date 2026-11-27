@@ -48,7 +48,7 @@ struct TimelineRecapView: View {
                 }
 
                 if model.recapMarketScope == .allMarkets, model.recapScope != .favorites {
-                    Text("统计包含本机实际记录的所有地区；同一天多地区只按日期计数。下方日期格仍显示当前地区。")
+                    Text("统计涵盖本机有记录的所有地区；同一天只计一次，日期格仍显示当前地区。")
                         .font(.caption2)
                         .foregroundStyle(.tertiary)
                         .fixedSize(horizontal: false, vertical: true)
@@ -307,9 +307,9 @@ struct TimelineRecapView: View {
         let keys = model.yearImageKeys()
         if !keys.isEmpty {
             VStack(alignment: .leading, spacing: 8) {
-                Text("年度图片")
+                Text("这一年的留影")
                     .font(.headline)
-                Text("每个有记录的日期显示一张代表图片；同一天的其他地区记录可在日期详情中查看。")
+                Text("每个有记录的日期留下一张代表图；同一天其他地区的记录，可在日期详情中查看。")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -506,7 +506,7 @@ struct TimelineRecapStatsGrid: View {
 
         self.tiles = [
             .init(
-                title: "已记录",
+                title: "有记录的日期",
                 value: summary.eligibleDays.map { "\(summary.observedDays)/\($0) 天" }
                     ?? "\(summary.observedDays) 天",
                 caption: "观察窗口内",
@@ -578,31 +578,20 @@ struct TimelineCoverageNote: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(note)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
+            if summary.firstObservedDate != nil {
+                Text("首次观察日前的补录不计入。")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
             if let range = summary.effectiveRange {
-                Text("可观察区间：\(rangeText(range))")
+                Text("观察窗口：\(rangeText(range))")
                     .font(.caption2)
                     .foregroundStyle(.tertiary)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.top, 4)
-    }
-
-    private var note: LocalizedStringKey {
-        switch summary.coverageState {
-        case .firstObservedDateUnknown:
-            return "缺少观察起点"
-        case .noObservation:
-            return "窗口内无记录"
-        case .partial:
-            return "部分日期有记录"
-        case .complete:
-            return "窗口内完整"
-        }
     }
 
     private func rangeText(_ range: LocalDateRange) -> String {

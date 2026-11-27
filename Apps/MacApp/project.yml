@@ -24,6 +24,9 @@ packages:
     path: Packages/DaybreakCore
   MacIntegration:
     path: Platform/MacIntegration
+  Sparkle:
+    url: https://github.com/sparkle-project/Sparkle
+    version: 2.10.1
 settings:
   base:
     SWIFT_VERSION: "6.0"
@@ -47,11 +50,14 @@ targets:
         product: DaybreakCore
       - package: MacIntegration
         product: MacIntegration
+      - package: Sparkle
+        product: Sparkle
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: dev.daybreak.mac
         PRODUCT_NAME: Daybreak
-        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_FILE: Apps/MacApp/Info.plist
+        GENERATE_INFOPLIST_FILE: NO
         INFOPLIST_KEY_CFBundleDisplayName: Daybreak
         INFOPLIST_KEY_CFBundleName: Daybreak
         INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.photography
@@ -59,8 +65,9 @@ targets:
         INFOPLIST_KEY_NSHighResolutionCapable: YES
         INFOPLIST_KEY_NSPrincipalClass: NSApplication
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
-        MARKETING_VERSION: "1.2.1"
-        CURRENT_PROJECT_VERSION: "5"
+        SPARKLE_EDDSA_PUBLIC_KEY: ""
+        MARKETING_VERSION: "1.3.0"
+        CURRENT_PROJECT_VERSION: "6"
         COMBINE_HIDPI_IMAGES: YES
     scheme:
       testTargets:
@@ -132,8 +139,8 @@ targets:
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         TARGETED_DEVICE_FAMILY: "1,2"
-        MARKETING_VERSION: "1.2.1"
-        CURRENT_PROJECT_VERSION: "11"
+        MARKETING_VERSION: "1.3.0"
+        CURRENT_PROJECT_VERSION: "12"
         # Automatic signing with whichever team the user selects locally.
         # Never commit DEVELOPMENT_TEAM, certificates, profiles or
         # entitlements; the default sideload configuration needs none.

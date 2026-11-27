@@ -29,7 +29,7 @@ struct DaybreakSetWallpaperButton: View {
         Button {
             runOrShowGuide()
         } label: {
-            Label("用快捷指令设为壁纸", systemImage: "photo.badge.arrow.down")
+            Label("快捷指令", systemImage: "photo.badge.arrow.down")
         }
         .buttonStyle(.bordered)
         .tint(.daybreakActionTint)

@@ -1877,6 +1877,8 @@ private struct AboutSettingsPane: View {
                     Text("关于 Daybreak")
                 }
 
+                MacUpdateSettingsSections()
+
                 Section {
                     authorCard
                 } header: {

@@ -12,7 +12,20 @@ This changelog consolidates development records. Test and build entries reflect 
 - The refactor verification passed 253 DaybreakCore tests, 79 MacIntegration tests, the import-boundary check, an unsigned macOS Release build, and an unsigned iOS Release build.
 - Real-device folder synchronization, cross-device propagation, authorization-bookmark persistence after free-account re-signing, complete multi-display and multi-Space acceptance, and full mobile device behavior remain **Not tested**.
 
+## 2026-11-28
+
+- Reduced unused horizontal space on the macOS Today page by centering a wider story column while keeping long body text at a readable measure.
+- Split cached originals and thumbnails into separate storage tabs. Each tab uses stable per-kind ordering and independent six-item pagination; protection, deletion and page clamping remain unchanged.
+- Verified the macOS refinement build without warnings and ran seven isolated storage pagination tests in a temporary HOME. The refined Today surface was launched once and captured; real storage-tab interaction remains **Not tested**.
+
 ## 2026-11-27
+
+- Refined Today, calendar, gallery and recap presentation without changing wallpaper automation or recap counting. Daily source links now use an in-app WebKit or system Safari view; mobile Safari Services cannot enforce or report every subsequent navigation.
+- Added macOS Sparkle update integration with an opt-in check/install policy, signed-feed and pre-extraction verification configuration, and a manual DMG fallback. Maintainer public/private key provisioning is required before a stable update feed can be published.
+- In a disposable ad-hoc Sparkle test, a signed update changed a scratch app from build 1 to 2 and relaunched it through Launch Services using the documented immediate-install callback. The test used localhost HTTP and an unquarantined app; production HTTPS, Gatekeeper, permissions and data preservation were not verified.
+- On the current user's running 1.2.1 application, the gallery showed 11 November records while the yearly recap showed four observed days. Their scopes differ; whether the local observation start explains this particular difference was not determined.
+- With Xcode 27.2 and the installed macOS/iPhoneOS SDKs, both unsigned app test targets compiled; DaybreakCore passed 254 tests and MacIntegration passed 79 tests. These results do not establish actual UI, source-page, updater or device behavior.
+- Launched the unsigned macOS build once with a temporary HOME and captured the Today surface; the photo, simplified metadata/actions and story remain visible. A sandbox extension message was emitted by direct executable launch; no wallpaper action was triggered. The running user's installed app and settings were not used for this check.
 
 - A macOS ad-hoc build using the bundle identifier as its code-signing identifier showed notification permission as authorized in the user's installed app. The cause of the earlier failure and actual notification delivery remain unverified. The macOS build number was incremented to 5 for the rebuilt 1.2.1.
 - CI now ad-hoc signs the macOS app in the release DMG using its `CFBundleIdentifier` as the code-signing identifier, then verifies the signature and identifier. This is not a Developer ID signature; the iOS IPA remains unsigned.

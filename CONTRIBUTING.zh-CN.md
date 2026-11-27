@@ -96,4 +96,10 @@ Bing 标题、介绍和版权信息属于来源内容，不是界面文案。保
 
 CI 会为推送和拉取请求上传构建产物。发布由版本标签或手动流程触发。CI 会对 DMG 中的 macOS 应用执行 ad-hoc 签名并验签，签名标识与应用的 `CFBundleIdentifier` 一致；这不是 Developer ID 签名。iOS IPA 保持未签名，供用户自行签名。不得提交签名凭据，也不得为了方便而更改签名设置。
 
+macOS 正式版本使用 Sparkle 2.10.1 和 GitHub Release 中的签名 appcast，GitHub DMG 仍可手动下载。未配置更新签名时，正式版本发布会失败。发布标签、应用版本、构建号和更新资源必须一致，工作流会在发布前校验；预发布版本不更新正式 appcast。真实签名 feed、Gatekeeper、安装、重启和权限保留仍为 **Not tested**。
+
+配置更新签名时，在专用发布钥匙串中使用官方 Sparkle 2.10.1 工具。运行 `generate_keys` 创建或查看发布公钥，再运行 `generate_keys -x <安全的私钥文件路径>`，将对应私钥导出到仓库之外。将公钥填写到 GitHub Actions 仓库变量 `SPARKLE_EDDSA_PUBLIC_KEY`，将整个私钥导出文件的 base64 编码填写到仓库 Secret `SPARKLE_EDDSA_PRIVATE_KEY_BASE64`。已有正式发布密钥时不要重新生成或覆盖。若已为仓库配置 GitHub CLI，可将编码后的文件通过管道传给 `gh secret set SPARKLE_EDDSA_PRIVATE_KEY_BASE64 --repo mentalfl0w/Daybreak`，不要在终端打印私钥；公钥变量单独设置。妥善保管导出文件和离线备份。
+
+发布维护者应在安全位置保留 Sparkle EdDSA 私钥的离线备份。启用签名 feed 和解压前验证后，丢失私钥可能使已安装的 ad-hoc 签名版本无法接受后续更新。Sparkle 文档提供 Developer ID 签名磁盘映像作为密钥轮换的后备路径，但 Daybreak 当前的 ad-hoc 分发不具备该条件。不得将私钥提交到仓库、输出到日志或包含在构建产物中。
+
 仓库级实现限制见 [AGENTS.md](AGENTS.md)；维护中的参考文档见[文档索引](docs/README.zh-CN.md)。

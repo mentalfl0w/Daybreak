@@ -26,6 +26,25 @@ struct StoragePaginationTests {
         #expect(StoragePagination(totalCount: 45, pageSize: 20, requestedPageIndex: 2).canGoNext == false)
     }
 
+    @Test func defaultPageSizePaginatesEachKindIndependentlyAndClampsAfterRefresh() {
+        #expect(StoragePagination.defaultPageSize == 6)
+
+        let originals = StoragePagination(totalCount: 8, requestedPageIndex: 1)
+        let thumbnails = StoragePagination(totalCount: 9, requestedPageIndex: 1)
+        #expect(originals.pageCount == 2)
+        #expect(originals.range == 6..<8)
+        #expect(thumbnails.pageCount == 2)
+        #expect(thumbnails.range == 6..<9)
+
+        let refreshedOriginals = StoragePagination(
+            totalCount: 5,
+            requestedPageIndex: originals.pageIndex
+        )
+        #expect(refreshedOriginals.pageIndex == 0)
+        #expect(refreshedOriginals.range == 0..<5)
+        #expect(thumbnails.pageIndex == 1)
+    }
+
     @Test func exactlyOneFullPageHasNoTrailingEmptyPage() {
         let pagination = StoragePagination(totalCount: 20, pageSize: 20)
 

@@ -20,7 +20,8 @@ struct StorageView: View {
     let model: RecapScreenModel
     @Environment(\.locale) private var locale
 
-    @State private var assetPageIndex = 0
+    @State private var selectedAssetKind: AssetKind = .original
+    @State private var assetPageIndices: [AssetKind: Int] = [.original: 0, .thumbnail: 0]
 
     /// Scroll target used to bring a newly selected page's rows into view.
     private static let assetsAnchorID = "storage.cached-assets"
@@ -101,11 +102,18 @@ struct StorageView: View {
             // Page controls live at the bottom of the list. Without this the
             // new page's rows would render above a viewport that stayed parked
             // at the footer.
-            .onChange(of: assetPageIndex) { _, _ in
-                withAnimation(.easeInOut(duration: 0.18)) {
-                    proxy.scrollTo(Self.assetsAnchorID, anchor: .top)
-                }
+            .onChange(of: selectedAssetPageIndex) { _, _ in
+                scrollAssetsToTop(using: proxy)
             }
+            .onChange(of: selectedAssetKind) { _, _ in
+                scrollAssetsToTop(using: proxy)
+            }
+        }
+    }
+
+    private func scrollAssetsToTop(using proxy: ScrollViewProxy) {
+        withAnimation(.easeInOut(duration: 0.18)) {
+            proxy.scrollTo(Self.assetsAnchorID, anchor: .top)
         }
     }
 
@@ -547,75 +555,112 @@ struct StorageView: View {
     // MARK: Assets
 
     private var assetsSection: some View {
-        let pagination = assetPagination
-        // `cachedAssets` already has the model's deterministic order
-        // (originals first, newest access, stable identifier tie-break).
-        // Paginate that order without re-sorting, so a page never reshuffles.
-        let pageRows = Array(model.cachedAssets[pagination.range])
+        let kind = selectedAssetKind
+        let kindAssets = assets(for: kind)
+        let pagination = assetPagination(for: kind, totalCount: kindAssets.count)
+        // Filtering preserves the model's deterministic order within each kind.
+        let pageRows = Array(kindAssets[pagination.range])
 
         return VStack(alignment: .leading, spacing: 12) {
             sectionHeader(
                 title: "已缓存文件",
                 systemImage: "photo.stack",
-                subtitle: "按类型与最近访问时间排列；受保护文件不能在这里单独删除。"
+                subtitle: "按最近访问时间排列；受保护文件不能在这里单独删除。"
             )
 
-            if model.cachedAssets.isEmpty {
-                if model.isLoading {
-                    panel {
-                        inlineStatus("正在读取缓存文件…")
+            panel {
+                VStack(alignment: .leading, spacing: 16) {
+                    Picker("缓存类型", selection: $selectedAssetKind) {
+                        Text(RecapCopy.assetKindLabel(.original)).tag(AssetKind.original)
+                        Text(RecapCopy.assetKindLabel(.thumbnail)).tag(AssetKind.thumbnail)
                     }
-                } else {
-                    panel {
-                        inlineNotice(
-                            systemImage: "photo.stack",
-                            title: "还没有缓存图片",
-                            message: "图片信息与介绍可能仍保存在本机，但不在此列表中。"
-                        )
-                    }
-                }
-            } else {
-                panel {
-                    VStack(alignment: .leading, spacing: 20) {
-                        Text("共 \(model.cachedAssets.count) 个缓存文件。")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                            .monospacedDigit()
+                    .pickerStyle(.segmented)
+                    .labelsHidden()
+                    .frame(maxWidth: 300, alignment: .leading)
+                    .accessibilityLabel("缓存类型")
 
-                        ForEach([AssetKind.original, AssetKind.thumbnail], id: \.self) { kind in
-                            let rows = pageRows.filter { $0.asset.kind == kind }
-                            if !rows.isEmpty {
-                                assetGroup(kind: kind, rows: rows)
+                    Text("共 \(kindAssets.count) 个缓存文件。")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .monospacedDigit()
+
+                    if kindAssets.isEmpty {
+                        if model.cachedAssets.isEmpty {
+                            if model.isLoading {
+                                inlineStatus("正在读取缓存文件…")
+                            } else {
+                                inlineNotice(
+                                    systemImage: "photo.stack",
+                                    title: "还没有缓存图片",
+                                    message: "图片信息与介绍可能仍保存在本机，但不在此列表中。"
+                                )
                             }
+                        } else {
+                            inlineNotice(
+                                systemImage: kind == .original ? "photo" : "photo.on.rectangle",
+                                title: "当前类型暂无缓存",
+                                message: "切换标签可查看其他缓存文件。"
+                            )
                         }
+                    } else {
+                        assetGroup(kind: kind, rows: pageRows)
 
                         if pagination.pageCount > 1 {
                             Divider()
-                            assetPaginationFooter(pagination)
+                            assetPaginationFooter(pagination, kind: kind)
                         }
                     }
                 }
             }
         }
-        // Deleting the final row on the last page, or a refresh that shrinks
-        // the index, must never strand the view on an empty page.
-        .onChange(of: model.cachedAssets.count) { _, newCount in
-            clampAssetPage(totalCount: newCount)
+        .onChange(of: originalAssetCount) { _, newCount in
+            clampAssetPage(for: .original, totalCount: newCount)
+        }
+        .onChange(of: thumbnailAssetCount) { _, newCount in
+            clampAssetPage(for: .thumbnail, totalCount: newCount)
         }
     }
 
-    private var assetPagination: StoragePagination {
+    private var originalAssetCount: Int {
+        assetCount(for: .original)
+    }
+
+    private var thumbnailAssetCount: Int {
+        assetCount(for: .thumbnail)
+    }
+
+    private var selectedAssetPageIndex: Int {
+        assetPageIndex(for: selectedAssetKind)
+    }
+
+    private func assets(for kind: AssetKind) -> [RecapAssetRow] {
+        model.cachedAssets.filter { $0.asset.kind == kind }
+    }
+
+    private func assetCount(for kind: AssetKind) -> Int {
+        model.cachedAssets.reduce(into: 0) { count, row in
+            if row.asset.kind == kind {
+                count += 1
+            }
+        }
+    }
+
+    private func assetPageIndex(for kind: AssetKind) -> Int {
+        assetPageIndices[kind, default: 0]
+    }
+
+    private func assetPagination(for kind: AssetKind, totalCount: Int) -> StoragePagination {
         StoragePagination(
-            totalCount: model.cachedAssets.count,
+            totalCount: totalCount,
             pageSize: StoragePagination.defaultPageSize,
-            requestedPageIndex: assetPageIndex
+            requestedPageIndex: assetPageIndex(for: kind)
         )
     }
 
-    private func assetPaginationFooter(_ pagination: StoragePagination) -> some View {
+    private func assetPaginationFooter(_ pagination: StoragePagination, kind: AssetKind) -> some View {
         HStack(spacing: 10) {
             Button {
-                showPreviousAssetPage()
+                showPreviousAssetPage(for: kind)
             } label: {
                 Label("上一页", systemImage: "chevron.left")
             }
@@ -629,7 +674,7 @@ struct StorageView: View {
                 .monospacedDigit()
 
             Button {
-                showNextAssetPage()
+                showNextAssetPage(for: kind)
             } label: {
                 Label("下一页", systemImage: "chevron.right")
             }
@@ -647,31 +692,22 @@ struct StorageView: View {
         .accessibilityElement(children: .contain)
     }
 
-    private func showPreviousAssetPage() {
-        let pagination = assetPagination
+    private func showPreviousAssetPage(for kind: AssetKind) {
+        let pagination = assetPagination(for: kind, totalCount: assetCount(for: kind))
         guard pagination.canGoPrevious else { return }
-        assetPageIndex = pagination.pageIndex - 1
+        assetPageIndices[kind] = pagination.pageIndex - 1
     }
 
-    private func showNextAssetPage() {
-        let pagination = assetPagination
+    private func showNextAssetPage(for kind: AssetKind) {
+        let pagination = assetPagination(for: kind, totalCount: assetCount(for: kind))
         guard pagination.canGoNext else { return }
-        assetPageIndex = pagination.pageIndex + 1
+        assetPageIndices[kind] = pagination.pageIndex + 1
     }
 
-    private func clampAssetPage(totalCount: Int) {
-        let pagination = StoragePagination(
-            totalCount: totalCount,
-            pageSize: StoragePagination.defaultPageSize,
-            requestedPageIndex: assetPageIndex
-        )
-        guard pagination.pageCount > 0 else {
-            assetPageIndex = 0
-            return
-        }
-        if assetPageIndex != pagination.pageIndex {
-            assetPageIndex = pagination.pageIndex
-        }
+    private func clampAssetPage(for kind: AssetKind, totalCount: Int) {
+        let pagination = assetPagination(for: kind, totalCount: totalCount)
+        guard assetPageIndex(for: kind) != pagination.pageIndex else { return }
+        assetPageIndices[kind] = pagination.pageIndex
     }
 
     private func assetGroup(kind: AssetKind, rows: [RecapAssetRow]) -> some View {
@@ -883,13 +919,11 @@ struct StorageView: View {
 
 /// Pure page arithmetic for the cached-asset list.
 ///
-/// The list order comes from `RecapScreenModel` (originals first, then newest
-/// `lastAccessedAt`, with the asset identifier as the final tie-breaker), so a
-/// page is always the same slice for the same snapshot. The requested page is
-/// clamped instead of reset, which lets the view recover when a deletion or a
-/// refresh shrinks the list under the current page.
+/// Each kind's list is a stable filter of `RecapScreenModel`'s deterministic
+/// order. Pagination keeps that order and clamps the requested page when a
+/// deletion or refresh shrinks the list.
 struct StoragePagination: Equatable, Sendable {
-    static let defaultPageSize = 20
+    static let defaultPageSize = 6
 
     let totalCount: Int
     let pageSize: Int

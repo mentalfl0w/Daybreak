@@ -87,6 +87,7 @@ struct MobileRootView: View {
                 )
             }
         }
+        .sourceBrowserHost()
         // Attached above the shell switch: replacing the shell must not end the
         // presentation, so the same `WallpaperPreviewView` keeps its identity
         // and all of its composition and export state.

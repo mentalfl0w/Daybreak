@@ -23,6 +23,14 @@ On macOS, keep the main window photo-first and let the menu bar offer a small se
 
 Timeline, Library and Recap should feel like a visual archive. Thumbnails, representative images and favorites lead the page; coverage and counts support the story without becoming a dashboard.
 
+Today keeps the photograph prominent and gives the story a separate readable measure. Place the title, date, attribution and actions beneath or alongside the image according to available width; do not reserve a full column for a few actions. Keep the actual source date when it differs from today.
+
+Gallery records and annual recap days have different scopes: the gallery can include older archived records, while recap coverage uses the local observation window. Explain the distinction without changing the underlying counts or implying that unobserved dates had no content.
+
+Open daily source pages in the app without changing the selected date or replacing the underlying reading surface. macOS uses a WebKit sheet; mobile uses the system Safari view. Offer an external browser for pages that cannot load. Validate the initial address and never expose application data through a web bridge.
+
+Storage shows cached originals and thumbnails in separate tabs. Each tab keeps its own stable order and compact pagination, so users can inspect one cache type without mixing file roles or scrolling through an unnecessarily long combined list. Protection and deletion affordances remain on each row.
+
 ## Accessibility and localization
 
 Use semantic system controls and labels with at least a 44-point target where the platform requires it. Keep layouts readable under large accessibility sizes and long localized strings. Localize the semantic message rather than translating implementation text literally. Retain keys used by dynamic lookup until all callers are checked.

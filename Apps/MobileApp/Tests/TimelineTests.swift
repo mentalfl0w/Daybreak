@@ -309,6 +309,72 @@ struct TimelineBuilderTests {
         #expect(recap.recap.summary.favoriteImageCount == 0)
     }
 
+    @Test("Gallery retains dated history while a monthly recap uses its eligible observation window")
+    func galleryAndMonthlyRecapUseDifferentObservationWindows() throws {
+        let beforeObservation = timelineDate(2026, 10, 31)
+        let firstObserved = timelineDate(2026, 11, 24)
+        let asOf = timelineDate(2026, 11, 25)
+        let future = timelineDate(2026, 11, 26)
+        let snapshot = RepositorySnapshot(
+            occurrences: [
+                WallpaperOccurrence(
+                    source: .bing,
+                    market: .zhCN,
+                    localDate: beforeObservation,
+                    wallpaperID: WallpaperID(source: .bing, sourceImageID: "before-observation")
+                ),
+                WallpaperOccurrence(
+                    source: .bing,
+                    market: .zhCN,
+                    localDate: firstObserved,
+                    wallpaperID: WallpaperID(source: .bing, sourceImageID: "first-observed")
+                ),
+                WallpaperOccurrence(
+                    source: .bing,
+                    market: .zhCN,
+                    localDate: asOf,
+                    wallpaperID: WallpaperID(source: .bing, sourceImageID: "as-of")
+                ),
+                WallpaperOccurrence(
+                    source: .bing,
+                    market: .zhCN,
+                    localDate: future,
+                    wallpaperID: WallpaperID(source: .bing, sourceImageID: "future")
+                )
+            ],
+            firstObservedDate: firstObserved
+        )
+
+        let gallery = TimelineGalleryBuilder.items(
+            snapshot: snapshot,
+            market: .zhCN,
+            asOf: asOf,
+            scope: .all
+        )
+        #expect(gallery.map(\.date) == [asOf, firstObserved, beforeObservation])
+
+        let month = try TimelineBuilder.month(
+            year: 2026,
+            month: 11,
+            market: .zhCN,
+            asOf: asOf,
+            snapshot: snapshot
+        )
+        let recap = try #require(
+            TimelineRecapBuilder.month(
+                monthKey: TimelineMonthKey(year: 2026, month: 11),
+                month: month,
+                snapshot: snapshot,
+                asOf: asOf,
+                markets: [.zhCN]
+            )
+        )
+        #expect(recap.recap.days.map(\.date) == [firstObserved, asOf])
+        #expect(recap.recap.summary.effectiveRange?.start == firstObserved)
+        #expect(recap.recap.summary.effectiveRange?.end == asOf)
+        #expect(recap.recap.summary.eligibleDays == 2)
+    }
+
     @Test("Favorites recap separates dated and undated favorites")
     func favoritesRecap() {
         let imageA = WallpaperID(source: .bing, sourceImageID: "A")
@@ -324,6 +390,48 @@ struct TimelineBuilderTests {
         #expect(recap.undatedFavoriteCount == 1)
     }
 }
+
+@Suite("Timeline responsive presentation")
+struct TimelinePresentationTests {
+    @Test("Split layout requires both a wide and sufficiently tall window")
+    func splitLayoutThresholds() {
+        #expect(!TimelineLayout.isWide(CGSize(width: 759, height: 900)))
+        #expect(!TimelineLayout.isWide(CGSize(width: 844, height: 390)))
+        #expect(!TimelineLayout.isWide(CGSize(width: 1024, height: 499)))
+        #expect(TimelineLayout.isWide(CGSize(width: 760, height: 500)))
+        #expect(TimelineLayout.isWide(CGSize(width: 1024, height: 768)))
+    }
+
+    @Test("Split layout keeps the calendar readable without squeezing the detail column")
+    func splitColumnWidthsPreserveMinimums() {
+        for totalWidth: CGFloat in [760, 834, 1024, 1366] {
+            let listWidth = TimelineLayout.listColumnWidth(for: totalWidth)
+            #expect(listWidth >= 360)
+            #expect(listWidth <= 560)
+            #expect(totalWidth - listWidth >= 380)
+        }
+    }
+
+    @Test("Month header and short date formatting preserve a source-local calendar date")
+    func sourceLocalMonthAndDateFormatting() {
+        let locale = Locale(identifier: "en_US_POSIX")
+        let timeZone = TimeZone(identifier: "America/Los_Angeles")!
+        let date = timelineDate(2026, 11, 25)
+
+        #expect(
+            TimelinePresentation.monthTitle(
+                TimelineMonthKey(year: date.year, month: date.month),
+                locale: locale,
+                timeZone: timeZone
+            ) == "November 2026"
+        )
+        #expect(
+            TimelinePresentation.shortDate(date, locale: locale, timeZone: timeZone)
+                == "11/25/2026"
+        )
+    }
+}
+
 
 // MARK: - Model
 

@@ -32,6 +32,10 @@ struct DaybreakMacApp: App {
                 MainWindowRegistration()
             }
             .task {
+                let sparkleUpdater = MacSparkleUpdaterController.shared
+                if !sparkleUpdater.isConfigured {
+                    Task { await MacUpdateController.shared.checkAutomaticallyIfDue() }
+                }
                 await scheduleLoginItemConsentIfNeeded()
             }
         }
@@ -537,6 +541,27 @@ struct DaybreakCommands: Commands {
             }
             .keyboardShortcut("0", modifiers: [.command])
         }
+        CommandGroup(replacing: .appInfo) {
+            Button("About Daybreak…") {
+                navigate(to: .settings, settingsTab: .about)
+            }
+        }
+        CommandGroup(after: .appInfo) {
+            Button("Check for Updates…") {
+                if MacSparkleUpdaterController.shared.isConfigured {
+                    MacSparkleUpdaterController.shared.checkForUpdates()
+                } else {
+                    navigate(to: .settings, settingsTab: .about)
+                    Task { await MacUpdateController.shared.check() }
+                }
+            }
+            .disabled(
+                MacSparkleUpdaterController.shared.isConfigured
+                    ? MacSparkleUpdaterController.shared.updater?.canCheckForUpdates == false
+                    : MacUpdateController.shared.isChecking
+            )
+        }
+
         // The standard Settings item is replaced so Command-, selects the
         // in-window settings page directly instead of creating a window.
         CommandGroup(replacing: .appSettings) {

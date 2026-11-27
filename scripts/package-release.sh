@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
+script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)
 
 usage() {
-  echo "Usage: $0 <derived-data-path> <output-directory> <version>" >&2
+  echo "Usage: $0 <derived-data-path> <output-directory> <version> [<build-number> <include-sparkle-archive:true|false>]" >&2
 }
 
-if [[ $# -ne 3 ]]; then
+if [[ $# -ne 3 && $# -ne 5 ]]; then
   usage
   exit 64
 fi
@@ -13,6 +14,12 @@ fi
 derived_data_path=$1
 output_dir=$2
 version=$3
+build_number=""
+include_sparkle_archive=false
+if [[ $# -eq 5 ]]; then
+  build_number=$4
+  include_sparkle_archive=$5
+fi
 
 if [[ ! "$version" =~ ^[A-Za-z0-9][A-Za-z0-9._+-]{0,63}$ ]]; then
   echo "Invalid package version: $version" >&2
@@ -46,6 +53,27 @@ if [[ ! -f "$ios_app/Info.plist" ]]; then
   exit 1
 fi
 
+if [[ -n "$build_number" ]]; then
+  if [[ ! "$build_number" =~ ^[1-9][0-9]*$ ]]; then
+    echo "Release build number must be a positive, canonical integer" >&2
+    exit 1
+  fi
+  if [[ "$include_sparkle_archive" != "true" && "$include_sparkle_archive" != "false" ]]; then
+    echo "Sparkle archive selection must be true or false" >&2
+    exit 1
+  fi
+  bundle_version=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "$mac_app/Contents/Info.plist")
+  bundle_build=$(/usr/libexec/PlistBuddy -c 'Print :CFBundleVersion' "$mac_app/Contents/Info.plist")
+  if [[ "$bundle_version" != "$version" || "$bundle_build" != "$build_number" ]]; then
+    echo "Release tag version/build does not match the macOS app bundle" >&2
+    exit 1
+  fi
+  if [[ "$include_sparkle_archive" == "true" && ! "$version" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
+    echo "Only stable Semantic Version releases can include a Sparkle archive" >&2
+    exit 1
+  fi
+fi
+
 mkdir -p "$output_dir"
 output_dir=$(cd "$output_dir" && pwd -P)
 
@@ -56,10 +84,12 @@ trap 'rm -rf "$tmp_dir"' EXIT
 versioned_name="Daybreak-$version"
 dmg_name="$versioned_name-macOS.dmg"
 ipa_name="$versioned_name-iOS.ipa"
+sparkle_name="$versioned_name-macOS.zip"
 dmg_path="$output_dir/$dmg_name"
 ipa_path="$output_dir/$ipa_name"
 dmg_staged="$tmp_dir/$dmg_name"
 ipa_staged="$tmp_dir/$ipa_name"
+sparkle_staged="$tmp_dir/$sparkle_name"
 
 dmg_contents="$tmp_dir/dmg-contents"
 mkdir -p "$dmg_contents"
@@ -76,7 +106,21 @@ ipa_contents="$tmp_dir/ipa/Payload"
 mkdir -p "$ipa_contents"
 ditto "$ios_app" "$ipa_contents/Daybreak.app"
 ditto -c -k --sequesterRsrc --keepParent "$tmp_dir/ipa/Payload" "$ipa_staged"
+if [[ -n "$build_number" ]]; then
+  python3 "$script_dir/sparkle_release.py" validate-ipa \
+    --path "$ipa_staged" \
+    --version "$version" \
+    --build-number "$build_number"
+fi
+if [[ "$include_sparkle_archive" == "true" ]]; then
+  ditto -c -k --sequesterRsrc --keepParent "$mac_app" "$sparkle_staged"
+fi
+
 
 mv -f "$dmg_staged" "$dmg_path"
 mv -f "$ipa_staged" "$ipa_path"
 printf 'Created release packages:\n  macOS: %s\n  iOS: %s\n' "$dmg_path" "$ipa_path"
+if [[ "$include_sparkle_archive" == "true" ]]; then
+  mv -f "$sparkle_staged" "$output_dir/$sparkle_name"
+  printf '  Sparkle: %s\n' "$output_dir/$sparkle_name"
+fi

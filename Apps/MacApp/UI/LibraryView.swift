@@ -489,15 +489,17 @@ struct LibraryView: View {
             }
             .frame(minWidth: 560, maxWidth: .infinity, maxHeight: .infinity)
 
-            Divider()
+            if showsDetailRail {
+                Divider()
 
-            ScrollView {
-                detailRail
-                    .padding(.horizontal, 22)
-                    .padding(.top, 24)
-                    .padding(.bottom, 36)
+                ScrollView {
+                    detailRail
+                        .padding(.horizontal, 22)
+                        .padding(.top, 24)
+                        .padding(.bottom, 36)
+                }
+                .frame(width: 332)
             }
-            .frame(width: 332)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
@@ -507,16 +509,22 @@ struct LibraryView: View {
             VStack(alignment: .leading, spacing: 28) {
                 browserColumn
 
-                Divider()
+                if showsDetailRail {
+                    Divider()
 
-                detailRail
-                    .frame(maxWidth: 640, alignment: .leading)
+                    detailRail
+                        .frame(maxWidth: 640, alignment: .leading)
+                }
             }
             .padding(.horizontal, 28)
             .padding(.top, 24)
             .padding(.bottom, 36)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+
+    private var showsDetailRail: Bool {
+        model.selection != nil || model.isLoadingSelection
     }
 
     private var detailRail: some View {
@@ -936,6 +944,10 @@ struct LibraryView: View {
                     }
 
                     RecapCoverageCard(summary: yearly.summary, context: .year)
+                    Text("年度回顾统计本机观察窗口内的日期；图库还会显示观察期开始前归档的历史图片。")
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
+                        .fixedSize(horizontal: false, vertical: true)
 
                     if yearly.months.isEmpty {
                         Text("只显示本机实际记录。没有记录不代表 Bing 当天没有发布，也不会在回顾统计中补成 0 张。")
@@ -1250,15 +1262,9 @@ private struct LibraryGalleryCell: View {
 
     var body: some View {
         Button(action: onSelect) {
-            VStack(alignment: .leading, spacing: 9) {
+            VStack(alignment: .leading, spacing: 8) {
                 cover
                 caption
-            }
-            .padding(8)
-            .background(Color(nsColor: .controlBackgroundColor), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-            .overlay {
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .strokeBorder(.primary.opacity(0.06), lineWidth: 1)
             }
             .contentShape(Rectangle())
         }
@@ -1310,8 +1316,10 @@ private struct LibraryGalleryCell: View {
         }
         .aspectRatio(3.0 / 2.0, contentMode: .fit)
         .overlay(alignment: .topLeading) {
-            coverBadges
-                .padding(8)
+            if isHovering {
+                coverBadges
+                    .padding(8)
+            }
         }
         .overlay(alignment: .topTrailing) {
             if item.isFavorite {
@@ -1336,8 +1344,10 @@ private struct LibraryGalleryCell: View {
         }
         .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
         .overlay {
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .strokeBorder(borderColor, lineWidth: borderWidth)
+            if isSelected || isHovering {
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .strokeBorder(borderColor, lineWidth: borderWidth)
+            }
         }
         .shadow(
             color: .black.opacity(isHovering ? 0.14 : 0),
@@ -1377,7 +1387,7 @@ private struct LibraryGalleryCell: View {
     private var caption: some View {
         VStack(alignment: .leading, spacing: 3) {
             Text(displayTitle)
-                .font(.subheadline.weight(.medium))
+                .font(.body.weight(.medium))
                 .foregroundStyle(item.title == nil ? Color.secondary : Color.primary)
                 .lineLimit(2)
                 .multilineTextAlignment(.leading)
@@ -1433,13 +1443,12 @@ private struct LibraryGalleryCell: View {
 
     private var borderColor: Color {
         if isSelected { return .accentColor }
-        if isHovering { return Color(nsColor: .secondaryLabelColor).opacity(0.55) }
-        return Color(nsColor: .separatorColor).opacity(0.45)
+        return Color(nsColor: .secondaryLabelColor).opacity(0.55)
     }
 
     private var borderWidth: CGFloat {
         if isSelected { return 2.5 }
-        return isHovering ? 1 : 0.5
+        return 1
     }
 
     private var accessibilityLabel: String {
@@ -2024,7 +2033,7 @@ private struct LibraryDetailPanel: View {
                         .foregroundStyle(.secondary)
                 }
                 if let sourceURL {
-                    Link("查看来源页面", destination: sourceURL)
+                    SourceLink(destination: sourceURL, label: Text("查看来源页面"))
                         .font(.caption)
                 }
             case .unmatched(let hasCandidates):
@@ -2101,7 +2110,7 @@ private struct LibraryDetailPanel: View {
         ViewThatFits(in: .horizontal) {
             HStack(spacing: 12) {
                 if let sourceURL = story.sourceURL {
-                    Link("查看原文", destination: sourceURL)
+                    SourceLink(destination: sourceURL, label: Text("查看原文"))
                         .font(.caption)
                 }
                 Spacer(minLength: 0)
@@ -2109,7 +2118,7 @@ private struct LibraryDetailPanel: View {
             }
             VStack(alignment: .leading, spacing: 4) {
                 if let sourceURL = story.sourceURL {
-                    Link("查看原文", destination: sourceURL)
+                    SourceLink(destination: sourceURL, label: Text("查看原文"))
                         .font(.caption)
                 }
                 storyFooter(story)
@@ -2176,7 +2185,7 @@ private struct LibraryDetailPanel: View {
                 Text("本地记录 \(StatusFormatter.dateTime(cachedAt, locale: locale))")
             }
             if let sourceURL = payload.sourceURL {
-                Link("查看图片来源页面", destination: sourceURL)
+                SourceLink(destination: sourceURL, label: Text("查看图片来源页面"))
             }
             Text("日期按来源地区的日历计算，不根据本机时钟推断。")
         }

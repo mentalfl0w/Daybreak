@@ -1,11 +1,11 @@
 import SwiftUI
 import UIKit
 
-/// The primary photograph surface.
+/// The primary, full-width photograph surface.
 ///
-/// On compact widths the photograph is the first screen and the source strip
-/// sits directly under it. On expanded widths the same view is placed beside a
-/// readable story column by `TodayScreen`; it never assumes a device class.
+/// Source title, date, market and credit sit immediately below it in
+/// `TodayHeroDetailsView`; the screen places actions alongside that information
+/// when the available width allows.
 @MainActor
 struct TodayHeroView: View {
     let content: TodayDisplayContent
@@ -17,19 +17,8 @@ struct TodayHeroView: View {
     @Environment(\.locale) private var locale
 
     var body: some View {
-        VStack(spacing: 0) {
-            photo
-            sourceStrip
-        }
-        .background {
-            RoundedRectangle(cornerRadius: 26, style: .continuous)
-                .fill(Color(uiColor: .secondarySystemBackground))
-        }
-        .clipShape(RoundedRectangle(cornerRadius: 26, style: .continuous))
-        .overlay {
-            RoundedRectangle(cornerRadius: 26, style: .continuous)
-                .strokeBorder(Color.primary.opacity(0.07), lineWidth: 1)
-        }
+        photo
+            .clipShape(RoundedRectangle(cornerRadius: 26, style: .continuous))
     }
 
     // MARK: Photograph
@@ -72,13 +61,6 @@ struct TodayHeroView: View {
                         .foregroundStyle(.secondary)
                         .accessibilityHidden(true)
                     Text("图片未缓存")
-                        .font(.callout.weight(.semibold))
-                    Text(verbatim: resolvedTitle)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.center)
-                        .lineLimit(3)
-                        .padding(.horizontal, 24)
                     Button(action: onRequestImage) {
                         Label("下载图片", systemImage: "arrow.down.circle")
                     }
@@ -90,9 +72,32 @@ struct TodayHeroView: View {
         }
     }
 
-    // MARK: Source strip
 
-    private var sourceStrip: some View {
+    private var resolvedTitle: String {
+        content.title ?? MobileLocalizedString.resolve("来源未提供标题", locale: locale)
+    }
+
+    private var accessibilityLabel: String {
+        var parts = [
+            MobileLocalizedString.resolve("今日图片", locale: locale),
+            resolvedTitle,
+            TodayFormatting.sourceDate(content.sourceDate, locale: locale),
+            TodayFormatting.marketName(content.market, locale: locale)
+        ]
+        if let copyright = content.copyright, !copyright.isEmpty {
+            parts.append(copyright)
+        }
+        return TodayFormatting.list(parts, locale: locale)
+    }
+}
+
+@MainActor
+struct TodayHeroDetailsView: View {
+    let content: TodayDisplayContent
+
+    @Environment(\.locale) private var locale
+
+    var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             VStack(alignment: .leading, spacing: 4) {
                 Text(verbatim: resolvedTitle)
@@ -126,8 +131,6 @@ struct TodayHeroView: View {
                 }
             }
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 12)
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
@@ -150,21 +153,7 @@ struct TodayHeroView: View {
             .accessibilityLabel(Text("内容地区：\(TodayFormatting.marketName(content.market, locale: locale))"))
     }
 
-
     private var resolvedTitle: String {
         content.title ?? MobileLocalizedString.resolve("来源未提供标题", locale: locale)
-    }
-
-    private var accessibilityLabel: String {
-        var parts = [
-            MobileLocalizedString.resolve("今日图片", locale: locale),
-            resolvedTitle,
-            TodayFormatting.sourceDate(content.sourceDate, locale: locale),
-            TodayFormatting.marketName(content.market, locale: locale)
-        ]
-        if let copyright = content.copyright, !copyright.isEmpty {
-            parts.append(copyright)
-        }
-        return TodayFormatting.list(parts, locale: locale)
     }
 }

@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Wallpaper actions attached to the photograph's source strip.
+/// Wallpaper actions below the photograph's source details.
 ///
 /// Preview, share and export live in the full-screen preview; the system set
 /// flow is the Shortcuts guide owned by the intents module. Today never claims

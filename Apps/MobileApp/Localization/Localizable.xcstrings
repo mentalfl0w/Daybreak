@@ -2857,19 +2857,19 @@
         }
       }
     },
-    "受保护原图": {
+    "保留的原图": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Protected original"
+            "value": "Originals kept"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "保護されたオリジナル"
+            "value": "保持されるオリジナル画像"
           }
         }
       }
@@ -2993,19 +2993,19 @@
         }
       }
     },
-    "只测试快捷指令本身；不会证明每日自动化已启用或会在准点运行。": {
+    "只测试一次运行；每日自动化仍需在“快捷指令”中单独设置。": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tests only the shortcut itself; it does not prove the daily automation is enabled or will run on time."
+            "value": "Runs a one-time test. Set up the daily automation separately in Shortcuts."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "ショートカット自体をテストするだけです。毎日のオートメーションが有効であることや、時刻どおりに実行されることを証明するものではありません。"
+            "value": "1回だけテスト実行します。毎日のオートメーションは「ショートカット」で別途設定してください。"
           }
         }
       }
@@ -3737,23 +3737,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "カレンダーまたはギャラリーで日付を選択すると、その日に保存された画像、ストーリー、他の地域の記録を表示できます。"
-          }
-        }
-      }
-    },
-    "在时光中查看这一天": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "View this day in Timeline"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "タイムラインでこの日を表示"
           }
         }
       }
@@ -4812,19 +4795,19 @@
         }
       }
     },
-    "当前壁纸保护": {
+    "当前壁纸": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Current wallpaper protection"
+            "value": "Current wallpapers"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "現在の壁紙の保護"
+            "value": "現在の壁紙"
           }
         }
       }
@@ -5050,19 +5033,19 @@
         }
       }
     },
-    "快捷指令导出的是本机已缓存或可验证的原图文件；系统“设置壁纸照片”动作还可能再次裁切。画质偏好不好保证最终屏幕上的像素尺寸。": {
+    "快捷指令会使用本机已缓存或可验证的原图。系统设置壁纸时仍可能裁切图片，最终效果以系统为准。": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Shortcuts exports original image files that are cached or verifiable on this device; the system \"Set Wallpaper Photo\" action may crop again. Image quality preferences do not guarantee the final pixel dimensions on screen."
+            "value": "Shortcuts uses the original image cached or verified on this device. The system may crop it when setting the wallpaper, so the final appearance may differ."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "ショートカットが書き出すのは、この端末でキャッシュ済みまたは検証可能な元の画像ファイルです。システムの「壁紙写真を設定」アクションでさらに切り取られる場合があります。画質の設定は、最終的な画面上のピクセル寸法を保証するものではありません。"
+            "value": "ショートカットでは、このデバイスにキャッシュ済みまたは確認できたオリジナル画像を使います。壁紙に設定するときにシステムが画像を切り取る場合があり、最終的な表示は異なることがあります。"
           }
         }
       }
@@ -6110,7 +6093,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Could not construct the Shortcuts link."
+            "value": "Could not create the Shortcuts link."
           }
         },
         "ja": {
@@ -6127,13 +6110,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Could not construct the run-shortcut link."
+            "value": "Could not create the shortcut's run link."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "ショートカット実行用のリンクを作成できませんでした。"
+            "value": "ショートカットの実行リンクを作成できませんでした。"
           }
         }
       }
@@ -7498,6 +7481,23 @@
         }
       }
     },
+    "查看时光": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View Timeline"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "タイムラインを表示"
+          }
+        }
+      }
+    },
     "查看本月回顾": {
       "extractionState": "manual",
       "localizations": {
@@ -8735,23 +8735,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Apple ショートカットで壁紙を設定"
-          }
-        }
-      }
-    },
-    "用快捷指令设为壁纸": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Set Wallpaper with Shortcuts"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ショートカットで壁紙を設定"
           }
         }
       }
@@ -10949,53 +10932,53 @@
         }
       }
     },
-    "每天获取当天壁纸。每日运行需要你在“快捷指令”的“自动化”中创建个人自动化。": {
+    "获取当天壁纸。要每天运行，请在“快捷指令”的“自动化”中创建个人自动化。": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gets the day's wallpaper each day. Daily runs require a personal automation you create in Shortcuts › Automation."
+            "value": "Gets the day's wallpaper. To run it daily, create a personal automation in Shortcuts › Automation."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "毎日その日の壁紙を取得します。毎日の実行には、「ショートカット」の「オートメーション」で個人用オートメーションを作成する必要があります。"
+            "value": "当日の壁紙を取得します。毎日実行するには、「ショートカット」の「オートメーション」で個人用オートメーションを作成してください。"
           }
         }
       }
     },
-    "仅表示你已添加同名快捷指令。Daybreak 无法验证其内容或设置结果。": {
+    "此选项仅用于启用运行按钮；请确认已添加名称为 Daybreak Apply 的快捷指令。": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "This only means you added a shortcut with that name. Daybreak cannot verify its actions or the result."
+            "value": "This option enables the Run button. Make sure you've added a shortcut named Daybreak Apply."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "同じ名前のショートカットを追加したことだけを示します。Daybreak はその内容や設定結果を検証できません。"
+            "value": "このオプションで実行ボタンが有効になります。「Daybreak Apply」という名前のショートカットを追加したことを確認してください。"
           }
         }
       }
     },
-    "仅表示你已添加该快捷指令并创建自动化，Daybreak 无法验证系统自动化是否启用。": {
+    "此选项仅用于启用测试运行；请先添加 Daybreak Daily 并创建个人自动化。": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "This only means you added the shortcut and created an automation. Daybreak cannot verify that the system automation is enabled."
+            "value": "This option enables the test run. First add Daybreak Daily and create a personal automation."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "ショートカットを追加し、オートメーションを作成したことだけを示します。Daybreak はシステムのオートメーションが有効かどうかを検証できません。"
+            "value": "このオプションでテスト実行が有効になります。先に Daybreak Daily を追加し、個人用オートメーションを作成してください。"
           }
         }
       }
@@ -11204,19 +11187,19 @@
         }
       }
     },
-    "同步关闭时选项不可更改，已保存的偏好仍保留在本机。": {
+    "同步关闭时无法更改这些选项；已保存的设置仍保留在此设备。": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "These options cannot be changed while sync is off; saved preferences remain on this device."
+            "value": "These options are unavailable while sync is off; saved settings stay on this device."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "同期がオフの間はこれらのオプションを変更できません。保存済みの設定はこのデバイスに保持されます。"
+            "value": "同期がオフの間はこれらのオプションを変更できません。保存済みの設定はこのデバイスに残ります。"
           }
         }
       }
@@ -11425,19 +11408,19 @@
         }
       }
     },
-    "诊断日志包含应用与系统版本、同步状态、最近同步阶段记录和错误类别；不包含文件夹路径、授权书签、壁纸或文字内容、设备名称。文件仅在本机生成，分享去向由你在系统分享面板中选择。": {
+    "诊断报告会记录应用与系统版本、同步状态、最近的同步阶段和错误类别；不含文件夹路径、文件夹访问信息、壁纸或文字内容、设备名称。报告只在本机生成；你可以通过系统分享面板决定是否分享。": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The diagnostic log includes app and system versions, sync status, recent sync stage records and error categories. It never includes folder paths, authorization bookmarks, wallpaper or story content, or the device name. The file is generated on this device only; you choose where it goes in the system share sheet."
+            "value": "The report includes app and system versions, sync status, recent sync steps, and error categories. It excludes folder paths, folder access information, wallpaper or story content, and the device name. The report is created on this device; you choose whether to share it from the system share sheet."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "診断ログにはアプリとシステムのバージョン、同期状態、最近の同期段階の記録、エラー分類が含まれます。フォルダのパス、認可ブックマーク、壁紙や文章の内容、デバイス名は含まれません。ファイルはこの端末内でのみ生成され、共有先はシステムの共有シートで選択します。"
+            "value": "診断レポートには、アプリとシステムのバージョン、同期状態、最近の同期手順、エラー分類が記録されます。フォルダのパスやアクセス情報、壁紙・ストーリーの内容、デバイス名は含まれません。レポートはこのデバイスで作成され、システムの共有シートから共有するか選べます。"
           }
         }
       }
@@ -12326,19 +12309,19 @@
         }
       }
     },
-    "技术详情": {
+    "错误详情": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Technical detail"
+            "value": "Error details"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "技術的な詳細"
+            "value": "エラーの詳細"
           }
         }
       }
@@ -12532,15 +12515,15 @@
     "无法应用缓存上限。请重试。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Couldn't apply the cache limit. Try again." } }, "ja": { "stringUnit": { "state": "translated", "value": "キャッシュ上限を適用できませんでした。もう一度お試しください。" } } } },
     "无法清理所选内容。请重试。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Couldn't clean the selected items. Try again." } }, "ja": { "stringUnit": { "state": "translated", "value": "選択した項目を削除できませんでした。もう一度お試しください。" } } } },
     "无法检查缓存。请刷新缓存状态后重试。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Couldn't check the cache. Refresh the cache status and try again." } }, "ja": { "stringUnit": { "state": "translated", "value": "キャッシュを確認できませんでした。状態を更新してから、もう一度お試しください。" } } } },
-    "你选择的 iCloud Drive 文件夹用于在设备间传递 Daybreak 内容。每台设备仍保留自己的本地数据。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "The iCloud Drive folder you choose carries Daybreak content between devices. Each device keeps its own local data." } }, "ja": { "stringUnit": { "state": "translated", "value": "選択した iCloud Drive フォルダを通じて Daybreak の内容をデバイス間で共有します。データは各デバイスにも個別に保存されます。" } } } },
-    "请选择 iCloud Drive 中的文件夹。选择根目录后，Daybreak 会在里面创建“Daybreak”文件夹。在“文件”中选中文件夹本身后点“打开”。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Choose a folder in iCloud Drive. If you choose its root, Daybreak creates a Daybreak folder inside it. In Files, select the folder itself and tap Open." } }, "ja": { "stringUnit": { "state": "translated", "value": "iCloud Drive のフォルダを選択してください。iCloud Drive の最上位を選ぶと、その中に Daybreak フォルダを作成します。「ファイル」App でフォルダ自体を選び、「開く」をタップしてください。" } } } },
+    "选择 iCloud Drive 文件夹后，Daybreak 会在设备间同步内容。每台设备仍保留自己的本地数据。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Choose an iCloud Drive folder to sync Daybreak content between devices. Each device keeps its own local data." } }, "ja": { "stringUnit": { "state": "translated", "value": "iCloud Drive フォルダを選ぶと、Daybreak の内容をデバイス間で同期できます。各デバイスのローカルデータはそれぞれ保持されます。" } } } },
+    "请选择 iCloud Drive 中的文件夹。若选择 iCloud Drive 根目录，Daybreak 会在其中创建“Daybreak”文件夹。请在“文件”中选中文件夹本身，再点“打开”。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Choose a folder in iCloud Drive. If you choose the iCloud Drive root, Daybreak creates a Daybreak folder there. In Files, select the folder itself, then tap Open." } }, "ja": { "stringUnit": { "state": "translated", "value": "iCloud Drive のフォルダを選択してください。iCloud Drive の最上位を選ぶと、その中に Daybreak フォルダを作成します。「ファイル」App でフォルダ自体を選び、「開く」をタップしてください。" } } } },
     "Daybreak 只访问你选的文件夹。访问权限保存在此设备，不会同步到其他设备。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Daybreak accesses only the folder you choose. Access is saved on this device and isn't synced to other devices." } }, "ja": { "stringUnit": { "state": "translated", "value": "Daybreak がアクセスするのは選択したフォルダだけです。アクセス権はこのデバイスに保存され、他のデバイスには同期されません。" } } } },
     "同步已关闭；Daybreak 不会访问此文件夹。重新开启后可继续使用这个文件夹。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Sync is off, so Daybreak won't access this folder. Turn sync on again to keep using it." } }, "ja": { "stringUnit": { "state": "translated", "value": "同期はオフです。Daybreak はこのフォルダにアクセスしません。再びオンにすると、このフォルダを引き続き使用できます。" } } } },
-    "原图和内容地区偏好默认关闭。同步原图会占用更多设备与 iCloud 储存；开启内容地区偏好后，其他设备也会使用所选地区。关闭选项不会删除已有内容。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Originals and the content-region preference are off by default. Syncing originals uses more storage on your devices and in iCloud. When enabled, other devices also use your selected region. Turning an option off doesn't delete existing content." } }, "ja": { "stringUnit": { "state": "translated", "value": "オリジナル画像とコンテンツ地域の設定はデフォルトでオフです。オリジナル画像を同期すると、デバイスと iCloud の容量を多く使用します。地域設定をオンにすると、他のデバイスにも選択した地域が反映されます。オフにしても既存の内容は削除されません。" } } } },
+    "原图和内容地区偏好默认关闭。同步原图会占用更多设备和 iCloud 存储空间；同步内容地区偏好后，其他设备也会使用你选择的地区。关闭选项不会删除已有内容。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Original images and the content-region preference are off by default. Syncing original images uses more storage on your devices and in iCloud. Syncing the content-region preference applies your selected region on other devices too. Turning an option off doesn't delete existing content." } }, "ja": { "stringUnit": { "state": "translated", "value": "オリジナル画像とコンテンツ地域の設定はデフォルトでオフです。オリジナル画像を同期すると、デバイスと iCloud の容量を多く使用します。コンテンツ地域の設定を同期すると、他のデバイスにも選択した地域が適用されます。オフにしても既存の内容は削除されません。" } } } },
     "默认同步收藏、固定日期、图片日期与地区、壁纸信息、来源介绍和缩略图。原图与内容地区偏好由上方选项控制。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Favorites, pinned dates, image dates and regions, wallpaper details, source stories, and thumbnails sync by default. The options above control original images and the content-region preference." } }, "ja": { "stringUnit": { "state": "translated", "value": "お気に入り、固定した日付、画像の日付と地域、壁紙情報、出典の紹介、サムネイルはデフォルトで同期されます。オリジナル画像とコンテンツ地域の設定は上のオプションで選択できます。" } } } },
     "界面语言、缓存上限、壁纸设置和文件夹访问权限只保留在此设备。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Interface language, cache limit, wallpaper settings, and folder access stay on this device." } }, "ja": { "stringUnit": { "state": "translated", "value": "インターフェース言語、キャッシュ上限、壁紙設定、フォルダへのアクセス権はこのデバイスだけに保存されます。" } } } },
-    "关闭同步不会删除此设备的数据或文件夹中的已有内容。离线时仍可查看已缓存内容；重新开启后可继续使用同一文件夹。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Turning sync off doesn't delete data on this device or existing content in the folder. Cached content remains available offline; turn sync on again to keep using the same folder." } }, "ja": { "stringUnit": { "state": "translated", "value": "同期をオフにしても、このデバイスのデータやフォルダ内の既存の内容は削除されません。キャッシュ済みの内容はオフラインでも表示できます。同じフォルダを使うには、同期を再びオンにしてください。" } } } },
-    "同步完成表示更改已写入所选文件夹，不代表其他设备已收到或处理。到达时间由 iCloud Drive 和各设备决定。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Sync complete means this device wrote changes to the selected folder. It doesn't mean other devices have received or processed them; timing depends on iCloud Drive and each device." } }, "ja": { "stringUnit": { "state": "translated", "value": "同期完了は、このデバイスが選択したフォルダに変更を書き込んだことを示します。他のデバイスで受信・反映されたことを意味するものではなく、反映時期は iCloud Drive と各デバイスの状態によって異なります。" } } } },
+    "关闭同步不会删除此设备的数据或所选文件夹中的内容。离线时仍可查看已缓存内容；重新开启后可继续使用同一文件夹。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Turning sync off doesn't delete data on this device or content in the selected folder. Cached content remains available offline; turn sync on again to keep using the same folder." } }, "ja": { "stringUnit": { "state": "translated", "value": "同期をオフにしても、このデバイスのデータや選択したフォルダ内の内容は削除されません。キャッシュ済みの内容はオフラインでも表示できます。同じフォルダを使うには、同期を再びオンにしてください。" } } } },
+    "同步完成表示更改已写入所选文件夹。其他设备何时收到并处理更新，取决于 iCloud Drive 和各设备状态。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Sync complete means the changes were written to the selected folder. When other devices receive and process them depends on iCloud Drive and each device." } }, "ja": { "stringUnit": { "state": "translated", "value": "同期完了は、変更が選択したフォルダに書き込まれたことを示します。他のデバイスで受信・反映される時期は、iCloud Drive と各デバイスの状態によって異なります。" } } } },
     "同步已关闭。此设备中的内容与文件夹里已有内容都会保留。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Sync is off. Content on this device and existing files in the folder are kept." } }, "ja": { "stringUnit": { "state": "translated", "value": "同期はオフです。このデバイスの内容とフォルダ内の既存ファイルは保持されます。" } } } },
     "还没有选择同步文件夹。选择 iCloud Drive 中的文件夹即可开启同步；也可以稍后设置。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "No sync folder is selected. Choose a folder in iCloud Drive to turn on sync, or do this later." } }, "ja": { "stringUnit": { "state": "translated", "value": "同期フォルダが選択されていません。iCloud Drive のフォルダを選ぶと同期できます。後から設定することもできます。" } } } },
     "Daybreak 正在把此设备的更改写入文件夹。完成后，iCloud Drive 会继续传给其他设备。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Daybreak is writing this device's changes to the folder. iCloud Drive can then deliver them to other devices." } }, "ja": { "stringUnit": { "state": "translated", "value": "Daybreak はこのデバイスの変更をフォルダに書き込んでいます。書き込み後、iCloud Drive を通じて他のデバイスに届きます。" } } } },
@@ -12556,22 +12539,118 @@
     "这次同步未能完成。请检查网络和文件夹访问权限后点“立即同步”；此设备的内容仍可使用。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Sync didn't finish. Check your connection and folder access, then tap Sync Now. Content on this device remains available." } }, "ja": { "stringUnit": { "state": "translated", "value": "同期を完了できませんでした。ネットワークとフォルダへのアクセス権を確認し、「今すぐ同期」をタップしてください。このデバイスの内容は引き続き利用できます。" } } } },
     "图片说明和每日介绍不计入图片缓存容量。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Image details and daily stories aren't included in image-cache storage." } }, "ja": { "stringUnit": { "state": "translated", "value": "画像の詳細と毎日の紹介文は、画像キャッシュ容量に含まれません。" } } } },
     "目前没有缓存图片。打开“今日”或“时光”，图片会在需要时保存到本机。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "No images are cached yet. Open Today or Timeline to have images saved to this device as needed." } }, "ja": { "stringUnit": { "state": "translated", "value": "キャッシュ済みの画像はありません。「今日」または「タイムライン」を開くと、必要に応じてこのデバイスに画像が保存されます。" } } } },
-    "缓存上限用于控制图片占用。超过上限时，Daybreak 会优先清理较久未使用的图片。收藏、固定日期和受保护壁纸的原图会保留，因此实际用量可能超过上限。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "The cache limit helps control image storage. When it is exceeded, Daybreak removes images that haven't been used recently first. Originals for favorites, pinned dates, and protected wallpapers are kept, so usage can exceed the limit." } }, "ja": { "stringUnit": { "state": "translated", "value": "キャッシュ上限は画像の容量を管理するための目安です。上限を超えると、しばらく使われていない画像から削除します。お気に入り、固定した日付、保護された壁紙のオリジナル画像は保持されるため、使用量が上限を超える場合があります。" } } } },
-    "同一张图片可能同时被收藏或固定，因此各项数量可能重复。壁纸设置结果由系统显示，Daybreak 无法确认图片是否已应用。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "An image can be both a favorite and pinned, so category counts may overlap. The system shows wallpaper results; Daybreak can't confirm whether an image was applied." } }, "ja": { "stringUnit": { "state": "translated", "value": "同じ画像がお気に入りと固定日の両方に含まれる場合があるため、項目ごとの数は重複することがあります。壁紙の設定結果はシステムに表示され、Daybreak は画像が適用されたか確認できません。" } } } },
+    "缓存上限用于控制图片占用。超过上限时，Daybreak 会优先清理较久未使用的图片。收藏、固定日期和当前使用的壁纸原图会保留，因此缓存用量可能超过上限。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "The cache limit helps manage image storage. When it is exceeded, Daybreak removes less recently used images first. Originals for favorites, pinned dates, and the current wallpaper are kept, so usage may exceed the limit." } }, "ja": { "stringUnit": { "state": "translated", "value": "キャッシュ上限は画像の容量を管理する目安です。上限を超えると、使用頻度の低い画像から削除します。お気に入り、固定した日付、現在使用中の壁紙のオリジナル画像は保持されるため、使用量が上限を超えることがあります。" } } } },
+    "同一张图片可能同时被收藏或固定，因此各项数量可能重复。壁纸是否已设置，请以系统显示为准。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "An image can be both a favorite and pinned, so category counts may overlap. Check the system for wallpaper status." } }, "ja": { "stringUnit": { "state": "translated", "value": "同じ画像がお気に入りと固定日の両方に含まれる場合があるため、項目ごとの数は重複することがあります。壁紙の設定状況はシステムの表示をご確認ください。" } } } },
     "保留的图片": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Images kept" } }, "ja": { "stringUnit": { "state": "translated", "value": "保持される画像" } } } },
     "图片和每日介绍可以分别清理。收藏与固定日期会保留；联网后可重新获取已删除内容。清理无法撤销。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "You can clean images and stories separately. Favorites and pinned dates are kept. Deleted content can be fetched again when online. Cleanup can't be undone." } }, "ja": { "stringUnit": { "state": "translated", "value": "画像と毎日の紹介文は別々に削除できます。お気に入りと固定した日付は保持されます。削除した内容はオンラインで再取得できます。削除は取り消せません。" } } } },
     "检查并修复缓存": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Check and Repair Cache" } }, "ja": { "stringUnit": { "state": "translated", "value": "キャッシュを確認して修復" } } } },
     "查找本机缓存中不再使用的图片和缺少本机文件的记录；不会扫描其他应用的文件，也不会删除收藏和每日介绍。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Find unused images in Daybreak's cache and entries without a local image. This doesn't scan other apps' files or remove favorites and stories." } }, "ja": { "stringUnit": { "state": "translated", "value": "Daybreak のキャッシュ内で使われていない画像や、ローカル画像のない記録を確認します。他の App のファイルを調べたり、お気に入りや紹介文を削除したりすることはありません。" } } } },
-    "允许通知后，快捷指令可在设置壁纸后显示图片缩略图和来源信息。通知是否显示取决于系统权限；收到通知不代表壁纸已更换。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "With notifications enabled, Shortcuts can show an image thumbnail and source details after the wallpaper step. Whether a notification appears depends on system permission; a notification doesn't mean the wallpaper changed." } }, "ja": { "stringUnit": { "state": "translated", "value": "通知を許可すると、壁紙の設定後にショートカットから画像のサムネイルと出典情報を表示できます。通知の表示はシステムの許可に左右され、通知が届いても壁紙が変更されたとは限りません。" } } } },
+    "允许 Daybreak 通知后，快捷指令可在设置壁纸后显示图片缩略图和来源信息。通知不代表壁纸已更换。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Allow Daybreak notifications to see an image thumbnail and source details after the wallpaper step. A notification doesn't confirm that the wallpaper changed." } }, "ja": { "stringUnit": { "state": "translated", "value": "Daybreak の通知を許可すると、壁紙設定後に画像のサムネイルと出典情報が表示されます。通知が届いても、壁紙が変更されたとは限りません。" } } } },
     "通知已开启。快捷指令可以发送壁纸通知。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Notifications are on. Shortcuts can send wallpaper notifications." } }, "ja": { "stringUnit": { "state": "translated", "value": "通知はオンです。ショートカットから壁紙通知を送信できます。" } } } },
     "无法读取通知权限。请在系统设置中查看 Daybreak 的通知选项。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Couldn't read notification access. Check Daybreak's notification settings in Settings." } }, "ja": { "stringUnit": { "state": "translated", "value": "通知の許可を確認できません。システム設定で Daybreak の通知設定を確認してください。" } } } },
-    "Daybreak 会把所选图片交给快捷指令。系统负责设置壁纸并显示结果；Daybreak 无法确认壁纸是否已更换。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Daybreak hands the selected image to Shortcuts. The system sets the wallpaper and shows the result; Daybreak can't confirm whether it changed." } }, "ja": { "stringUnit": { "state": "translated", "value": "Daybreak は選択した画像をショートカットに渡します。壁紙の設定と結果の表示はシステムが行い、Daybreak は変更されたか確認できません。" } } } },
+    "Daybreak 会将所选图片交给快捷指令。请按系统提示预览并设置；Daybreak 无法确认壁纸是否已更换。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Daybreak passes the selected image to Shortcuts. Follow the system prompts to preview and set the wallpaper. Daybreak can't confirm whether it changed." } }, "ja": { "stringUnit": { "state": "translated", "value": "Daybreak は選択した画像をショートカットに渡します。システムの案内に従ってプレビューし、壁紙を設定してください。Daybreak では変更されたか確認できません。" } } } },
     "Daybreak Apply：设置所选壁纸": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Daybreak Apply: Set Selected Wallpaper" } }, "ja": { "stringUnit": { "state": "translated", "value": "Daybreak Apply：選択した壁紙を設定" } } } },
     "运行后会打开系统快捷指令并传入所选图片。请按系统提示预览并设置壁纸。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "This opens the system shortcut with the selected image. Follow the system prompts to preview and set the wallpaper." } }, "ja": { "stringUnit": { "state": "translated", "value": "実行すると、選択した画像を渡してシステムのショートカットを開きます。システムの案内に従ってプレビューし、壁紙を設定してください。" } } } },
     "已选择图片，可在快捷指令中继续。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "An image is selected and ready to continue in Shortcuts." } }, "ja": { "stringUnit": { "state": "translated", "value": "画像を選択しました。ショートカットで続行できます。" } } } },
-    "每日更换由系统自动化触发。系统可能要求确认；Daybreak 无法保证在设定时间运行。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "Daily changes are triggered by a system automation. The system may ask for confirmation, and Daybreak can't guarantee it will run at the scheduled time." } }, "ja": { "stringUnit": { "state": "translated", "value": "毎日の変更はシステムオートメーションによって実行されます。確認を求められる場合があり、Daybreak は設定した時刻に実行されることを保証できません。" } } } },
+    "每日更换由系统自动化触发，可能需要确认；实际运行时间由系统决定。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "The daily change is triggered by a system automation and may require confirmation. The actual run time depends on the system." } }, "ja": { "stringUnit": { "state": "translated", "value": "毎日の変更はシステムオートメーションで実行され、確認が必要な場合があります。実行時刻はシステムによって決まります。" } } } },
     "打开 iCloud 页面后，点“获取快捷指令”，再按系统提示添加。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "On the iCloud page, tap Get Shortcut and follow the system prompts to add it." } }, "ja": { "stringUnit": { "state": "translated", "value": "iCloud のページで「ショートカットを取得」をタップし、システムの案内に従って追加してください。" } } } },
     "如果页面打不开或缺少通知动作，请使用下方的手动步骤。": { "extractionState": "manual", "localizations": { "en": { "stringUnit": { "state": "translated", "value": "If the page won't open or the shortcut is missing the notification action, use the manual steps below." } }, "ja": { "stringUnit": { "state": "translated", "value": "ページを開けない場合や通知アクションがない場合は、下の手順で手動設定してください。" } } } },
+    "打开 Daybreak Apply 并传入所选图片、地区和日期。请按系统提示预览并设置壁纸。": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opens Daybreak Apply with the selected image, region, and date. Follow the system prompts to preview and set the wallpaper."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "選択した画像、地域、日付を Daybreak Apply に渡して開きます。システムの案内に従ってプレビューし、壁紙を設定してください。"
+          }
+        }
+      }
+    },
+    "Retry": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "重试" } },
+        "en": { "stringUnit": { "state": "translated", "value": "Retry" } },
+        "ja": { "stringUnit": { "state": "translated", "value": "再試行" } }
+      }
+    },
+    "Restarts the source page from its original address.": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "使用来源原始地址重新加载页面。" } },
+        "en": { "stringUnit": { "state": "translated", "value": "Restarts the source page from its original address." } },
+        "ja": { "stringUnit": { "state": "translated", "value": "元のアドレスからソースページを再読み込みします。" } }
+      }
+    },
+    "Open in Browser": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "在浏览器中打开" } },
+        "en": { "stringUnit": { "state": "translated", "value": "Open in Browser" } },
+        "ja": { "stringUnit": { "state": "translated", "value": "ブラウザで開く" } }
+      }
+    },
+    "Opens the original source in your default browser.": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "在默认浏览器中打开原始来源。" } },
+        "en": { "stringUnit": { "state": "translated", "value": "Opens the original source in your default browser." } },
+        "ja": { "stringUnit": { "state": "translated", "value": "元の出典をデフォルトブラウザで開きます。" } }
+      }
+    },
+    "This page couldn’t be loaded.": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "无法加载此页面。" } },
+        "en": { "stringUnit": { "state": "translated", "value": "This page couldn’t be loaded." } },
+        "ja": { "stringUnit": { "state": "translated", "value": "このページを読み込めませんでした。" } }
+      }
+    },
+    "You can retry the original address or open it in your browser.": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "你可以使用原始地址重试，或在浏览器中打开。" } },
+        "en": { "stringUnit": { "state": "translated", "value": "You can retry the original address or open it in your browser." } },
+        "ja": { "stringUnit": { "state": "translated", "value": "元のアドレスで再試行するか、ブラウザで開けます。" } }
+      }
+    },
+    "Can’t Open This Link": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "无法打开此链接" } },
+        "en": { "stringUnit": { "state": "translated", "value": "Can’t Open This Link" } },
+        "ja": { "stringUnit": { "state": "translated", "value": "このリンクを開けません" } }
+      }
+    },
+    "更新需要留意，打开状态查看详情": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": { "stringUnit": { "state": "translated", "value": "The update needs attention. Open status for details." } },
+        "ja": { "stringUnit": { "state": "translated", "value": "更新に確認が必要です。状況を開いて詳細を確認してください。" } }
+      }
+    },
+    "Only HTTPS addresses without credentials or custom ports can be opened.": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "仅支持打开不含用户名或密码、且未指定自定义端口的 HTTPS 地址。" } },
+        "en": { "stringUnit": { "state": "translated", "value": "Only HTTPS addresses without credentials or custom ports can be opened." } },
+        "ja": { "stringUnit": { "state": "translated", "value": "ユーザー名やパスワードを含まず、カスタムポートを指定していない HTTPS アドレスのみ開けます。" } }
+      }
+    },
+    "Close": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": { "stringUnit": { "state": "translated", "value": "关闭" } },
+        "en": { "stringUnit": { "state": "translated", "value": "Close" } },
+        "ja": { "stringUnit": { "state": "translated", "value": "閉じる" } }
+      }
+    },
     "在系统“设置墙纸照片”之后添加“发送 Daybreak 壁纸通知”动作，并将“壁纸图片”设为同一个 Daybreak 获取壁纸动作返回的图片（不要连接系统墙纸动作的结果）。通知使用这张图片的缩略图、来源标题、地区、版权和可用知识点；快捷指令无法确认系统墙纸是否更改。": {
       "extractionState": "manual",
       "localizations": {

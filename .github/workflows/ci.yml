@@ -29,16 +29,24 @@ jobs:
     timeout-minutes: 45
     env:
       DEVELOPER_DIR: /Applications/Xcode_27.2.app/Contents/Developer
+      SPARKLE_EDDSA_PUBLIC_KEY: ${{ vars.SPARKLE_EDDSA_PUBLIC_KEY }}
     outputs:
       version: ${{ steps.metadata.outputs.version }}
       tag_name: ${{ steps.metadata.outputs.tag_name }}
       prerelease: ${{ steps.metadata.outputs.prerelease }}
+      build_number: ${{ steps.metadata.outputs.build_number }}
     steps:
       - name: Check out source
         uses: actions/checkout@v4
 
       - name: Check import boundaries
         run: bash scripts/check-import-boundaries.sh
+      - name: Generate Xcode project from the pinned project specification
+        run: xcodegen generate -s Apps/MacApp/project.yml -r . -p .
+
+      - name: Run offline Sparkle release validation tests
+        run: python3 -m unittest discover -s scripts -p 'test_sparkle_release.py'
+
 
       - name: Resolve package version
         id: metadata
@@ -47,53 +55,71 @@ jobs:
           INPUT_VERSION: ${{ inputs.version }}
           INPUT_PRERELEASE: ${{ inputs.prerelease }}
         run: |
+          set -euo pipefail
           if [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]]; then
             version="${INPUT_VERSION#v}"
             tag_name="v$version"
-            prerelease=false
-            if [[ "$INPUT_PRERELEASE" == "true" ]]; then
-              prerelease=true
-            fi
           elif [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
             tag_name="$GITHUB_REF_NAME"
             version="${tag_name#v}"
-            prerelease=false
-            if [[ "$version" == *-* ]]; then
-              prerelease=true
-            fi
           else
             version="${GITHUB_SHA:0:12}"
             tag_name=""
-            prerelease=false
           fi
 
-          if [[ ! "$version" =~ ^[A-Za-z0-9][A-Za-z0-9._+-]{0,63}$ ]]; then
-            echo "Invalid package version: $version" >&2
-            exit 1
-          fi
-          if [[ -n "$tag_name" && "$tag_name" != v* ]]; then
-            echo "Release tags must start with v: $tag_name" >&2
-            exit 1
+          if [[ -n "$tag_name" ]]; then
+            python3 scripts/sparkle_release.py validate-version --version "$version"
+            if [[ "$tag_name" != "v$version" ]]; then
+              echo "Release tag must be exactly v<Semantic Version>: $tag_name" >&2
+              exit 1
+            fi
+            build_number="$GITHUB_RUN_NUMBER"
+            if [[ ! "$build_number" =~ ^[1-9][0-9]*$ ]]; then
+              echo "GitHub run number is not a positive canonical build number." >&2
+              exit 1
+            fi
+            prerelease=false
+            if [[ "$INPUT_PRERELEASE" == "true" ]] || \
+               [[ ! "$version" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
+              prerelease=true
+            fi
+          else
+            if [[ ! "$version" =~ ^[A-Za-z0-9][A-Za-z0-9._+-]{0,63}$ ]]; then
+              echo "Invalid package version: $version" >&2
+              exit 1
+            fi
+            build_number=""
+            prerelease=false
           fi
 
           {
             echo "version=$version"
             echo "tag_name=$tag_name"
             echo "prerelease=$prerelease"
+            echo "build_number=$build_number"
           } >> "$GITHUB_OUTPUT"
           echo "Packaging version: $version"
 
       - name: Build macOS app without code signing
         shell: bash
+        env:
+          PACKAGE_VERSION: ${{ steps.metadata.outputs.version }}
+          PACKAGE_BUILD_NUMBER: ${{ steps.metadata.outputs.build_number }}
+          RELEASE_TAG_NAME: ${{ steps.metadata.outputs.tag_name }}
         run: |
-          xcodebuild \
-            -project Daybreak.xcodeproj \
-            -scheme Daybreak \
-            -configuration Release \
-            -destination 'generic/platform=macOS' \
-            -derivedDataPath "$RUNNER_TEMP/daybreak-derived-data" \
-            CODE_SIGNING_ALLOWED=NO \
-            build
+          args=(
+            -project Daybreak.xcodeproj
+            -scheme Daybreak
+            -configuration Release
+            -destination 'generic/platform=macOS'
+            -derivedDataPath "$RUNNER_TEMP/daybreak-derived-data"
+            "SPARKLE_EDDSA_PUBLIC_KEY=${SPARKLE_EDDSA_PUBLIC_KEY:-}"
+            CODE_SIGNING_ALLOWED=NO
+          )
+          if [[ -n "$RELEASE_TAG_NAME" ]]; then
+            args+=("MARKETING_VERSION=$PACKAGE_VERSION" "CURRENT_PROJECT_VERSION=$PACKAGE_BUILD_NUMBER")
+          fi
+          xcodebuild "${args[@]}" build
 
       - name: Ad hoc sign and verify macOS app
         shell: bash
@@ -123,26 +149,50 @@ jobs:
           echo "Verified ad-hoc signature for $bundle_identifier"
       - name: Build iOS app without code signing
         shell: bash
+        env:
+          PACKAGE_VERSION: ${{ steps.metadata.outputs.version }}
+          PACKAGE_BUILD_NUMBER: ${{ steps.metadata.outputs.build_number }}
+          RELEASE_TAG_NAME: ${{ steps.metadata.outputs.tag_name }}
         run: |
-          xcodebuild \
-            -project Daybreak.xcodeproj \
-            -scheme DaybreakMobile \
-            -configuration Release \
-            -destination 'generic/platform=iOS' \
-            -derivedDataPath "$RUNNER_TEMP/daybreak-derived-data" \
-            CODE_SIGNING_ALLOWED=NO \
-            build
+          set -euo pipefail
+          args=(
+            -project Daybreak.xcodeproj
+            -scheme DaybreakMobile
+            -configuration Release
+            -destination 'generic/platform=iOS'
+            -derivedDataPath "$RUNNER_TEMP/daybreak-derived-data"
+            CODE_SIGNING_ALLOWED=NO
+          )
+          if [[ -n "$RELEASE_TAG_NAME" ]]; then
+            args+=("MARKETING_VERSION=$PACKAGE_VERSION" "CURRENT_PROJECT_VERSION=$PACKAGE_BUILD_NUMBER")
+          fi
+          xcodebuild "${args[@]}" build
 
       - name: Package ad hoc-signed macOS DMG and unsigned iOS IPA
         shell: bash
         env:
           PACKAGE_VERSION: ${{ steps.metadata.outputs.version }}
+          PACKAGE_BUILD_NUMBER: ${{ steps.metadata.outputs.build_number }}
+          RELEASE_TAG_NAME: ${{ steps.metadata.outputs.tag_name }}
+          RELEASE_PRERELEASE: ${{ steps.metadata.outputs.prerelease }}
         run: |
-          bash scripts/package-release.sh \
-            "$RUNNER_TEMP/daybreak-derived-data" \
-            "$RUNNER_TEMP/daybreak-release-assets" \
-            "$PACKAGE_VERSION"
-
+          if [[ -n "$RELEASE_TAG_NAME" ]]; then
+            include_sparkle_archive=false
+            if [[ "$RELEASE_PRERELEASE" != "true" ]]; then
+              include_sparkle_archive=true
+            fi
+            bash scripts/package-release.sh \
+              "$RUNNER_TEMP/daybreak-derived-data" \
+              "$RUNNER_TEMP/daybreak-release-assets" \
+              "$PACKAGE_VERSION" \
+              "$PACKAGE_BUILD_NUMBER" \
+              "$include_sparkle_archive"
+          else
+            bash scripts/package-release.sh \
+              "$RUNNER_TEMP/daybreak-derived-data" \
+              "$RUNNER_TEMP/daybreak-release-assets" \
+              "$PACKAGE_VERSION"
+          fi
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -155,25 +205,196 @@ jobs:
     name: Publish GitHub Release
     needs: build
     if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v'))
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
+    runs-on: xcode-27
+    timeout-minutes: 15
+    concurrency:
+      group: daybreak-release-${{ needs.build.outputs.tag_name }}
+      cancel-in-progress: false
     permissions:
       contents: write
     steps:
+      - name: Check out trusted release tooling
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+
       - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
           name: daybreak-release-assets
           path: release-assets
 
-      - name: Create GitHub Release
+      - name: Check stable release state before touching assets
+        id: stable_release_state
+        if: needs.build.outputs.prerelease != 'true'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG_NAME: ${{ needs.build.outputs.tag_name }}
+        run: |
+          set -euo pipefail
+          response_file="$RUNNER_TEMP/daybreak-release-response"
+          error_file="$RUNNER_TEMP/daybreak-release-error"
+          if gh api --include \
+            "repos/$GITHUB_REPOSITORY/releases/tags/$RELEASE_TAG_NAME" \
+            >"$response_file" 2>"$error_file"; then
+            request_succeeded=true
+          else
+            request_succeeded=false
+          fi
+          http_status="$(awk 'NR == 1 { print $2; exit }' "$response_file")"
+          if [[ "$request_succeeded" == "true" && "$http_status" == "200" ]]; then
+            release_json="$(sed -n '/^{/,$p' "$response_file")"
+            is_draft="$(jq -r '.draft // false' <<< "$release_json")"
+            is_prerelease="$(jq -r '.prerelease // false' <<< "$release_json")"
+            if [[ "$is_draft" != "true" ]]; then
+              echo "Stable release $RELEASE_TAG_NAME is already published; refusing to replace its assets." >&2
+              exit 1
+            fi
+            if [[ "$is_prerelease" != "false" ]]; then
+              echo "Existing draft release has unexpected prerelease metadata." >&2
+              exit 1
+            fi
+            echo "draft_exists=true" >> "$GITHUB_OUTPUT"
+          elif [[ "$http_status" == "404" ]]; then
+            echo "draft_exists=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "Unable to verify stable release state (HTTP ${http_status:-unknown}); refusing to upload assets." >&2
+            cat "$error_file" >&2
+            exit 1
+          fi
+
+      - name: Prepare signed Sparkle appcast
+        if: needs.build.outputs.prerelease != 'true'
+        shell: bash
+        env:
+          SPARKLE_EDDSA_PUBLIC_KEY: ${{ vars.SPARKLE_EDDSA_PUBLIC_KEY }}
+          SPARKLE_EDDSA_PRIVATE_KEY_BASE64: ${{ secrets.SPARKLE_EDDSA_PRIVATE_KEY_BASE64 }}
+        run: |
+          bash scripts/prepare-sparkle-release.sh \
+            "$GITHUB_WORKSPACE/release-assets" \
+            "$RUNNER_TEMP/sparkle-output" \
+            "${{ needs.build.outputs.tag_name }}" \
+            "${{ needs.build.outputs.version }}" \
+            "${{ needs.build.outputs.build_number }}"
+
+      - name: Create stable draft release if needed
+        if: needs.build.outputs.prerelease != 'true' && steps.stable_release_state.outputs.draft_exists != 'true'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG_NAME: ${{ needs.build.outputs.tag_name }}
+        run: |
+          gh release create "$RELEASE_TAG_NAME" \
+            --draft \
+            --generate-notes \
+            --title "Daybreak $RELEASE_TAG_NAME" \
+            --target "$GITHUB_SHA"
+
+      - name: Create pre-release and publish assets
+        if: needs.build.outputs.prerelease == 'true'
         uses: softprops/action-gh-release@v2
         with:
           token: ${{ github.token }}
           tag_name: ${{ needs.build.outputs.tag_name }}
           target_commitish: ${{ github.sha }}
           name: Daybreak ${{ needs.build.outputs.tag_name }}
-          prerelease: ${{ needs.build.outputs.prerelease == 'true' }}
+          prerelease: true
           generate_release_notes: true
           fail_on_unmatched_files: true
           files: release-assets/*
+
+      - name: Upload stable release archives to the draft
+        if: needs.build.outputs.prerelease != 'true'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG_NAME: ${{ needs.build.outputs.tag_name }}
+          RELEASE_VERSION: ${{ needs.build.outputs.version }}
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          release_files=(release-assets/*)
+          expected_files=(
+            "release-assets/Daybreak-${RELEASE_VERSION}-macOS.dmg"
+            "release-assets/Daybreak-${RELEASE_VERSION}-iOS.ipa"
+            "release-assets/Daybreak-${RELEASE_VERSION}-macOS.zip"
+          )
+          if [[ "${#release_files[@]}" -ne "${#expected_files[@]}" ]]; then
+            echo "Stable release must contain exactly the DMG, IPA, and Sparkle ZIP before appcast upload." >&2
+            exit 1
+          fi
+          for expected_file in "${expected_files[@]}"; do
+            if [[ ! -f "$expected_file" ]]; then
+              echo "Required stable release asset is missing: $(basename "$expected_file")" >&2
+              exit 1
+            fi
+          done
+          gh release upload "$RELEASE_TAG_NAME" "${release_files[@]}" \
+            --repo "$GITHUB_REPOSITORY" \
+            --clobber
+
+      - name: Upload stable Sparkle appcast last to the draft
+        if: needs.build.outputs.prerelease != 'true'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG_NAME: ${{ needs.build.outputs.tag_name }}
+        run: |
+          gh release upload "$RELEASE_TAG_NAME" \
+            "$RUNNER_TEMP/sparkle-output/appcast.xml" \
+            --repo "$GITHUB_REPOSITORY" \
+            --clobber
+
+      - name: Validate complete stable draft assets
+        if: needs.build.outputs.prerelease != 'true'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG_NAME: ${{ needs.build.outputs.tag_name }}
+          RELEASE_VERSION: ${{ needs.build.outputs.version }}
+        run: |
+          set -euo pipefail
+          expected_assets="$(
+            printf '%s\n' \
+              "Daybreak-${RELEASE_VERSION}-macOS.dmg" \
+              "Daybreak-${RELEASE_VERSION}-iOS.ipa" \
+              "Daybreak-${RELEASE_VERSION}-macOS.zip" \
+              "appcast.xml" |
+              jq -Rsc 'split("\n") | map(select(length > 0)) | sort'
+          )"
+          release_json="$(gh release view "$RELEASE_TAG_NAME" \
+            --repo "$GITHUB_REPOSITORY" \
+            --json isDraft,isPrerelease,assets)"
+          if ! jq -e --argjson expected "$expected_assets" '
+            .isDraft == true and
+            .isPrerelease == false and
+            ([.assets[].name] | sort) == $expected and
+            all(.assets[]; .size > 0)
+          ' <<< "$release_json" >/dev/null; then
+            echo "Draft release assets do not exactly match the complete stable package set." >&2
+            exit 1
+          fi
+
+      - name: Publish complete stable release
+        if: needs.build.outputs.prerelease != 'true'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG_NAME: ${{ needs.build.outputs.tag_name }}
+        run: |
+          set -euo pipefail
+          release_id="$(gh release view "$RELEASE_TAG_NAME" \
+            --repo "$GITHUB_REPOSITORY" \
+            --json databaseId \
+            --jq .databaseId)"
+          is_draft="$(gh api \
+            --method PATCH \
+            "repos/$GITHUB_REPOSITORY/releases/$release_id" \
+            --field draft=false \
+            --jq .draft)"
+          if [[ "$is_draft" != "false" ]]; then
+            echo "GitHub did not publish the complete stable release." >&2
+            exit 1
+          fi
