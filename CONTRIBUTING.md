@@ -30,6 +30,24 @@ xcodebuild -project Daybreak.xcodeproj -scheme DaybreakMobile \
   -destination 'generic/platform=iOS' CODE_SIGNING_ALLOWED=NO build
 ```
 
+For local notification testing, an unsigned build is not equivalent to the
+installed app. On one macOS installation, an ad-hoc build with signing identifier
+`dev.daybreak.mac` showed notification permission as authorized. The cause of the
+earlier failure and actual notification delivery remain unverified.
+If you choose to sign a disposable copy for local testing, explicitly use the
+bundle identifier and inspect the result; do not re-sign an existing signed app:
+
+```sh
+ditto /path/to/unsigned/Daybreak.app /path/to/test/Daybreak.app
+codesign --force --deep --sign - --identifier dev.daybreak.mac /path/to/test/Daybreak.app
+codesign --verify --deep --strict /path/to/test/Daybreak.app
+codesign -dv /path/to/test/Daybreak.app 2>&1
+```
+
+Install the test copy in a stable location and launch it from there. Ad-hoc
+signatures are not Developer ID signatures; distribution and system notification
+behavior require separate verification.
+
 Run the platform-independent and macOS integration test suites when your change affects them:
 
 ```sh

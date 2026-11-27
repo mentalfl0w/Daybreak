@@ -30,6 +30,21 @@ xcodebuild -project Daybreak.xcodeproj -scheme DaybreakMobile \
   -destination 'generic/platform=iOS' CODE_SIGNING_ALLOWED=NO build
 ```
 
+测试 macOS 通知时，未签名构建不能等同于已安装的应用。在一次实际测试中，
+签名标识为 `dev.daybreak.mac` 的 ad-hoc 构建显示通知已授权。此前失败的原因
+和通知是否实际送达仍未确认。如果选择对一次性测试副本签名，请明确使用 bundle identifier
+并检查结果；不要重新签名已有的签名应用：
+
+```sh
+ditto /path/to/unsigned/Daybreak.app /path/to/test/Daybreak.app
+codesign --force --deep --sign - --identifier dev.daybreak.mac /path/to/test/Daybreak.app
+codesign --verify --deep --strict /path/to/test/Daybreak.app
+codesign -dv /path/to/test/Daybreak.app 2>&1
+```
+
+将测试副本安装在固定位置并从该位置启动。Ad-hoc 签名不是 Developer ID 签名；
+分发和系统通知行为仍需单独验证。
+
 修改影响共享核心或 macOS 集成时，运行相应自动化测试：
 
 ```sh
