@@ -41,6 +41,8 @@ jobs:
 
       - name: Check import boundaries
         run: bash scripts/check-import-boundaries.sh
+      - name: Install XcodeGen
+        run: brew install xcodegen
       - name: Generate Xcode project from the pinned project specification
         run: xcodegen generate -s Apps/MacApp/project.yml -r . -p .
 
