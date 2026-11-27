@@ -19,8 +19,8 @@
 
 ### ADR-004：GitHub 开源与用户自行签名
 
-- 项目在 GitHub 开源，不上架 App Store；iOS 和 iPadOS 由用户自行签名后侧载。
-- 理由：符合当前发布方式和分发边界。
+- 项目在 GitHub 开源，不上架 App Store；iOS 和 iPadOS 仍由用户自行签名后侧载。
+- CI 发布的 macOS DMG 中应用采用 ad-hoc 签名，签名标识与 `CFBundleIdentifier` 一致；这不是 Developer ID 签名。
 
 ### ADR-005：壁纸与 Space 只使用公开 API
 

@@ -18,7 +18,7 @@ iOS and iPadOS expose App Intents and Shortcuts integration. The app does not cl
 The app preserves source locale and provenance. Missing story content is shown as unavailable. It never fabricates text, dates, image metadata or recap statistics.
 
 ### Distribution
-macOS releases are unsigned DMG artifacts unless a user signs them. iOS and iPadOS artifacts are unsigned IPAs for user signing and sideloading. The project does not use App Store distribution, telemetry, backend services or bundled Bing media.
+macOS apps in CI DMGs receive an ad-hoc signature whose identifier matches `CFBundleIdentifier`; this is not a Developer ID signature. iOS and iPadOS artifacts remain unsigned IPAs for user signing and sideloading. The project does not use App Store distribution, telemetry, backend services or bundled Bing media.
 
 ## Deferred questions
 

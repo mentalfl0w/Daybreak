@@ -15,6 +15,7 @@ This changelog consolidates development records. Test and build entries reflect 
 ## 2026-11-27
 
 - A macOS ad-hoc build using the bundle identifier as its code-signing identifier showed notification permission as authorized in the user's installed app. The cause of the earlier failure and actual notification delivery remain unverified. The macOS build number was incremented to 5 for the rebuilt 1.2.1.
+- CI now ad-hoc signs the macOS app in the release DMG using its `CFBundleIdentifier` as the code-signing identifier, then verifies the signature and identifier. This is not a Developer ID signature; the iOS IPA remains unsigned.
 - Refined mobile settings, sync and Shortcuts copy to foreground user-visible outcomes while keeping local folder writes distinct from cross-device propagation and treating the final system wallpaper state as unknown to Daybreak.
 - Added the cross-platform product design and copy reference. Mobile and macOS UI changes compile with the unsigned builds recorded below; physical-device and full visual checks remain **Not tested**.
 

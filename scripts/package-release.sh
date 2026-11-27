@@ -79,4 +79,4 @@ ditto -c -k --sequesterRsrc --keepParent "$tmp_dir/ipa/Payload" "$ipa_staged"
 
 mv -f "$dmg_staged" "$dmg_path"
 mv -f "$ipa_staged" "$ipa_path"
-printf 'Created unsigned packages:\n  %s\n  %s\n' "$dmg_path" "$ipa_path"
+printf 'Created release packages:\n  macOS: %s\n  iOS: %s\n' "$dmg_path" "$ipa_path"
