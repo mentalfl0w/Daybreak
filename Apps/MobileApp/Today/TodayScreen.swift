@@ -5,8 +5,8 @@ import UIKit
 /// Picture-first Today screen for iPhone, Duo and iPad.
 ///
 /// The screen adapts to the window's available width, not to a device name or
-/// orientation: narrow windows stack the photograph and the full-width story,
-/// wide windows place the photograph beside the reading column. It never keeps
+/// orientation: the photograph remains prominent, while its information and
+/// actions rearrange above a separate reading column. It never keeps
 /// a second content store; every value comes from the process-wide
 /// `MobileStore`, and only transient presentation state (scrolled layout,
 /// status sheet, loaded image) belongs to this scene. The crop/export preview
@@ -49,8 +49,6 @@ struct TodayScreen: View {
                 VStack(alignment: .leading, spacing: 20) {
                     if let content = store.todayDisplayContent {
                         contentLayout(content)
-                        errorBannerIfNeeded
-                        warningsSection
                     } else {
                         unavailableContent
                     }
@@ -129,7 +127,7 @@ struct TodayScreen: View {
     /// Wide windows use the system's inline-large title, which renders the
     /// navigation title inside the bar on the same row as the trailing
     /// actions. Compact windows keep the native large title. The threshold is
-    /// the layout width at which the photograph and story columns separate.
+    /// the layout width at which source details and actions can share a row.
     ///
     /// This only selects a title display mode. The title itself stays the
     /// navigation title, so the system never has to move a text item into the
@@ -144,10 +142,18 @@ struct TodayScreen: View {
             Button {
                 isShowingStatus = true
             } label: {
-                Label("状态", systemImage: "info.circle")
+                Label(
+                    "状态",
+                    systemImage: store.lastErrorMessage == nil && store.todayRefreshWarnings.isEmpty
+                        ? "info.circle" : "exclamationmark.circle"
+                )
             }
             .disabled(store.today == nil)
-            .accessibilityHint("显示今日图片的获取、缓存与来源详情")
+            .accessibilityHint(
+                store.lastErrorMessage == nil && store.todayRefreshWarnings.isEmpty
+                    ? Text("显示今日图片的获取、缓存与来源详情")
+                    : Text("更新需要留意，打开状态查看详情")
+            )
 
             Button {
                 Task { await store.refreshToday() }
@@ -189,22 +195,7 @@ struct TodayScreen: View {
         min(max(viewportSize.width - horizontalPadding * 2, 280), 1180)
     }
 
-    private var storyColumnWidth: CGFloat {
-        min(420, max(320, contentWidth * 0.42))
-    }
-
-    private var intermediateActionsWidth: CGFloat {
-        min(300, max(220, contentWidth * 0.34))
-    }
-
-    private var photoWidth: CGFloat {
-        switch layoutMode {
-        case .expanded:
-            return max(300, contentWidth - storyColumnWidth - 24)
-        case .compact, .intermediate:
-            return contentWidth
-        }
-    }
+    private var photoWidth: CGFloat { contentWidth }
 
     private var heroHeight: CGFloat {
         switch layoutMode {
@@ -220,33 +211,31 @@ struct TodayScreen: View {
 
     @ViewBuilder
     private func contentLayout(_ content: TodayDisplayContent) -> some View {
-        switch layoutMode {
-        case .compact:
-            VStack(alignment: .leading, spacing: 16) {
-                hero(for: content)
-                wallpaperActions(for: content)
-                storyColumn(for: content)
-            }
-        case .intermediate:
-            VStack(alignment: .leading, spacing: 20) {
-                hero(for: content)
-                HStack(alignment: .top, spacing: 24) {
-                    wallpaperActions(for: content)
-                        .frame(width: intermediateActionsWidth, alignment: .leading)
-                    storyColumn(for: content)
-                }
-            }
-        case .expanded:
-            HStack(alignment: .top, spacing: 24) {
-                VStack(alignment: .leading, spacing: 16) {
-                    hero(for: content)
-                    wallpaperActions(for: content)
-                }
-                .frame(maxWidth: .infinity, alignment: .top)
+        VStack(alignment: .leading, spacing: 22) {
+            hero(for: content)
 
-                storyColumn(for: content)
-                    .frame(width: storyColumnWidth, alignment: .top)
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: 16) {
+                    TodayHeroDetailsView(content: content)
+                    wallpaperActions(for: content)
+                }
+            } else {
+                ViewThatFits(in: .horizontal) {
+                    HStack(alignment: .top, spacing: 24) {
+                        TodayHeroDetailsView(content: content)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        wallpaperActions(for: content)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    VStack(alignment: .leading, spacing: 16) {
+                        TodayHeroDetailsView(content: content)
+                        wallpaperActions(for: content)
+                    }
+                }
             }
+
+            storyColumn(for: content)
+                .frame(maxWidth: 760, alignment: .leading)
         }
     }
 
@@ -271,7 +260,7 @@ struct TodayScreen: View {
             Button {
                 navigation.openTimeline(date: content.sourceDate, market: content.market)
             } label: {
-                Label("在时光中查看这一天", systemImage: "calendar")
+                Label("查看时光", systemImage: "calendar")
             }
             .font(.callout)
             .tint(.daybreakActionTint)
@@ -290,55 +279,6 @@ struct TodayScreen: View {
         )
     }
 
-    private func actionsCard(for content: TodayDisplayContent) -> some View {
-        VStack(alignment: .leading, spacing: 14) {
-            TodayActionsView(
-                content: content,
-                isPreparingPreview: isPreparingPreview,
-                isDownloadingOriginal: store.isDownloadingOriginal,
-                onToggleFavorite: {
-                    Task { await store.toggleTodayFavorite() }
-                },
-                onPreview: startPreviewPreparation,
-                onRequestOriginal: requestImage
-            )
-
-            Divider()
-
-            Button {
-                navigation.openTimeline(date: content.sourceDate, market: content.market)
-            } label: {
-                Label("在时光中查看这一天", systemImage: "calendar")
-            }
-            .font(.callout)
-            .tint(.daybreakActionTint)
-            .accessibilityHint("切换到时光并选中这张图片的来源日期")
-        }
-        .padding(16)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            Color(uiColor: .secondarySystemBackground),
-            in: RoundedRectangle(cornerRadius: 22, style: .continuous)
-        )
-        .overlay {
-            RoundedRectangle(cornerRadius: 22, style: .continuous)
-                .strokeBorder(Color.primary.opacity(0.06), lineWidth: 1)
-        }
-    }
-
-    private func storyCard(_ content: TodayDisplayContent) -> some View {
-        TodayStoryView(content: content)
-            .padding(16)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(
-                Color(uiColor: .secondarySystemBackground),
-                in: RoundedRectangle(cornerRadius: 22, style: .continuous)
-            )
-            .overlay {
-                RoundedRectangle(cornerRadius: 22, style: .continuous)
-                    .strokeBorder(Color.primary.opacity(0.06), lineWidth: 1)
-            }
-    }
 
     // MARK: States
 
@@ -402,67 +342,6 @@ struct TodayScreen: View {
         .frame(minHeight: 420)
     }
 
-    @ViewBuilder
-    private var errorBannerIfNeeded: some View {
-        if let message = store.lastErrorMessage, !message.isEmpty {
-            HStack(alignment: .top, spacing: 10) {
-                Image(systemName: "exclamationmark.triangle")
-                    .foregroundStyle(.orange)
-                    .accessibilityHidden(true)
-                VStack(alignment: .leading, spacing: 3) {
-                    Text("操作未完成")
-                        .font(.callout.weight(.semibold))
-                    Text(verbatim: message)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-                Spacer(minLength: 8)
-                Button("刷新") {
-                    Task { await store.refreshToday() }
-                }
-                .tint(.daybreakActionTint)
-                .disabled(store.isRefreshing)
-            }
-            .padding(14)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(
-                Color.orange.opacity(0.10),
-                in: RoundedRectangle(cornerRadius: 16, style: .continuous)
-            )
-            .overlay {
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .strokeBorder(Color.orange.opacity(0.22), lineWidth: 1)
-            }
-        }
-    }
-
-    @ViewBuilder
-    private var warningsSection: some View {
-        let warnings = store.todayRefreshWarnings
-        if !warnings.isEmpty {
-            VStack(alignment: .leading, spacing: 8) {
-                SectionHeader(title: "获取提示", systemImage: "exclamationmark.bubble")
-                ForEach(warnings, id: \.self) { warning in
-                    HStack(alignment: .firstTextBaseline, spacing: 6) {
-                        Text(verbatim: "•")
-                            .foregroundStyle(.tertiary)
-                            .accessibilityHidden(true)
-                        Text(verbatim: warning)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                }
-            }
-            .padding(16)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(
-                Color(uiColor: .secondarySystemBackground),
-                in: RoundedRectangle(cornerRadius: 20, style: .continuous)
-            )
-        }
-    }
 
 
     // MARK: Image and preview

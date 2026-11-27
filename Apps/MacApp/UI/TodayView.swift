@@ -6,9 +6,9 @@ import SwiftUI
 /// surface and is never covered by a wall of panels. The photograph's own
 /// footer is the "today's source" strip that also hosts the wallpaper
 /// controls, while update and cache details expand from the floating badge.
-/// The daily story remains one full-width row. Liquid Glass is reserved for
-/// small floating controls on macOS 26; older systems fall back to standard
-/// system materials and button styles.
+/// The daily story follows in a readable editorial column. Liquid Glass is
+/// reserved for small floating controls on macOS 26; older systems fall back
+/// to standard system materials and button styles.
 struct TodayView: View {
     let model: AppModel
     /// Owned by `AppShell` so the window toolbar backdrop can follow the real
@@ -94,11 +94,7 @@ struct TodayView: View {
 
     private var subtitle: String {
         var parts = [model.marketChoice.displayName(in: locale)]
-        if let payload = model.payload {
-            if !payload.isSourceDateToday {
-                parts.append(MacLocalizedString.resolve("非今日来源", locale: locale))
-            }
-        } else {
+        if model.payload == nil {
             parts.append(model.statusTitle)
         }
         return parts.joined(separator: " · ")
@@ -150,12 +146,9 @@ struct TodayView: View {
                             .frame(maxWidth: 980, alignment: .leading)
                     }
 
-                    storySection
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    if !model.warnings.isEmpty {
-                        warningsSection
-                            .frame(maxWidth: 980, alignment: .leading)
-                    }
+                    storySection(for: payload)
+                        .frame(maxWidth: 1_080, alignment: .leading)
+                        .frame(maxWidth: .infinity, alignment: .center)
                 }
                 .frame(maxWidth: 1480, alignment: .leading)
                 .padding(.horizontal, 24)
@@ -249,12 +242,14 @@ struct TodayView: View {
                             .foregroundStyle(.white)
                             .lineLimit(3)
                             .shadow(color: .black.opacity(0.35), radius: 3, y: 1)
-                        Text(payload.copyright ?? MacLocalizedString.resolve("版权信息不可用", locale: WallpaperInterfaceLocale.current))
-                            .font(.caption)
-                            .foregroundStyle(.white.opacity(0.9))
-                            .lineLimit(3)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .shadow(color: .black.opacity(0.35), radius: 2, y: 1)
+                        if let copyright = payload.copyright, !copyright.isEmpty {
+                            Text(copyright)
+                                .font(.caption2)
+                                .foregroundStyle(.white.opacity(0.76))
+                                .lineLimit(3)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .shadow(color: .black.opacity(0.35), radius: 2, y: 1)
+                        }
                     }
                     .padding(22)
                     .frame(maxWidth: 660, alignment: .leading)
@@ -323,7 +318,7 @@ struct TodayView: View {
                 .fixedSize(horizontal: false, vertical: true)
             if let copyright = payload.copyright, !copyright.isEmpty {
                 Text(copyright)
-                    .font(.caption)
+                    .font(.caption2)
                     .foregroundStyle(.secondary)
                     .lineLimit(3)
                     .fixedSize(horizontal: false, vertical: true)
@@ -336,43 +331,36 @@ struct TodayView: View {
     }
 
     private func photoFooter(for payload: TodayPayload) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 8) {
             ViewThatFits(in: .horizontal) {
                 HStack(alignment: .center, spacing: 16) {
                     sourceDateLabel(for: payload)
                     Spacer(minLength: 12)
                     downloadControl(for: payload)
                 }
-                VStack(alignment: .leading, spacing: 10) {
+                VStack(alignment: .leading, spacing: 8) {
                     sourceDateLabel(for: payload)
                     downloadControl(for: payload)
                 }
             }
 
-            Divider()
-                .opacity(0.6)
-
             wallpaperControls
         }
-        .padding(.horizontal, 18)
-        .padding(.vertical, 14)
-        .background(Color.primary.opacity(0.04))
-        .overlay(alignment: .top) {
-            Divider()
-        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
     }
 
     private var wallpaperControls: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            TodayFlowLayout(spacing: 12, rowSpacing: 8) {
+        VStack(alignment: .leading, spacing: 6) {
+            TodayFlowLayout(spacing: 10, rowSpacing: 6) {
                 displayTargetControl
                 applyWallpaperButton
                 automationProgress
             }
 
             if let status = model.wallpaperStatusMessage, !status.isEmpty {
-                Label(status, systemImage: "info.circle")
-                    .font(.caption)
+                Label(compactWallpaperStatus(status), systemImage: "info.circle")
+                    .font(.caption2)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
@@ -409,12 +397,6 @@ struct TodayView: View {
                 .accessibilityLabel("目标显示器")
                 .help("选择要写入的显示器")
             }
-            .padding(.horizontal, 10)
-            .padding(.vertical, 5)
-            .background(
-                Color.primary.opacity(0.05),
-                in: Capsule()
-            )
         }
     }
 
@@ -460,13 +442,14 @@ struct TodayView: View {
     }
 
     private func sourceDateLabel(for payload: TodayPayload) -> some View {
-        VStack(alignment: .leading, spacing: 2) {
+        HStack(alignment: .firstTextBaseline, spacing: 6) {
             Text(payload.sourceDate.iso8601)
-                .font(.callout.weight(.semibold))
-                .monospacedDigit()
-            Text(payload.isSourceDateToday ? MacLocalizedString.resolve("今日来源", locale: WallpaperInterfaceLocale.current) : MacLocalizedString.resolve("最新来源日期", locale: WallpaperInterfaceLocale.current))
                 .font(.caption)
+                .monospacedDigit()
                 .foregroundStyle(.secondary)
+            Text(payload.isSourceDateToday ? MacLocalizedString.resolve("今日来源", locale: WallpaperInterfaceLocale.current) : MacLocalizedString.resolve("最新来源日期", locale: WallpaperInterfaceLocale.current))
+                .font(.caption2)
+                .foregroundStyle(.tertiary)
         }
     }
 
@@ -506,7 +489,7 @@ struct TodayView: View {
             )
         }
         .buttonStyle(.plain)
-        .help("查看获取状态、网络来源与缓存详情")
+        .help("查看获取、壁纸与缓存详情")
         .accessibilityLabel(
             "\(imageBadgeLabel)，\(model.statusTitle)，\(model.sourceOriginLabel)"
         )
@@ -534,6 +517,37 @@ struct TodayView: View {
 
             statusSummary(for: payload)
 
+            if let wallpaperStatus = model.wallpaperStatusMessage, !wallpaperStatus.isEmpty {
+                Divider()
+                    .opacity(0.6)
+                VStack(alignment: .leading, spacing: 8) {
+                    sectionHeader("壁纸状态", systemImage: "macwindow")
+                    Text(wallpaperStatus)
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .textSelection(.enabled)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+
+            if !model.warnings.isEmpty {
+                Divider()
+                    .opacity(0.6)
+                VStack(alignment: .leading, spacing: 8) {
+                    sectionHeader("获取提示", systemImage: "exclamationmark.bubble")
+                    ForEach(model.warnings, id: \.self) { warning in
+                        HStack(alignment: .firstTextBaseline, spacing: 6) {
+                            Text("•")
+                                .foregroundStyle(.tertiary)
+                            Text(warning)
+                                .font(.caption2)
+                                .foregroundStyle(.secondary)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                    }
+                }
+            }
+
             if hasCacheDetails(for: payload) {
                 Divider()
                     .opacity(0.6)
@@ -541,6 +555,33 @@ struct TodayView: View {
             }
         }
         .fixedSize(horizontal: false, vertical: true)
+    }
+
+    private func compactWallpaperStatus(_ message: String) -> String {
+        let locale = WallpaperInterfaceLocale.current
+
+        if message.hasPrefix(MacLocalizedString.resolve("自动同步目标已更新；已断开的自动目标也会在重新接入时使用新图。将在下次 Space 切换、显示器变化、唤醒，或鼠标进入另一台显示器时应用。", locale: locale)) {
+            return MacLocalizedString.resolve("自动同步目标已更新", locale: locale)
+        }
+        if message == MacLocalizedString.resolve("自动同步已开启，并会在重新启动后继续。已立即检查当前可访问的桌面，并按写入策略应用目标；遇到未知壁纸或手动保护时会暂停并等待确认。之后的内容更新、Space 切换、显示器变化、唤醒，或鼠标进入另一台显示器时会继续检查。未激活的 Space 不会立即更新。", locale: locale) {
+            return MacLocalizedString.resolve("自动同步已开启", locale: locale)
+        }
+        if message == MacLocalizedString.resolve("已更新所选显示器的当前桌面壁纸。", locale: locale)
+            || message == MacLocalizedString.resolve("已按确认覆盖当前壁纸。", locale: locale) {
+            return MacLocalizedString.resolve("已应用到所选显示器", locale: locale)
+        }
+        if message == MacLocalizedString.resolve("自动覆盖已开启。自动同步运行时，遇到未知壁纸也会替换当前可访问的桌面，不再逐台确认；手动保护的显示器仍会保留。", locale: locale) {
+            return MacLocalizedString.resolve("自动覆盖已开启", locale: locale)
+        }
+        if message == MacLocalizedString.resolve("自动覆盖已关闭。遇到未知壁纸时会暂停，并等待你按显示器确认。", locale: locale) {
+            return MacLocalizedString.resolve("自动覆盖已关闭", locale: locale)
+        }
+        if message == MacLocalizedString.resolve("自动同步已关闭；不会继续修改壁纸。", locale: locale)
+            || message == MacLocalizedString.resolve("自动同步已关闭；清理旧目标失败，下次开启时会重新设置。", locale: locale) {
+            return MacLocalizedString.resolve("自动同步已关闭", locale: locale)
+        }
+
+        return message
     }
 
     private func cacheDetailRows(for payload: TodayPayload) -> some View {
@@ -646,7 +687,7 @@ struct TodayView: View {
     }
 
     @ViewBuilder
-    private var storySection: some View {
+    private func storySection(for payload: TodayPayload) -> some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("每日介绍")
                 .font(.headline)
@@ -654,7 +695,7 @@ struct TodayView: View {
 
             switch model.storyPanel ?? .notFetched {
             case .available(let story):
-                storyAvailableWide(story)
+                storyAvailable(story, for: payload)
             case .unavailable(let reason, _, let headline, let copyright, let sourceURL):
                 Text("该地区暂无可用介绍")
                     .font(.callout.weight(.semibold))
@@ -662,17 +703,17 @@ struct TodayView: View {
                     .font(.callout)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
-                if let headline, !headline.isEmpty {
+                if let headline = distinctStoryText(headline, from: payload.title) {
                     Text(headline)
                         .font(.callout)
                         .textSelection(.enabled)
                         .fixedSize(horizontal: false, vertical: true)
                 }
-                if let copyright, !copyright.isEmpty {
+                if let copyright = distinctStoryText(copyright, from: payload.copyright) {
                     storyMetadata("版权：\(copyright)")
                 }
                 if let sourceURL {
-                    Link("查看来源页面", destination: sourceURL)
+                    SourceLink(destination: sourceURL, label: Text("查看来源页面"))
                         .font(.caption)
                 }
             case .unmatched(let hasCandidates):
@@ -686,81 +727,10 @@ struct TodayView: View {
     }
 
     @ViewBuilder
-    private func storyAvailable(_ story: StoryText) -> some View {
-        if let headline = story.headline, !headline.isEmpty {
-            Text(headline)
-                .font(.title3.weight(.semibold))
-                .lineSpacing(2)
-                .textSelection(.enabled)
-                .fixedSize(horizontal: false, vertical: true)
-        } else if let title = story.title, !title.isEmpty {
-            Text(title)
-                .font(.title3.weight(.semibold))
-                .lineSpacing(2)
-                .textSelection(.enabled)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-
-        if let quickFact = story.quickFact, !quickFact.isEmpty {
-            VStack(alignment: .leading, spacing: 5) {
-                Text("来源速览")
-                    .font(.caption2.weight(.semibold))
-                    .foregroundStyle(.secondary)
-                Text(quickFact)
-                    .font(.callout)
-                    .textSelection(.enabled)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-        }
-
-        if let body = story.body, !body.isEmpty {
-            Text(body)
-                .font(.callout)
-                .lineSpacing(3)
-                .textSelection(.enabled)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-
-        if let copyright = story.copyright, !copyright.isEmpty {
-            storyMetadata("版权：\(copyright)")
-        }
-
-        ViewThatFits(in: .horizontal) {
-            HStack(alignment: .firstTextBaseline, spacing: 12) {
-                storySourceLink(story.sourceURL)
-                Spacer(minLength: 8)
-                storyFetchedLabel(story)
-            }
-            VStack(alignment: .leading, spacing: 5) {
-                storySourceLink(story.sourceURL)
-                storyFetchedLabel(story)
-            }
-        }
-    }
-
-    private func storyAvailableWide(_ story: StoryText) -> some View {
-        HStack(alignment: .top, spacing: 36) {
-            storyLead(story)
-                .frame(width: 300, alignment: .leading)
-
-            storyBody(story)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .layoutPriority(1)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-    }
-
-    @ViewBuilder
-    private func storyLead(_ story: StoryText) -> some View {
+    private func storyAvailable(_ story: StoryText, for payload: TodayPayload) -> some View {
         VStack(alignment: .leading, spacing: 14) {
-            if let headline = story.headline, !headline.isEmpty {
-                Text(headline)
-                    .font(.title3.weight(.semibold))
-                    .lineSpacing(2)
-                    .textSelection(.enabled)
-                    .fixedSize(horizontal: false, vertical: true)
-            } else if let title = story.title, !title.isEmpty {
-                Text(title)
+            if let heading = distinctStoryHeading(story, from: payload.title) {
+                Text(heading)
                     .font(.title3.weight(.semibold))
                     .lineSpacing(2)
                     .textSelection(.enabled)
@@ -778,21 +748,17 @@ struct TodayView: View {
                         .fixedSize(horizontal: false, vertical: true)
                 }
             }
-        }
-    }
 
-    @ViewBuilder
-    private func storyBody(_ story: StoryText) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
             if let body = story.body, !body.isEmpty {
                 Text(body)
                     .font(.callout)
                     .lineSpacing(3)
                     .textSelection(.enabled)
+                    .frame(maxWidth: 900, alignment: .leading)
                     .fixedSize(horizontal: false, vertical: true)
             }
 
-            if let copyright = story.copyright, !copyright.isEmpty {
+            if let copyright = distinctStoryText(story.copyright, from: payload.copyright) {
                 storyMetadata("版权：\(copyright)")
             }
 
@@ -810,10 +776,29 @@ struct TodayView: View {
         }
     }
 
+    private func distinctStoryHeading(_ story: StoryText, from photoTitle: String?) -> String? {
+        distinctStoryText(story.headline, from: photoTitle)
+            ?? distinctStoryText(story.title, from: photoTitle)
+    }
+
+    private func distinctStoryText(_ text: String?, from photoText: String?) -> String? {
+        guard let text else { return nil }
+        let trimmedText = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedText.isEmpty else { return nil }
+        guard let photoText else { return text }
+
+        let trimmedPhotoText = photoText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedPhotoText.isEmpty else { return text }
+        return trimmedText.compare(
+            trimmedPhotoText,
+            options: [.caseInsensitive, .diacriticInsensitive, .widthInsensitive]
+        ) == .orderedSame ? nil : text
+    }
+
     @ViewBuilder
     private func storySourceLink(_ url: URL?) -> some View {
         if let url {
-            Link("查看原文", destination: url)
+            SourceLink(destination: url, label: Text("查看原文"))
                 .font(.caption)
         }
     }
@@ -879,21 +864,6 @@ struct TodayView: View {
         .modifier(TodayWarningCardStyle(padding: 16))
     }
 
-    private var warningsSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            sectionHeader("获取提示", systemImage: "exclamationmark.bubble")
-            ForEach(model.warnings, id: \.self) { warning in
-                HStack(alignment: .firstTextBaseline, spacing: 6) {
-                    Text("•")
-                        .foregroundStyle(.tertiary)
-                    Text(warning)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-            }
-        }
-    }
 
     private var displayBinding: Binding<DesktopDisplayID?> {
         Binding(
@@ -1099,8 +1069,8 @@ private struct TodayStatusBadge: View {
 /// Left-aligned wrapping row for wallpaper controls. Each control keeps its
 /// intrinsic size; rows wrap only when the available width cannot fit the next
 /// control, so narrow windows never clip a selector or button. Controls of
-/// differing intrinsic height (for example the display-picker capsule next to
-/// a bordered button) are vertically centered within their row so the row
+/// differing intrinsic height (for example a display picker next to a
+/// bordered button) are vertically centered within their row so the row
 /// reads as one baseline.
 private struct TodayFlowLayout: Layout {
     var spacing: CGFloat = 12

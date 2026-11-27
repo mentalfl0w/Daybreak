@@ -39,7 +39,7 @@ struct ImageQualitySettingsView: View {
                     }
                 }
             } footer: {
-                Text(MobileLocalizedString.resolve("快捷指令导出的是本机已缓存或可验证的原图文件；系统“设置壁纸照片”动作还可能再次裁切。画质偏好不好保证最终屏幕上的像素尺寸。", locale: locale))
+                Text(MobileLocalizedString.resolve("快捷指令会使用本机已缓存或可验证的原图。系统设置壁纸时仍可能裁切图片，最终效果以系统为准。", locale: locale))
             }
         }
         .navigationTitle(MobileLocalizedString.resolve("图片质量", locale: locale))

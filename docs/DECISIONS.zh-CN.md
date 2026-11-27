@@ -22,6 +22,11 @@
 - 项目在 GitHub 开源，不上架 App Store；iOS 和 iPadOS 仍由用户自行签名后侧载。
 - CI 发布的 macOS DMG 中应用采用 ad-hoc 签名，签名标识与 `CFBundleIdentifier` 一致；这不是 Developer ID 签名。
 
+### macOS 版本检查与更新
+
+- 使用 Sparkle 2.10.1 从 GitHub Release 的稳定 HTTPS feed 检查 macOS 更新。要求 EdDSA 签名 feed，并在解压前验证更新包；自动检查与安装由用户选择，保留手动下载 GitHub DMG 的途径。未配置公钥的构建无法执行经过身份验证的 Sparkle 更新。Ad-hoc 签名不是 Developer ID 签名。
+- 隔离的 ad-hoc 签名宿主使用 Sparkle 2.10.1 时，EdDSA 签名更新包验证通过、篡改后被拒绝。通过 Launch Services 启动的试验使用官方即时安装回调后，临时应用从构建号 1 更新到 2 并重新启动；未使用该回调时只观察到替换，未观察到重启。试验使用 localhost HTTP feed 和用户可写目录中未带隔离标记的应用，不能证明真实 DMG、Gatekeeper、通知身份、用户授权和数据保留均可靠；这些场景和可信发布流程仍需单独验证。
+
 ### ADR-005：壁纸与 Space 只使用公开 API
 
 - 不使用私有 API 修改 Space 或壁纸。通过公开事件驱动状态收敛，不承诺所有 Space 原子同步。

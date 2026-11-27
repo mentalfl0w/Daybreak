@@ -661,7 +661,7 @@ struct TimelineStorySection: View {
                 }
             }
             if let sourceURL {
-                Link(destination: sourceURL) {
+                SourceLink(destination: sourceURL) {
                     Label("查看来源网页", systemImage: "arrow.up.right.square")
                         .font(.caption.weight(.medium))
                 }

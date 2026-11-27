@@ -301,7 +301,7 @@ struct CacheSettingsView: View {
         } header: {
             Text("容量上限")
         } footer: {
-            Text("缓存上限用于控制图片占用。超过上限时，Daybreak 会优先清理较久未使用的图片。收藏、固定日期和受保护壁纸的原图会保留，因此实际用量可能超过上限。")
+            Text("缓存上限用于控制图片占用。超过上限时，Daybreak 会优先清理较久未使用的图片。收藏、固定日期和当前使用的壁纸原图会保留，因此缓存用量可能超过上限。")
         }
     }
 
@@ -319,14 +319,14 @@ struct CacheSettingsView: View {
                     .monospacedDigit()
                     .foregroundStyle(.secondary)
             }
-            LabeledContent("当前壁纸保护") {
+            LabeledContent("当前壁纸") {
                 Text("\(protectedCount(.currentlyApplied))")
                     .monospacedDigit()
                     .foregroundStyle(.secondary)
             }
 
             if let report {
-                LabeledContent("受保护原图") {
+                LabeledContent("保留的原图") {
                     Text("\(report.protectedOriginalAssetCount) 个文件")
                         .monospacedDigit()
                         .foregroundStyle(.secondary)
@@ -335,7 +335,7 @@ struct CacheSettingsView: View {
         } header: {
             Text("保留的图片")
         } footer: {
-            Text("同一张图片可能同时被收藏或固定，因此各项数量可能重复。壁纸设置结果由系统显示，Daybreak 无法确认图片是否已应用。")
+            Text("同一张图片可能同时被收藏或固定，因此各项数量可能重复。壁纸是否已设置，请以系统显示为准。")
         }
     }
 
@@ -434,7 +434,7 @@ struct CacheCapacitySelectionView: View {
                     .accessibilityAddTraits(capacity == selection ? .isSelected : [])
                 }
             } footer: {
-                Text("缓存上限用于控制图片占用。超过上限时，Daybreak 会优先清理较久未使用的图片。收藏、固定日期和受保护壁纸的原图会保留，因此实际用量可能超过上限。")
+                Text("缓存上限用于控制图片占用。超过上限时，Daybreak 会优先清理较久未使用的图片。收藏、固定日期和当前使用的壁纸原图会保留，因此缓存用量可能超过上限。")
             }
         }
         .navigationTitle("缓存总上限", locale: locale)

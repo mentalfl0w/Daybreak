@@ -82,7 +82,7 @@ struct ShortcutsGuideView: View {
     private var notificationCard: some View {
         card(title: "壁纸通知", systemImage: "bell.badge") {
             VStack(alignment: .leading, spacing: 10) {
-                Text("允许通知后，快捷指令可在设置壁纸后显示图片缩略图和来源信息。通知是否显示取决于系统权限；收到通知不代表壁纸已更换。")
+                Text("允许 Daybreak 通知后，快捷指令可在设置壁纸后显示图片缩略图和来源信息。通知不代表壁纸已更换。")
                     .font(.callout)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -179,7 +179,7 @@ struct ShortcutsGuideView: View {
             Label("用 Apple 快捷指令设置壁纸", systemImage: "wand.and.stars")
                 .font(.title3.weight(.semibold))
                 .accessibilityAddTraits(.isHeader)
-            Text("Daybreak 会把所选图片交给快捷指令。系统负责设置壁纸并显示结果；Daybreak 无法确认壁纸是否已更换。")
+            Text("Daybreak 会将所选图片交给快捷指令。请按系统提示预览并设置；Daybreak 无法确认壁纸是否已更换。")
                 .font(.callout)
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
@@ -200,7 +200,7 @@ struct ShortcutsGuideView: View {
                 manualApply
 
                 Toggle("我已添加 Daybreak Apply", isOn: $applyConfigured)
-                    .accessibilityHint("仅表示你已添加同名快捷指令。Daybreak 无法验证其内容或设置结果。")
+                    .accessibilityHint("此选项仅用于启用运行按钮；请确认已添加名称为 Daybreak Apply 的快捷指令。")
 
                 Divider()
 
@@ -217,7 +217,7 @@ struct ShortcutsGuideView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .disabled(!applyConfigured || effectiveWallpaperReference == nil)
-                .accessibilityHint("打开系统的 Daybreak Apply 快捷指令，并传入所选图片及其地区和日期。系统会显示实际结果。")
+                .accessibilityHint("打开 Daybreak Apply 并传入所选图片、地区和日期。请按系统提示预览并设置壁纸。")
                 if !applyConfigured {
                     Text("先添加并确认 Daybreak Apply，运行按钮才会启用。")
                         .font(.footnote)
@@ -330,13 +330,13 @@ struct ShortcutsGuideView: View {
                 )
                 installNote
 
-                Text("每天获取当天壁纸。每日运行需要你在“快捷指令”的“自动化”中创建个人自动化。")
+                Text("获取当天壁纸。要每天运行，请在“快捷指令”的“自动化”中创建个人自动化。")
                     .font(.callout)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
 
                 Toggle("我已添加 Daybreak Daily", isOn: $dailyConfigured)
-                    .accessibilityHint("仅表示你已添加该快捷指令并创建自动化，Daybreak 无法验证系统自动化是否启用。")
+                    .accessibilityHint("此选项仅用于启用测试运行；请先添加 Daybreak Daily 并创建个人自动化。")
 
                 Button {
                     runShortcut(
@@ -349,11 +349,11 @@ struct ShortcutsGuideView: View {
                 .buttonStyle(.bordered)
                 .tint(.daybreakActionTint)
                 .disabled(!dailyConfigured)
-                .accessibilityHint("只测试快捷指令本身；不会证明每日自动化已启用或会在准点运行。")
+                .accessibilityHint("只测试一次运行；每日自动化仍需在“快捷指令”中单独设置。")
 
                 manualDaily
 
-                Text("每日更换由系统自动化触发。系统可能要求确认；Daybreak 无法保证在设定时间运行。")
+                Text("每日更换由系统自动化触发，可能需要确认；实际运行时间由系统决定。")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)

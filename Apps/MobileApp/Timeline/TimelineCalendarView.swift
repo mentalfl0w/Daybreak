@@ -135,11 +135,6 @@ struct TimelineDayCell: View {
                             }
                         }
                         Spacer(minLength: 0)
-                        HStack(spacing: 3) {
-                            storyMarker
-                            Spacer(minLength: 0)
-                            cacheMarker
-                        }
                     }
                     .padding(5)
                 }
@@ -192,32 +187,6 @@ struct TimelineDayCell: View {
         isSelected ? 2.5 : (isToday ? 1.5 : 0)
     }
 
-    @ViewBuilder
-    private var storyMarker: some View {
-        if case .available = day.content?.story {
-            Circle()
-                .fill(Color.daybreakActionTint)
-                .frame(width: 5, height: 5)
-                .shadow(color: hasImage ? .black.opacity(0.5) : .clear, radius: 1)
-                .accessibilityHidden(true)
-        } else if case .unavailable = day.content?.story {
-            Circle()
-                .strokeBorder(.secondary, lineWidth: 1)
-                .frame(width: 5, height: 5)
-                .accessibilityHidden(true)
-        }
-    }
-
-    @ViewBuilder
-    private var cacheMarker: some View {
-        if day.state == .observed, day.content?.originalCached == true {
-            Image(systemName: "square.stack.3d.up.fill")
-                .font(.system(size: 7, weight: .bold))
-                .foregroundStyle(hasImage ? .white.opacity(0.9) : .secondary)
-                .shadow(color: hasImage ? .black.opacity(0.45) : .clear, radius: 1)
-                .accessibilityHidden(true)
-        }
-    }
 
     private var accessibilityLabel: String {
         let dateText = TimelinePresentation.fullDate(
@@ -230,6 +199,9 @@ struct TimelineDayCell: View {
 
     private var accessibilityValue: String {
         var parts: [String] = []
+        if isToday {
+            parts.append(MobileLocalizedString.resolve("今天", locale: locale))
+        }
         switch day.state {
         case .observed:
             parts.append(MobileLocalizedString.resolve("已有本地记录", locale: locale))
@@ -301,78 +273,133 @@ struct TimelineCalendarView: View {
     }
 
     private var header: some View {
+        ViewThatFits(in: .horizontal) {
+            fullHeader
+            compactHeader
+            stackedHeader
+        }
+    }
+
+    private var fullHeader: some View {
         HStack(spacing: 10) {
-            Button {
-                if model.display == .month {
-                    model.goToPreviousMonth()
-                } else {
-                    model.goToPreviousYear()
-                }
-            } label: {
-                Image(systemName: "chevron.left")
-                    .font(.body.weight(.semibold))
-                    .frame(width: 34, height: 34)
-            }
-            .buttonStyle(.bordered)
-            .buttonBorderShape(.circle)
-            .disabled(model.display == .month ? !model.canGoToPreviousMonth : !model.canGoToPreviousYear)
-            .accessibilityLabel(model.display == .month ? Text("上个月") : Text("上一年"))
-
-            Button {
-                showsPicker = true
-            } label: {
-                HStack(spacing: 5) {
-                    Group {
-                        if model.display == .month {
-                            TimelineDateText(locale: locale, timeZone: model.timeZone)
-                                .month(model.monthKey)
-                        } else {
-                            TimelineDateText(locale: locale, timeZone: model.timeZone)
-                                .year(model.displayYear)
-                        }
-                    }
-                    .font(.title3.weight(.semibold))
-                    .foregroundStyle(.primary)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.75)
-                    Image(systemName: "chevron.down")
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(.secondary)
-                }
-            }
-            .buttonStyle(.plain)
-            .accessibilityHint(Text("打开月份和年份选择"))
-
-            Button {
-                if model.display == .month {
-                    model.goToNextMonth()
-                } else {
-                    model.goToNextYear()
-                }
-            } label: {
-                Image(systemName: "chevron.right")
-                    .font(.body.weight(.semibold))
-                    .frame(width: 34, height: 34)
-            }
-            .buttonStyle(.bordered)
-            .buttonBorderShape(.circle)
-            .disabled(model.display == .month ? !model.canGoToNextMonth : !model.canGoToNextYear)
-            .accessibilityLabel(model.display == .month ? Text("下个月") : Text("下一年"))
-
+            previousPeriodButton
+            periodPickerButton
+            nextPeriodButton
             Spacer(minLength: 8)
             marketMenu
-
-
-            Button {
-                model.setDisplay(model.display == .month ? .year : .month)
-            } label: {
-                Image(systemName: model.display == .month ? "square.grid.3x3" : "calendar")
-                    .frame(width: 34, height: 34)
-            }
-            .buttonStyle(.bordered)
-            .buttonBorderShape(.circle)
-            .accessibilityLabel(model.display == .month ? Text("切换到年视图") : Text("切换到月视图"))
+            displayToggleButton
         }
+    }
+
+    private var compactHeader: some View {
+        VStack(spacing: 8) {
+            HStack(spacing: 8) {
+                previousPeriodButton
+                Spacer(minLength: 0)
+                periodPickerButton
+                Spacer(minLength: 0)
+                nextPeriodButton
+            }
+            HStack(spacing: 8) {
+                Spacer(minLength: 0)
+                marketMenu
+                displayToggleButton
+            }
+        }
+    }
+
+    private var stackedHeader: some View {
+        VStack(spacing: 8) {
+            HStack {
+                Spacer(minLength: 0)
+                periodPickerButton
+                Spacer(minLength: 0)
+            }
+            HStack(spacing: 8) {
+                previousPeriodButton
+                Spacer(minLength: 0)
+                marketMenu
+                displayToggleButton
+                Spacer(minLength: 0)
+                nextPeriodButton
+            }
+        }
+    }
+
+    private var previousPeriodButton: some View {
+        Button {
+            if model.display == .month {
+                model.goToPreviousMonth()
+            } else {
+                model.goToPreviousYear()
+            }
+        } label: {
+            Image(systemName: "chevron.left")
+                .font(.body.weight(.semibold))
+                .frame(width: 44, height: 44)
+        }
+        .buttonStyle(.bordered)
+        .buttonBorderShape(.circle)
+        .disabled(model.display == .month ? !model.canGoToPreviousMonth : !model.canGoToPreviousYear)
+        .accessibilityLabel(model.display == .month ? Text("上个月") : Text("上一年"))
+    }
+
+    private var periodPickerButton: some View {
+        Button {
+            showsPicker = true
+        } label: {
+            HStack(spacing: 5) {
+                Group {
+                    if model.display == .month {
+                        TimelineDateText(locale: locale, timeZone: model.timeZone)
+                            .month(model.monthKey)
+                    } else {
+                        TimelineDateText(locale: locale, timeZone: model.timeZone)
+                            .year(model.displayYear)
+                    }
+                }
+                .font(.title3.weight(.semibold))
+                .foregroundStyle(.primary)
+                .lineLimit(1)
+                .fixedSize(horizontal: true, vertical: false)
+                Image(systemName: "chevron.down")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.secondary)
+            }
+            .frame(minHeight: 44)
+        }
+        .buttonStyle(.plain)
+        .accessibilityHint(Text("打开月份和年份选择"))
+    }
+
+    private var nextPeriodButton: some View {
+        Button {
+            if model.display == .month {
+                model.goToNextMonth()
+            } else {
+                model.goToNextYear()
+            }
+        } label: {
+            Image(systemName: "chevron.right")
+                .font(.body.weight(.semibold))
+                .frame(width: 44, height: 44)
+        }
+        .buttonStyle(.bordered)
+        .buttonBorderShape(.circle)
+        .disabled(model.display == .month ? !model.canGoToNextMonth : !model.canGoToNextYear)
+        .accessibilityLabel(model.display == .month ? Text("下个月") : Text("下一年"))
+    }
+
+    private var displayToggleButton: some View {
+        Button {
+            model.setDisplay(model.display == .month ? .year : .month)
+        } label: {
+            Image(systemName: model.display == .month ? "square.grid.3x3" : "calendar")
+                .frame(width: 44, height: 44)
+        }
+        .buttonStyle(.bordered)
+        .buttonBorderShape(.circle)
+        .accessibilityLabel(model.display == .month ? Text("切换到年视图") : Text("切换到月视图"))
     }
 
     private var marketMenu: some View {
@@ -399,7 +426,7 @@ struct TimelineCalendarView: View {
         } label: {
             Image(systemName: "globe")
                 .font(.body.weight(.semibold))
-                .frame(width: 34, height: 34)
+                .frame(width: 44, height: 44)
         }
         .buttonStyle(.bordered)
         .buttonBorderShape(.circle)
@@ -489,12 +516,6 @@ struct TimelineMonthLegend: View {
                     .foregroundStyle(.pink)
                 Text("收藏")
             }
-            HStack(spacing: 3) {
-                Circle()
-                    .fill(Color.daybreakActionTint)
-                    .frame(width: 6, height: 6)
-                Text("介绍")
-            }
             Spacer(minLength: 0)
         }
         .font(.caption2)
@@ -521,12 +542,6 @@ struct TimelineMonthSummaryStrip: View {
                 value: month.observedDayCount,
                 total: eligibleDayCount(month),
                 title: Text("已记录")
-            )
-            Divider().frame(height: 32)
-            stat(
-                value: month.thumbnailCachedDayCount,
-                total: month.observedDayCount,
-                title: Text("有缩略图")
             )
             Divider().frame(height: 32)
             stat(
@@ -601,18 +616,7 @@ struct TimelineYearMonthCard: View {
                         total: Double(max(eligibleDays(summary), 1))
                     )
                     .tint(.accentColor)
-                    HStack(spacing: 6) {
-                        TimelineBadge(
-                            Text("\(summary.thumbnailDays) 张缩略图"),
-                            systemImage: "photo"
-                        )
-                        if summary.storyDays > 0 {
-                            TimelineBadge(
-                                Text("\(summary.storyDays) 篇介绍"),
-                                systemImage: "text.book.closed"
-                            )
-                        }
-                    }
+
                 } else {
                     Text("没有本地记录")
                         .font(.caption)
@@ -733,13 +737,12 @@ struct TimelineMonthYearPicker: View {
                 year = max(model.browsableYears.lowerBound, year - 1)
             } label: {
                 Image(systemName: "chevron.left")
-                    .frame(width: 32, height: 32)
+                    .frame(width: 44, height: 44)
             }
             .buttonStyle(.bordered)
             .buttonBorderShape(.circle)
             .disabled(year <= model.browsableYears.lowerBound)
             .accessibilityLabel(Text("上一年"))
-
             Menu {
                 Picker("年份", selection: $year) {
                     ForEach(model.browsableYears, id: \.self) { value in
@@ -759,7 +762,7 @@ struct TimelineMonthYearPicker: View {
                         .font(.caption.weight(.semibold))
                         .foregroundStyle(.secondary)
                 }
-                .frame(minWidth: 120)
+                .frame(minWidth: 120, minHeight: 44)
             }
             .accessibilityLabel(Text("年份"))
 
@@ -767,7 +770,7 @@ struct TimelineMonthYearPicker: View {
                 year = min(model.browsableYears.upperBound, year + 1)
             } label: {
                 Image(systemName: "chevron.right")
-                    .frame(width: 32, height: 32)
+                    .frame(width: 44, height: 44)
             }
             .buttonStyle(.bordered)
             .buttonBorderShape(.circle)
@@ -780,7 +783,7 @@ struct TimelineMonthYearPicker: View {
 
     private var monthGrid: some View {
         LazyVGrid(
-            columns: Array(repeating: GridItem(.flexible(), spacing: 10), count: 3),
+            columns: [GridItem(.adaptive(minimum: 100), spacing: 10)],
             spacing: 10
         ) {
             ForEach(1...12, id: \.self) { month in

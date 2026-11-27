@@ -793,7 +793,7 @@ struct RecapCoverageCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             HStack(alignment: .center, spacing: 10) {
-                Text(context == .month ? MacLocalizedString.resolve("本月记录", locale: WallpaperInterfaceLocale.current) : MacLocalizedString.resolve("本年记录", locale: WallpaperInterfaceLocale.current))
+                Text(context == .month ? MacLocalizedString.resolve("本月留影", locale: WallpaperInterfaceLocale.current) : MacLocalizedString.resolve("本年留影", locale: WallpaperInterfaceLocale.current))
                     .font(.headline)
                     .accessibilityAddTraits(.isHeader)
 
@@ -817,7 +817,7 @@ struct RecapCoverageCard: View {
                     .font(.system(.largeTitle, design: .rounded, weight: .bold))
                     .monospacedDigit()
 
-                Text("天有记录")
+                Text("个有记录的日期")
                     .font(.title3.weight(.semibold))
                     .foregroundStyle(.secondary)
 
@@ -864,10 +864,15 @@ struct RecapCoverageCard: View {
                 } else {
                     Text("涉及 \(summary.distinctMarketCount) 个地区 · 各地区有记录的天数：\(marketLines)")
                 }
-                if summary.coverage != nil {
-                    Text("覆盖率 = 有记录的天数 ÷ 统计范围内的天数，只反映本机保存了多少天。")
+                if context == .year {
+                    Text("年度回顾统计本机观察窗口内各地区的不同日期；图库统计当前地区所有年份的出现次数。")
+                } else {
+                    Text("总天数按不同日期计，同一天跨地区只算一次。")
                 }
-                Text("没有记录的日期可能是应用未运行、内容未获取或请求失败，不代表 Bing 当天没有发布图片。")
+                if summary.firstObservedDate != nil {
+                    Text("首次观察日前的补录不计入。")
+                }
+                Text("本机未记录，不代表当天没有发布图片。")
             }
             .font(.caption2)
             .foregroundStyle(.secondary)
@@ -1218,14 +1223,14 @@ private struct RecapOccurrenceRow: View {
                 cacheLabel(.thumbnail, isCached: thumbnailCached)
                 cacheLabel(.original, isCached: originalCached)
                 if let sourceURL {
-                    Link("来源页面", destination: sourceURL)
+                    SourceLink(destination: sourceURL, label: Text("来源页面"))
                 }
             }
             VStack(alignment: .leading, spacing: 4) {
                 cacheLabel(.thumbnail, isCached: thumbnailCached)
                 cacheLabel(.original, isCached: originalCached)
                 if let sourceURL {
-                    Link("来源页面", destination: sourceURL)
+                    SourceLink(destination: sourceURL, label: Text("来源页面"))
                 }
             }
         }
@@ -1305,7 +1310,7 @@ private struct RecapOccurrenceRow: View {
                             .foregroundStyle(.secondary)
                     }
                     if let sourceURL {
-                        Link("来源页面", destination: sourceURL)
+                        SourceLink(destination: sourceURL, label: Text("来源页面"))
                             .font(.caption)
                     }
                 }
@@ -1388,7 +1393,7 @@ struct RecapStoryDetailView: View {
 
             HStack(spacing: 12) {
                 if let sourceURL = story.sourceURL {
-                    Link("查看原文", destination: sourceURL)
+                    SourceLink(destination: sourceURL, label: Text("查看原文"))
                         .font(.caption)
                 }
                 Text(StoryCopy.provenance(localeTag: story.locale, fetchedAt: story.fetchedAt, in: locale))

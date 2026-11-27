@@ -38,13 +38,7 @@ struct TodayStoryView: View {
     @ViewBuilder
     private func availableStory(_ story: DailyStoryRecord) -> some View {
         VStack(alignment: .leading, spacing: 12) {
-            if let headline = story.headline, !headline.isEmpty {
-                Text(verbatim: headline)
-                    .font(.title3.weight(.semibold))
-                    .lineSpacing(2)
-                    .textSelection(.enabled)
-                    .fixedSize(horizontal: false, vertical: true)
-            } else if let title = story.title, !title.isEmpty {
+            if let title = storyTitle(story) {
                 Text(verbatim: title)
                     .font(.title3.weight(.semibold))
                     .lineSpacing(2)
@@ -73,12 +67,24 @@ struct TodayStoryView: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
 
-            if let copyright = story.copyright, !copyright.isEmpty {
+            if let copyright = story.copyright,
+               !copyright.isEmpty,
+               copyright != content.copyright {
                 copyrightLine(copyright)
             }
 
             storyFooter(story)
         }
+    }
+
+    private func storyTitle(_ story: DailyStoryRecord) -> String? {
+        if let headline = story.headline, !headline.isEmpty {
+            return headline == content.title ? nil : headline
+        }
+        guard let title = story.title, !title.isEmpty, title != content.title else {
+            return nil
+        }
+        return title
     }
 
     // MARK: Unavailable / unmatched
@@ -89,18 +95,22 @@ struct TodayStoryView: View {
                 .font(.callout.weight(.semibold))
 
 
-            if let headline = story.headline, !headline.isEmpty {
+            if let headline = story.headline,
+               !headline.isEmpty,
+               headline != content.title {
                 Text(verbatim: headline)
                     .font(.callout)
                     .fixedSize(horizontal: false, vertical: true)
             }
 
-            if let copyright = story.copyright, !copyright.isEmpty {
+            if let copyright = story.copyright,
+               !copyright.isEmpty,
+               copyright != content.copyright {
                 copyrightLine(copyright)
             }
 
             if let url = story.sourceURL {
-                Link("查看来源页面", destination: url)
+                SourceLink(destination: url, label: Text("查看来源页面"))
                     .tint(.daybreakActionTint)
                     .font(.caption)
             }
@@ -126,7 +136,7 @@ struct TodayStoryView: View {
         ViewThatFits(in: .horizontal) {
             HStack(alignment: .firstTextBaseline, spacing: 12) {
                 if showSourceLink, let url = story.sourceURL {
-                    Link("查看原文", destination: url)
+                    SourceLink(destination: url, label: Text("查看原文"))
                         .tint(.daybreakActionTint)
                         .font(.caption)
                 }
@@ -135,7 +145,7 @@ struct TodayStoryView: View {
             }
             VStack(alignment: .leading, spacing: 5) {
                 if showSourceLink, let url = story.sourceURL {
-                    Link("查看原文", destination: url)
+                    SourceLink(destination: url, label: Text("查看原文"))
                         .tint(.daybreakActionTint)
                         .font(.caption)
                 }

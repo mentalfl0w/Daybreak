@@ -150,7 +150,7 @@ struct TodayStatusView: View {
             }
 
             if let sourceURL = content.sourceURL {
-                Link(destination: sourceURL) {
+                SourceLink(destination: sourceURL) {
                     Label("打开来源页面", systemImage: "safari")
                         .font(.callout)
                 }

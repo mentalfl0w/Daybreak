@@ -69,7 +69,7 @@ struct TimelineGalleryView: View {
     private var countText: LocalizedStringKey {
         switch model.galleryScope {
         case .all:
-            return "\(model.galleryItems.count) 张本地记录"
+            return "当前地区 · 所有年份 · \(model.galleryItems.count) 次出现"
         case .favorites:
             return "\(model.galleryItems.count) 张收藏图片"
         }
