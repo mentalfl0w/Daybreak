@@ -1094,20 +1094,34 @@ final class DailyNotificationController {
             Self.logger.error(
                 "authorization request failed domain=\(failure.domain, privacy: .public) code=\(failure.code, privacy: .public)"
             )
-            // The system never presented a choice. Keep both the persisted
-            // opt-in and the authorization status unchanged, show the raw
-            // cause, and let the user retry.
             let live = await sender.authorizationStatus()
-            if hasConfirmedAuthorizationGrant, live == .notDetermined {
-                authorization = .authorized
-            } else {
+            if live.allowsDelivery {
+                // The request can throw after the system has already retained
+                // an authorization decision. Trust that live decision and do
+                // not leave a stale request error in the settings UI.
                 authorization = live
+                isEnabled = true
+                settings.isEnabled = true
+                settings.userChoice = .on
+                hasConfirmedAuthorizationGrant = true
+                authorizationRequestIncomplete = false
+                authorizationFailure = nil
+                errorMessage = nil
+            } else {
+                // The system never presented a usable decision. Keep the
+                // opt-in state unchanged, show the raw cause, and let the user
+                // retry when the request is still incomplete.
+                if hasConfirmedAuthorizationGrant, live == .notDetermined {
+                    authorization = .authorized
+                } else {
+                    authorization = live
+                }
+                authorizationFailure = failure
+                errorMessage = Self.requestFailureMessage(
+                    failure,
+                    locale: WallpaperInterfaceLocale.current
+                )
             }
-            authorizationFailure = failure
-            errorMessage = Self.requestFailureMessage(
-                failure,
-                locale: WallpaperInterfaceLocale.current
-            )
         case .resolved(let status, let granted):
             // Only a lagging `.notDetermined`/`.unknown` may use the Bool to
             // resolve a grant. An explicit `.denied` always wins, even if the

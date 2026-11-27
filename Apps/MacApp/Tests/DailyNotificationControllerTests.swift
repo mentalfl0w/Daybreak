@@ -665,6 +665,32 @@ struct DailyNotificationControllerTests {
         #expect(DailyWallpaperNotificationSettings(defaults: defaults).userChoice == nil)
     }
 
+    @Test("A request failure is cleared when the live system state is already authorized")
+    @MainActor
+    func requestFailureWithAuthorizedLiveStateKeepsNotificationsEnabled() async throws {
+        let defaults = NotificationFixtures.defaults()
+        let sender = FakeDailyNotificationSender(status: .authorized)
+        sender.requestFailure = DailyWallpaperNotificationFailure(
+            domain: "UNErrorDomain",
+            code: 1,
+            detail: "Notifications are not allowed for this application"
+        )
+        let controller = DailyNotificationController(
+            defaults: defaults,
+            sender: sender,
+            now: { NotificationFixtures.marketInstant() }
+        )
+
+        controller.setEnabled(true)
+        try await waitForUpdate(controller)
+
+        #expect(controller.isEnabled)
+        #expect(controller.authorization == .authorized)
+        #expect(controller.authorizationFailure == nil)
+        #expect(controller.errorMessage == nil)
+        #expect(DailyWallpaperNotificationSettings(defaults: defaults).isEnabled)
+    }
+
     @Test("A granted request is not lost when settings status has not refreshed")
     @MainActor
     func grantedResultOutranksStaleSettings() async throws {
