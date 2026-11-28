@@ -103,6 +103,10 @@ struct SettingsScreen: View {
             NavigationStack {
                 destination(for: selectedCategory ?? .language)
             }
+            .background {
+                Color(uiColor: .systemGroupedBackground)
+                    .ignoresSafeArea()
+            }
         }
         .navigationSplitViewStyle(.balanced)
         .containerBackground(for: .navigationSplitView) {
