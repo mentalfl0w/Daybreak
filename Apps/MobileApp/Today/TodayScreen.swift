@@ -235,7 +235,7 @@ struct TodayScreen: View {
             }
 
             storyColumn(for: content)
-                .frame(maxWidth: 1040, alignment: .leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 
