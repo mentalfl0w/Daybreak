@@ -66,8 +66,8 @@ targets:
         INFOPLIST_KEY_NSPrincipalClass: NSApplication
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         SPARKLE_EDDSA_PUBLIC_KEY: ""
-        MARKETING_VERSION: "1.3.1"
-        CURRENT_PROJECT_VERSION: "7"
+        MARKETING_VERSION: "1.3.2"
+        CURRENT_PROJECT_VERSION: "8"
         COMBINE_HIDPI_IMAGES: YES
     scheme:
       testTargets:
@@ -139,8 +139,8 @@ targets:
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         TARGETED_DEVICE_FAMILY: "1,2"
-        MARKETING_VERSION: "1.3.1"
-        CURRENT_PROJECT_VERSION: "13"
+        MARKETING_VERSION: "1.3.2"
+        CURRENT_PROJECT_VERSION: "14"
         # Automatic signing with whichever team the user selects locally.
         # Never commit DEVELOPMENT_TEAM, certificates, profiles or
         # entitlements; the default sideload configuration needs none.
