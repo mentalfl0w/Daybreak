@@ -124,6 +124,11 @@ struct AboutSettingsView: View {
             }
         }
         .listStyle(.insetGrouped)
+        .scrollContentBackground(.hidden)
+        .background {
+            Color(uiColor: .systemGroupedBackground)
+                .ignoresSafeArea()
+        }
         .wideShellTabBarInset(extraBottomGap: Self.authorCardBottomGap)
         .navigationTitle("关于", locale: locale)
         .frame(maxWidth: 720)
